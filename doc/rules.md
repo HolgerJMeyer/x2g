@@ -2,6 +2,14 @@
 
 ## Rule language by example
 
+### XML extract with match and xpath expressions
+
+The general syntax is
+
+`match path(<xpath-expr>) using <var-binding> { <body> }`
+
+The body of the match statement is evaluate for each xml fragment matched by the Xpath expresion <xpath-expr>.  Within body the current binding can be access through the bound variable <var-binding>.
+
 ```
 // nested match example, the second match is evaluated within context of the first
 match path(//story) using $s {
