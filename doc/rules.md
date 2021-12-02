@@ -36,7 +36,7 @@ The node statment has the general form of
 
 `create node <var-binding> label <string-expr> { <optional-property-list> }`
 
-For each unique combined value of `<string-expr>` and `<optional-property-list>` a new node is generated.  The generated unique node id is then bound to the variable `<var-binding>`.  If already a node with the same label and set of property values exists, its node id is bound and no node is generated.
+For each unique combined value of the label `<string-expr>` and `<optional-property-list>` a new node is generated.  The generated unique node id is then bound to the variable `<var-binding>`.  If already a node with the same label and set of property values exists, its node id is bound and no node is generated.
 
 ### The edge generating statement
 
