@@ -8,7 +8,7 @@ The general syntax is
 
 `match path(<xpath-expr>) using <var-binding> { <body> }`
 
-The body of the match statement is evaluate for each xml fragment matched by the Xpath expresion `<xpath-expr>`.  The `using` clause allows for binding a variable to each of the matches.  Within the body the current binding can be access through the bound variable`<var-binding>` or by relative Xpath expressions, alternativly.  A relative Xpath starts usually with `.`.
+The body of the match statement is evaluate for each xml fragment matched by the Xpath expresion `<xpath-expr>`.  The `using` clause allows for binding a variable to each of the matches.  Within the body the current binding can be access through the bound variable`<var-binding>` or by relative Xpath expressions, alternativly.  A relative Xpath starts usually with `'.'` as in the second `match` statement in the example below.
 
 `<body>` can be one more several other `match`- or `node` and `edge` generating statements.
 
