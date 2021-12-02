@@ -2,6 +2,7 @@
 
 ## Rule language by example
 
+```
 // nested match example, the second match is evaluated within context of the first
 match path(//story) using $s {
     create node $n label "story" {
@@ -17,5 +18,8 @@ match path(//story) using $s {
         create edge from $s to $n label "narrator" { /* no properties */ }
     }
 }
+```
 
-// conditional node creation
+
+## Open questions
+* How to create a node or edge condtionally?
