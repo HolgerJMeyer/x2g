@@ -83,7 +83,7 @@ A path variable can be used to further access all elements or attributes by an X
 
 `$<var>/<xpath-expression>`
 
-Such an expression is `$p/name/text()` from the example above, which extracts the string of the sub-element `name` from a `person``fragment.
+Such an expression is `$p/name/text()` from the example above, which extracts the string of the sub-element `name` from a `person` fragment.
 
 Node and edge variables can access the properties assigned. There a some reserved attributes/properties which are:
 * `id` to access the node's id
