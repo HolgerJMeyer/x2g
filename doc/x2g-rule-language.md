@@ -28,7 +28,7 @@ The evaluation of such `match` statement is a follows: each `<match-expression>`
 ## A first running example
 
 ```
-// nested match example, the second match is evaluated within context of the first
+// nested match example, the second match is evaluated within the context of the first
 match xpath(//story) using $s {
     create node $n label "story" {
         // property list
