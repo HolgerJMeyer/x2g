@@ -100,10 +100,9 @@ Both, nodes and edges can have a set of properties.  Each property has a name an
 
 Here is a property list from the running example:
 ```
-{
-        // property list
-        content = "$s/content/text()",
-        title = "$s/title/text()"
+{ // property list
+    content = "$s/content/text()",
+    title = "$s/title/text()"
 }
 ```
 
