@@ -62,7 +62,7 @@ Sometimes it is necessary to only generate nodes and especially edges under cert
 
 `if <boolean-expr> { <body> }`
 
-If the boolean expression, e.g. some comparisons of bound values, evaluates to true, statements of <body> are evaluated.
+If the boolean expression, e.g. some comparisons of bound values, evaluates to true, statements of `<body>` are evaluated.
 
 ### Variable bindings and expressions
 
