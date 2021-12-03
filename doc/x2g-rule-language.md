@@ -38,7 +38,9 @@ match xpath(//story) using $s {
     match xpath(.//person[@role="narrator"]) using $p {
         create node $p label "person" {
             name = "$p/name/text()",
-            gender = "$p/appellation"
+            if $p/appellation == "Mr" {
+                gender = "male"
+            }
         }
         create edge $e from $s to $n label "narrator" { /* no properties */ }
     }
@@ -91,6 +93,19 @@ Node and edge variables can access the properties assigned. There a some reserve
 To distinguish XPath from node and edge variables, the later using a dot notation for accessing the certein properties, like in `$n.id` or `$e.from`.
 
 At the moment, we expact all expression to be evaluated ot truth (boolean) or the string values.  In a later version numerical expression evaluation may be added.
+
+## Property lists
+
+Both, nodes and edges can have a set of properties.  Each property has a name and assigned value.  Properties are assigned to nodes and edges within `create` statements.  The values are literals or expression from the evaluation of variable bindings.
+
+Here is a property list from the running example:
+```
+{
+        // property list
+        content = "$s/content/text()",
+        title = "$s/title/text()"
+}
+```
 
 ## Comments
 
