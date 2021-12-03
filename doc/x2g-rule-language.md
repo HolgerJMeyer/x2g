@@ -1,6 +1,6 @@
 # X2G rule language
 
-The document describe the first draft of the X2G rule language for mapping XML document to Property Graphs.  Main concepts of the rule language are:
+The document describe the first draft of the X2G rule language for mapping XML documents to Property Graphs.  Main concepts of the rule language are:
 * extracting XML fragments by XPath expression,
 * generating nodes and edges from literals and the evaluation of variable bindings,
 * nested evaluation of statements in the context of other statements and variable bindings. 
