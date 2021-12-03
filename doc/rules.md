@@ -8,7 +8,7 @@ The general syntax is
 
 `match xpath(<xpath-expr>) using <var-binding> { <body> }`
 
-The body of the match statement is evaluate for each xml fragment matched by the Xpath expresion `<xpath-expr>`.  The `using` clause allows for binding a variable to each of the matches.  Within the body the current binding can be access through the bound variable`<var-binding>` or by relative Xpath expressions, alternativly.  A relative Xpath starts usually with `'.'` as in the second `match` statement in the example below.
+The body of the `match` statement is evaluate for each xml fragment matched by the XPath expresion `<xpath-expr>`.  The `using` clause allows for binding a variable to each of the matches.  Within the body the current binding can be access through the bound variable`<var-binding>` or by relative Xpath expressions, alternativly.  A relative XPath starts usually with `'.'` as in the second `match` statement in the example below.
 
 `<body>` can be one more several other `match`- or `node` and `edge` generating statements.
 
@@ -68,11 +68,11 @@ If the boolean expression, e.g. some comparisons of bound values, evaluates to t
 
 There are three types of variable bindings:
 
-* Path variables bound to XML fragments by Xpath expressions,
+* Path variables bound to XML fragments by XPath expressions,
 * Node variables bound to nodes by `create node` or `node(<label>)`, and
 * Edge variables bound to edges by `create edge`.
 
-A path variable can be used to further access all elements or attributes by an xpath sub-expression like:
+A path variable can be used to further access all elements or attributes by an XPath sub-expression like:
 
 `$<var>/<xpath-expression>`
 
@@ -83,7 +83,9 @@ Node and edge variables can access the properties assigned. There a some reserve
 * `label` returning the node or edge label, and
 * `from` and `to` representing the source and target node ids of an edge.
 
-To distinguish xpath from node and edge variables, the later using a dot notation for accessing the certein properties, like in `$n.id` or `$e.from`.
+To distinguish XPath from node and edge variables, the later using a dot notation for accessing the certein properties, like in `$n.id` or `$e.from`.
+
+At the moment, we expact all expression to be evaluated ot truth (boolean) or the string values.  In a later version numerical expression evaluation may be added.
 
 ## Open questions
 * How to create a node or edge condtionally?
