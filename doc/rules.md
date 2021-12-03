@@ -10,7 +10,7 @@ The general syntax is
 
 The body of the `match` statement is evaluate for each xml fragment matched by the XPath expresion `<xpath-expr>`.  The `using` clause allows for binding a variable to each of the matches.  Within the body the current binding can be access through the bound variable`<var-binding>` or by relative Xpath expressions, alternativly.  A relative XPath starts usually with `'.'` as in the second `match` statement in the example below.
 
-`<body>` can be one more several other `match`- or `node` and `edge` generating statements.
+`<body>` can be one more several other `match`, `node` and `edge` generating or conditional statements.
 
 ```
 // nested match example, the second match is evaluated within context of the first
@@ -25,7 +25,7 @@ match xpath(//story) using $s {
             name = "$p/name/text()",
             gender = "$p/appellation"
         }
-        create edge from $s to $n label "narrator" { /* no properties */ }
+        create edge $e from $s to $n label "narrator" { /* no properties */ }
     }
 }
 ```
@@ -54,7 +54,7 @@ And directed edge from a node ot another is produced by following statement:
 
 `create edge <var-binding> from <node-reference> to <node-reference> label <string-expr> { <optional-property-list> }`
 
-Both, the `from` and the `to` clause have to reference existing nodes by the given `node-reference`, i.e. nodes already generated.  A `<node-reference>` is usually a bound node variable from former node statements.
+Both, the `from` and the `to` clause have to reference existing nodes by the given `<node-reference>`, i.e. nodes already generated.  A `<node-reference>` is usually a bound node variable from node statement evaluated before.
 
 ### The conditional statement
 
@@ -86,6 +86,12 @@ Node and edge variables can access the properties assigned. There a some reserve
 To distinguish XPath from node and edge variables, the later using a dot notation for accessing the certein properties, like in `$n.id` or `$e.from`.
 
 At the moment, we expact all expression to be evaluated ot truth (boolean) or the string values.  In a later version numerical expression evaluation may be added.
+
+### Comment
+
+Comment can be used as in C++ or Java:
+* a comment starting with `//` to the end of the line and
+* multi-line comments enclosed by `/*` and `*/`.
 
 ## Open questions
 * How to create a node or edge condtionally?
