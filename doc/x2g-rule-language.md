@@ -1,13 +1,17 @@
 # X2G rule language
 
+The document describe the first draft of the X2G rule language for mapping XML document to Property Graphs.  Main concepts of the rule language are:
+* extracting XML fragments by XPath expression,
+* generating nodes and edges from literals and the evaluation of variable bindings,
+* nested evaluation of statements in the context of other statements and variable bindings. 
 
-## XML extract with match and xpath expressions
+## XML extracting with `match` and XPath expressions
 
 The general syntax is
 
 `match xpath(<xpath-expr>) using <var-binding> { <body> }`
 
-The body of the `match` statement is evaluate for each xml fragment matched by the XPath expresion `<xpath-expr>`.  The `using` clause allows for binding a variable to each of the matches.  Within the body the current binding can be access through the bound variable`<var-binding>` or by relative Xpath expressions, alternativly.  A relative XPath starts usually with `'.'` as in the second `match` statement in the example below.
+The body of the `match` statement is evaluate for each xml fragment matched by the XPath expression `<xpath-expr>`.  The `using` clause allows for binding a variable to each of the matches.  Within the body the current binding can be access through the bound variable`<var-binding>` or by relative XPath expressions, alternativly.  A relative XPath starts usually with `'.'` as in the second `match` statement in the example below.
 
 `<body>` can be one more several other `match`, `node` and `edge` generating or conditional statements.
 
