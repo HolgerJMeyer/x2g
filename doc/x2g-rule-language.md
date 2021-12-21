@@ -35,19 +35,20 @@ The evaluation of such `match` statement is a follows: each `<match-expression>`
 ```
 // nested match example, the second match is evaluated within the context of the first
 match xpath(//story) using $s {
-    create node $n label "story" {
+    create node $sn label "story" {
         // property list
         content = "$s/content/text()",
         title = "$s/title/text()"
     }
-    match xpath(.//person[@role="narrator"]) using $p {
-        create node $p label "person" {
-            name = "$p/name/text()",
-            if $p/appellation == "Mr" {
+    match xpath(.//person[@role="narrator"]) using $n {
+        create node $pn label "person" {
+            // properties
+            name = "$n/name/text()",
+            if $n/appellation == "Mr" {
                 gender = "male"
             }
         }
-        create edge $e from $s to $n label "narrator" { /* no properties */ }
+        create edge $e from $sn to $pn label "narrator" { /* no properties */ }
     }
 }
 ```
@@ -56,9 +57,9 @@ match xpath(//story) using $s {
 
 The node statement has the general form of
 
-`create node <var-binding> label <string-expr> { <optional-property-list> }`
+`create node <var-binding> label <string-expr> { <optional-property-list> <optional-unique-clause> }`
 
-For each unique combined value of the label `<string-expr>` and `<optional-property-list>` a new node is generated.  The generated unique node id is then bound to the variable `<var-binding>`.  If there exists already a node with the same label and set of property values, its node id is bound and no new node is generated.
+For each unique combined value of the label `<string-expr>` and `<optional-property-list>` a new node is generated.  The generated unique node id is then bound to the variable `<var-binding>`.  If there exists already a node with the same label and set of property values, its node id is bound and no new node is generated.  If an `<optional-unique-clause>` is given, only the set of specified properties controls the generation of new nodes, i.e. no new node is generated if a node with the same values for the unique properties already exists.
 
 ## The edge generating statement
 
