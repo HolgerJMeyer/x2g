@@ -1,4 +1,8 @@
-lexer grammar graflLexer;
+lexer grammar x2gLexer;
+
+@header {
+//package x2g;
+}
 
 tokens {
 	STR,

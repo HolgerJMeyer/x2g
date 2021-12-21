@@ -1,11 +1,13 @@
-parser grammar graflParser;
+parser grammar x2gParser;
 
 @header {
+//package x2g;
+
 import java.util.*;
 }
 
 options {
-	tokenVocab = graflLexer;
+	tokenVocab = x2gLexer;
 }
 
 @members {
@@ -25,11 +27,11 @@ options {
  *
  *
  */
-grafl
-	: grafl_statement*
+x2g
+	: x2g_statement*
 	;
 
-grafl_statement
+x2g_statement
 	: ddl_statement
 	| dml_statement
 	| query_statement

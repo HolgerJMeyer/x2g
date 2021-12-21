@@ -1,4 +1,6 @@
-// Generated from graflParser.g4 by ANTLR 4.7
+// Generated from x2gParser.g4 by ANTLR 4.7
+
+//package x2g;
 
 import java.util.*;
 
@@ -6,867 +8,867 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by
- * {@link graflParser}.
+ * {@link x2gParser}.
  */
-public interface graflParserListener extends ParseTreeListener {
+public interface x2gParserListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link graflParser#grafl}.
+	 * Enter a parse tree produced by {@link x2gParser#x2g}.
 	 * @param ctx the parse tree
 	 */
-	void enterGrafl(graflParser.GraflContext ctx);
+	void enterX2g(x2gParser.X2gContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#grafl}.
+	 * Exit a parse tree produced by {@link x2gParser#x2g}.
 	 * @param ctx the parse tree
 	 */
-	void exitGrafl(graflParser.GraflContext ctx);
+	void exitX2g(x2gParser.X2gContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#grafl_statement}.
+	 * Enter a parse tree produced by {@link x2gParser#x2g_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterGrafl_statement(graflParser.Grafl_statementContext ctx);
+	void enterX2g_statement(x2gParser.X2g_statementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#grafl_statement}.
+	 * Exit a parse tree produced by {@link x2gParser#x2g_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitGrafl_statement(graflParser.Grafl_statementContext ctx);
+	void exitX2g_statement(x2gParser.X2g_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#ddl_statement}.
+	 * Enter a parse tree produced by {@link x2gParser#ddl_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterDdl_statement(graflParser.Ddl_statementContext ctx);
+	void enterDdl_statement(x2gParser.Ddl_statementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#ddl_statement}.
+	 * Exit a parse tree produced by {@link x2gParser#ddl_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitDdl_statement(graflParser.Ddl_statementContext ctx);
+	void exitDdl_statement(x2gParser.Ddl_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#create_node_type}.
+	 * Enter a parse tree produced by {@link x2gParser#create_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterCreate_node_type(graflParser.Create_node_typeContext ctx);
+	void enterCreate_node_type(x2gParser.Create_node_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#create_node_type}.
+	 * Exit a parse tree produced by {@link x2gParser#create_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitCreate_node_type(graflParser.Create_node_typeContext ctx);
+	void exitCreate_node_type(x2gParser.Create_node_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#super_node_type}.
+	 * Enter a parse tree produced by {@link x2gParser#super_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterSuper_node_type(graflParser.Super_node_typeContext ctx);
+	void enterSuper_node_type(x2gParser.Super_node_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#super_node_type}.
+	 * Exit a parse tree produced by {@link x2gParser#super_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitSuper_node_type(graflParser.Super_node_typeContext ctx);
+	void exitSuper_node_type(x2gParser.Super_node_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#alter_node_type}.
+	 * Enter a parse tree produced by {@link x2gParser#alter_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterAlter_node_type(graflParser.Alter_node_typeContext ctx);
+	void enterAlter_node_type(x2gParser.Alter_node_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#alter_node_type}.
+	 * Exit a parse tree produced by {@link x2gParser#alter_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitAlter_node_type(graflParser.Alter_node_typeContext ctx);
+	void exitAlter_node_type(x2gParser.Alter_node_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#drop_node_type}.
+	 * Enter a parse tree produced by {@link x2gParser#drop_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterDrop_node_type(graflParser.Drop_node_typeContext ctx);
+	void enterDrop_node_type(x2gParser.Drop_node_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#drop_node_type}.
+	 * Exit a parse tree produced by {@link x2gParser#drop_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitDrop_node_type(graflParser.Drop_node_typeContext ctx);
+	void exitDrop_node_type(x2gParser.Drop_node_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#create_edge_type}.
+	 * Enter a parse tree produced by {@link x2gParser#create_edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterCreate_edge_type(graflParser.Create_edge_typeContext ctx);
+	void enterCreate_edge_type(x2gParser.Create_edge_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#create_edge_type}.
+	 * Exit a parse tree produced by {@link x2gParser#create_edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitCreate_edge_type(graflParser.Create_edge_typeContext ctx);
+	void exitCreate_edge_type(x2gParser.Create_edge_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#edge_type_definition}.
+	 * Enter a parse tree produced by {@link x2gParser#edge_type_definition}.
 	 * @param ctx the parse tree
 	 */
-	void enterEdge_type_definition(graflParser.Edge_type_definitionContext ctx);
+	void enterEdge_type_definition(x2gParser.Edge_type_definitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#edge_type_definition}.
+	 * Exit a parse tree produced by {@link x2gParser#edge_type_definition}.
 	 * @param ctx the parse tree
 	 */
-	void exitEdge_type_definition(graflParser.Edge_type_definitionContext ctx);
+	void exitEdge_type_definition(x2gParser.Edge_type_definitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#content_model}.
+	 * Enter a parse tree produced by {@link x2gParser#content_model}.
 	 * @param ctx the parse tree
 	 */
-	void enterContent_model(graflParser.Content_modelContext ctx);
+	void enterContent_model(x2gParser.Content_modelContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#content_model}.
+	 * Exit a parse tree produced by {@link x2gParser#content_model}.
 	 * @param ctx the parse tree
 	 */
-	void exitContent_model(graflParser.Content_modelContext ctx);
+	void exitContent_model(x2gParser.Content_modelContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#role_node_type_list}.
+	 * Enter a parse tree produced by {@link x2gParser#role_node_type_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterRole_node_type_list(graflParser.Role_node_type_listContext ctx);
+	void enterRole_node_type_list(x2gParser.Role_node_type_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#role_node_type_list}.
+	 * Exit a parse tree produced by {@link x2gParser#role_node_type_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitRole_node_type_list(graflParser.Role_node_type_listContext ctx);
+	void exitRole_node_type_list(x2gParser.Role_node_type_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#role_node_type}.
+	 * Enter a parse tree produced by {@link x2gParser#role_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterRole_node_type(graflParser.Role_node_typeContext ctx);
+	void enterRole_node_type(x2gParser.Role_node_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#role_node_type}.
+	 * Exit a parse tree produced by {@link x2gParser#role_node_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitRole_node_type(graflParser.Role_node_typeContext ctx);
+	void exitRole_node_type(x2gParser.Role_node_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#quantifier}.
+	 * Enter a parse tree produced by {@link x2gParser#quantifier}.
 	 * @param ctx the parse tree
 	 */
-	void enterQuantifier(graflParser.QuantifierContext ctx);
+	void enterQuantifier(x2gParser.QuantifierContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#quantifier}.
+	 * Exit a parse tree produced by {@link x2gParser#quantifier}.
 	 * @param ctx the parse tree
 	 */
-	void exitQuantifier(graflParser.QuantifierContext ctx);
+	void exitQuantifier(x2gParser.QuantifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#super_edge_type}.
+	 * Enter a parse tree produced by {@link x2gParser#super_edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterSuper_edge_type(graflParser.Super_edge_typeContext ctx);
+	void enterSuper_edge_type(x2gParser.Super_edge_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#super_edge_type}.
+	 * Exit a parse tree produced by {@link x2gParser#super_edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitSuper_edge_type(graflParser.Super_edge_typeContext ctx);
+	void exitSuper_edge_type(x2gParser.Super_edge_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#alter_edge_type}.
+	 * Enter a parse tree produced by {@link x2gParser#alter_edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterAlter_edge_type(graflParser.Alter_edge_typeContext ctx);
+	void enterAlter_edge_type(x2gParser.Alter_edge_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#alter_edge_type}.
+	 * Exit a parse tree produced by {@link x2gParser#alter_edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitAlter_edge_type(graflParser.Alter_edge_typeContext ctx);
+	void exitAlter_edge_type(x2gParser.Alter_edge_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#drop_edge_type}.
+	 * Enter a parse tree produced by {@link x2gParser#drop_edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterDrop_edge_type(graflParser.Drop_edge_typeContext ctx);
+	void enterDrop_edge_type(x2gParser.Drop_edge_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#drop_edge_type}.
+	 * Exit a parse tree produced by {@link x2gParser#drop_edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitDrop_edge_type(graflParser.Drop_edge_typeContext ctx);
+	void exitDrop_edge_type(x2gParser.Drop_edge_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#dml_statement}.
+	 * Enter a parse tree produced by {@link x2gParser#dml_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterDml_statement(graflParser.Dml_statementContext ctx);
+	void enterDml_statement(x2gParser.Dml_statementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#dml_statement}.
+	 * Exit a parse tree produced by {@link x2gParser#dml_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitDml_statement(graflParser.Dml_statementContext ctx);
+	void exitDml_statement(x2gParser.Dml_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#create_node}.
+	 * Enter a parse tree produced by {@link x2gParser#create_node}.
 	 * @param ctx the parse tree
 	 */
-	void enterCreate_node(graflParser.Create_nodeContext ctx);
+	void enterCreate_node(x2gParser.Create_nodeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#create_node}.
+	 * Exit a parse tree produced by {@link x2gParser#create_node}.
 	 * @param ctx the parse tree
 	 */
-	void exitCreate_node(graflParser.Create_nodeContext ctx);
+	void exitCreate_node(x2gParser.Create_nodeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#update_node}.
+	 * Enter a parse tree produced by {@link x2gParser#update_node}.
 	 * @param ctx the parse tree
 	 */
-	void enterUpdate_node(graflParser.Update_nodeContext ctx);
+	void enterUpdate_node(x2gParser.Update_nodeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#update_node}.
+	 * Exit a parse tree produced by {@link x2gParser#update_node}.
 	 * @param ctx the parse tree
 	 */
-	void exitUpdate_node(graflParser.Update_nodeContext ctx);
+	void exitUpdate_node(x2gParser.Update_nodeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#delete_node}.
+	 * Enter a parse tree produced by {@link x2gParser#delete_node}.
 	 * @param ctx the parse tree
 	 */
-	void enterDelete_node(graflParser.Delete_nodeContext ctx);
+	void enterDelete_node(x2gParser.Delete_nodeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#delete_node}.
+	 * Exit a parse tree produced by {@link x2gParser#delete_node}.
 	 * @param ctx the parse tree
 	 */
-	void exitDelete_node(graflParser.Delete_nodeContext ctx);
+	void exitDelete_node(x2gParser.Delete_nodeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#returns_clause}.
+	 * Enter a parse tree produced by {@link x2gParser#returns_clause}.
 	 * @param ctx the parse tree
 	 */
-	void enterReturns_clause(graflParser.Returns_clauseContext ctx);
+	void enterReturns_clause(x2gParser.Returns_clauseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#returns_clause}.
+	 * Exit a parse tree produced by {@link x2gParser#returns_clause}.
 	 * @param ctx the parse tree
 	 */
-	void exitReturns_clause(graflParser.Returns_clauseContext ctx);
+	void exitReturns_clause(x2gParser.Returns_clauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#create_edge}.
+	 * Enter a parse tree produced by {@link x2gParser#create_edge}.
 	 * @param ctx the parse tree
 	 */
-	void enterCreate_edge(graflParser.Create_edgeContext ctx);
+	void enterCreate_edge(x2gParser.Create_edgeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#create_edge}.
+	 * Exit a parse tree produced by {@link x2gParser#create_edge}.
 	 * @param ctx the parse tree
 	 */
-	void exitCreate_edge(graflParser.Create_edgeContext ctx);
+	void exitCreate_edge(x2gParser.Create_edgeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#update_edge}.
+	 * Enter a parse tree produced by {@link x2gParser#update_edge}.
 	 * @param ctx the parse tree
 	 */
-	void enterUpdate_edge(graflParser.Update_edgeContext ctx);
+	void enterUpdate_edge(x2gParser.Update_edgeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#update_edge}.
+	 * Exit a parse tree produced by {@link x2gParser#update_edge}.
 	 * @param ctx the parse tree
 	 */
-	void exitUpdate_edge(graflParser.Update_edgeContext ctx);
+	void exitUpdate_edge(x2gParser.Update_edgeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#delete_edge}.
+	 * Enter a parse tree produced by {@link x2gParser#delete_edge}.
 	 * @param ctx the parse tree
 	 */
-	void enterDelete_edge(graflParser.Delete_edgeContext ctx);
+	void enterDelete_edge(x2gParser.Delete_edgeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#delete_edge}.
+	 * Exit a parse tree produced by {@link x2gParser#delete_edge}.
 	 * @param ctx the parse tree
 	 */
-	void exitDelete_edge(graflParser.Delete_edgeContext ctx);
+	void exitDelete_edge(x2gParser.Delete_edgeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_list}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_list(graflParser.Attr_listContext ctx);
+	void enterAttr_list(x2gParser.Attr_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_list}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_list(graflParser.Attr_listContext ctx);
+	void exitAttr_list(x2gParser.Attr_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#alter_attr_list}.
+	 * Enter a parse tree produced by {@link x2gParser#alter_attr_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterAlter_attr_list(graflParser.Alter_attr_listContext ctx);
+	void enterAlter_attr_list(x2gParser.Alter_attr_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#alter_attr_list}.
+	 * Exit a parse tree produced by {@link x2gParser#alter_attr_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitAlter_attr_list(graflParser.Alter_attr_listContext ctx);
+	void exitAlter_attr_list(x2gParser.Alter_attr_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#alter_attr}.
+	 * Enter a parse tree produced by {@link x2gParser#alter_attr}.
 	 * @param ctx the parse tree
 	 */
-	void enterAlter_attr(graflParser.Alter_attrContext ctx);
+	void enterAlter_attr(x2gParser.Alter_attrContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#alter_attr}.
+	 * Exit a parse tree produced by {@link x2gParser#alter_attr}.
 	 * @param ctx the parse tree
 	 */
-	void exitAlter_attr(graflParser.Alter_attrContext ctx);
+	void exitAlter_attr(x2gParser.Alter_attrContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#query_statement}.
+	 * Enter a parse tree produced by {@link x2gParser#query_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterQuery_statement(graflParser.Query_statementContext ctx);
+	void enterQuery_statement(x2gParser.Query_statementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#query_statement}.
+	 * Exit a parse tree produced by {@link x2gParser#query_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitQuery_statement(graflParser.Query_statementContext ctx);
+	void exitQuery_statement(x2gParser.Query_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#variable_assignments}.
+	 * Enter a parse tree produced by {@link x2gParser#variable_assignments}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariable_assignments(graflParser.Variable_assignmentsContext ctx);
+	void enterVariable_assignments(x2gParser.Variable_assignmentsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#variable_assignments}.
+	 * Exit a parse tree produced by {@link x2gParser#variable_assignments}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariable_assignments(graflParser.Variable_assignmentsContext ctx);
+	void exitVariable_assignments(x2gParser.Variable_assignmentsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#itervar_assignment_list}.
+	 * Enter a parse tree produced by {@link x2gParser#itervar_assignment_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterItervar_assignment_list(graflParser.Itervar_assignment_listContext ctx);
+	void enterItervar_assignment_list(x2gParser.Itervar_assignment_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#itervar_assignment_list}.
+	 * Exit a parse tree produced by {@link x2gParser#itervar_assignment_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitItervar_assignment_list(graflParser.Itervar_assignment_listContext ctx);
+	void exitItervar_assignment_list(x2gParser.Itervar_assignment_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#itervar_assignment}.
+	 * Enter a parse tree produced by {@link x2gParser#itervar_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterItervar_assignment(graflParser.Itervar_assignmentContext ctx);
+	void enterItervar_assignment(x2gParser.Itervar_assignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#itervar_assignment}.
+	 * Exit a parse tree produced by {@link x2gParser#itervar_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitItervar_assignment(graflParser.Itervar_assignmentContext ctx);
+	void exitItervar_assignment(x2gParser.Itervar_assignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#setvar_assignment_list}.
+	 * Enter a parse tree produced by {@link x2gParser#setvar_assignment_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterSetvar_assignment_list(graflParser.Setvar_assignment_listContext ctx);
+	void enterSetvar_assignment_list(x2gParser.Setvar_assignment_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#setvar_assignment_list}.
+	 * Exit a parse tree produced by {@link x2gParser#setvar_assignment_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitSetvar_assignment_list(graflParser.Setvar_assignment_listContext ctx);
+	void exitSetvar_assignment_list(x2gParser.Setvar_assignment_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#setvar_assignment}.
+	 * Enter a parse tree produced by {@link x2gParser#setvar_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterSetvar_assignment(graflParser.Setvar_assignmentContext ctx);
+	void enterSetvar_assignment(x2gParser.Setvar_assignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#setvar_assignment}.
+	 * Exit a parse tree produced by {@link x2gParser#setvar_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitSetvar_assignment(graflParser.Setvar_assignmentContext ctx);
+	void exitSetvar_assignment(x2gParser.Setvar_assignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#set_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#set_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterSet_expr(graflParser.Set_exprContext ctx);
+	void enterSet_expr(x2gParser.Set_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#set_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#set_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitSet_expr(graflParser.Set_exprContext ctx);
+	void exitSet_expr(x2gParser.Set_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#where_clause}.
+	 * Enter a parse tree produced by {@link x2gParser#where_clause}.
 	 * @param ctx the parse tree
 	 */
-	void enterWhere_clause(graflParser.Where_clauseContext ctx);
+	void enterWhere_clause(x2gParser.Where_clauseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#where_clause}.
+	 * Exit a parse tree produced by {@link x2gParser#where_clause}.
 	 * @param ctx the parse tree
 	 */
-	void exitWhere_clause(graflParser.Where_clauseContext ctx);
+	void exitWhere_clause(x2gParser.Where_clauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#order_by_clause}.
+	 * Enter a parse tree produced by {@link x2gParser#order_by_clause}.
 	 * @param ctx the parse tree
 	 */
-	void enterOrder_by_clause(graflParser.Order_by_clauseContext ctx);
+	void enterOrder_by_clause(x2gParser.Order_by_clauseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#order_by_clause}.
+	 * Exit a parse tree produced by {@link x2gParser#order_by_clause}.
 	 * @param ctx the parse tree
 	 */
-	void exitOrder_by_clause(graflParser.Order_by_clauseContext ctx);
+	void exitOrder_by_clause(x2gParser.Order_by_clauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#return_clause}.
+	 * Enter a parse tree produced by {@link x2gParser#return_clause}.
 	 * @param ctx the parse tree
 	 */
-	void enterReturn_clause(graflParser.Return_clauseContext ctx);
+	void enterReturn_clause(x2gParser.Return_clauseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#return_clause}.
+	 * Exit a parse tree produced by {@link x2gParser#return_clause}.
 	 * @param ctx the parse tree
 	 */
-	void exitReturn_clause(graflParser.Return_clauseContext ctx);
+	void exitReturn_clause(x2gParser.Return_clauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#scalar_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#scalar_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterScalar_expr(graflParser.Scalar_exprContext ctx);
+	void enterScalar_expr(x2gParser.Scalar_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#scalar_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#scalar_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitScalar_expr(graflParser.Scalar_exprContext ctx);
+	void exitScalar_expr(x2gParser.Scalar_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#literal_value}.
+	 * Enter a parse tree produced by {@link x2gParser#literal_value}.
 	 * @param ctx the parse tree
 	 */
-	void enterLiteral_value(graflParser.Literal_valueContext ctx);
+	void enterLiteral_value(x2gParser.Literal_valueContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#literal_value}.
+	 * Exit a parse tree produced by {@link x2gParser#literal_value}.
 	 * @param ctx the parse tree
 	 */
-	void exitLiteral_value(graflParser.Literal_valueContext ctx);
+	void exitLiteral_value(x2gParser.Literal_valueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#string_literal}.
+	 * Enter a parse tree produced by {@link x2gParser#string_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterString_literal(graflParser.String_literalContext ctx);
+	void enterString_literal(x2gParser.String_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#string_literal}.
+	 * Exit a parse tree produced by {@link x2gParser#string_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitString_literal(graflParser.String_literalContext ctx);
+	void exitString_literal(x2gParser.String_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#datespan_literal}.
+	 * Enter a parse tree produced by {@link x2gParser#datespan_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterDatespan_literal(graflParser.Datespan_literalContext ctx);
+	void enterDatespan_literal(x2gParser.Datespan_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#datespan_literal}.
+	 * Exit a parse tree produced by {@link x2gParser#datespan_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitDatespan_literal(graflParser.Datespan_literalContext ctx);
+	void exitDatespan_literal(x2gParser.Datespan_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#point_literal}.
+	 * Enter a parse tree produced by {@link x2gParser#point_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterPoint_literal(graflParser.Point_literalContext ctx);
+	void enterPoint_literal(x2gParser.Point_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#point_literal}.
+	 * Exit a parse tree produced by {@link x2gParser#point_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitPoint_literal(graflParser.Point_literalContext ctx);
+	void exitPoint_literal(x2gParser.Point_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#linestring_literal}.
+	 * Enter a parse tree produced by {@link x2gParser#linestring_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterLinestring_literal(graflParser.Linestring_literalContext ctx);
+	void enterLinestring_literal(x2gParser.Linestring_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#linestring_literal}.
+	 * Exit a parse tree produced by {@link x2gParser#linestring_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitLinestring_literal(graflParser.Linestring_literalContext ctx);
+	void exitLinestring_literal(x2gParser.Linestring_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#region_literal}.
+	 * Enter a parse tree produced by {@link x2gParser#region_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterRegion_literal(graflParser.Region_literalContext ctx);
+	void enterRegion_literal(x2gParser.Region_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#region_literal}.
+	 * Exit a parse tree produced by {@link x2gParser#region_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitRegion_literal(graflParser.Region_literalContext ctx);
+	void exitRegion_literal(x2gParser.Region_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#numeric_literal}.
+	 * Enter a parse tree produced by {@link x2gParser#numeric_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumeric_literal(graflParser.Numeric_literalContext ctx);
+	void enterNumeric_literal(x2gParser.Numeric_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#numeric_literal}.
+	 * Exit a parse tree produced by {@link x2gParser#numeric_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumeric_literal(graflParser.Numeric_literalContext ctx);
+	void exitNumeric_literal(x2gParser.Numeric_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#boolean_literal}.
+	 * Enter a parse tree produced by {@link x2gParser#boolean_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolean_literal(graflParser.Boolean_literalContext ctx);
+	void enterBoolean_literal(x2gParser.Boolean_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#boolean_literal}.
+	 * Exit a parse tree produced by {@link x2gParser#boolean_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolean_literal(graflParser.Boolean_literalContext ctx);
+	void exitBoolean_literal(x2gParser.Boolean_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_type}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_type(graflParser.Attr_typeContext ctx);
+	void enterAttr_type(x2gParser.Attr_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_type}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_type(graflParser.Attr_typeContext ctx);
+	void exitAttr_type(x2gParser.Attr_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_value}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_value}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_value(graflParser.Attr_valueContext ctx);
+	void enterAttr_value(x2gParser.Attr_valueContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_value}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_value}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_value(graflParser.Attr_valueContext ctx);
+	void exitAttr_value(x2gParser.Attr_valueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_type_list}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_type_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_type_list(graflParser.Attr_type_listContext ctx);
+	void enterAttr_type_list(x2gParser.Attr_type_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_type_list}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_type_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_type_list(graflParser.Attr_type_listContext ctx);
+	void exitAttr_type_list(x2gParser.Attr_type_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_definition}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_definition}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_definition(graflParser.Attr_definitionContext ctx);
+	void enterAttr_definition(x2gParser.Attr_definitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_definition}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_definition}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_definition(graflParser.Attr_definitionContext ctx);
+	void exitAttr_definition(x2gParser.Attr_definitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_value_list}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_value_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_value_list(graflParser.Attr_value_listContext ctx);
+	void enterAttr_value_list(x2gParser.Attr_value_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_value_list}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_value_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_value_list(graflParser.Attr_value_listContext ctx);
+	void exitAttr_value_list(x2gParser.Attr_value_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_assignment}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_assignment(graflParser.Attr_assignmentContext ctx);
+	void enterAttr_assignment(x2gParser.Attr_assignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_assignment}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_assignment(graflParser.Attr_assignmentContext ctx);
+	void exitAttr_assignment(x2gParser.Attr_assignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#func_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#func_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunc_expr(graflParser.Func_exprContext ctx);
+	void enterFunc_expr(x2gParser.Func_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#func_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#func_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunc_expr(graflParser.Func_exprContext ctx);
+	void exitFunc_expr(x2gParser.Func_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#func_param_list}.
+	 * Enter a parse tree produced by {@link x2gParser#func_param_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunc_param_list(graflParser.Func_param_listContext ctx);
+	void enterFunc_param_list(x2gParser.Func_param_listContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#func_param_list}.
+	 * Exit a parse tree produced by {@link x2gParser#func_param_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunc_param_list(graflParser.Func_param_listContext ctx);
+	void exitFunc_param_list(x2gParser.Func_param_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#func_param}.
+	 * Enter a parse tree produced by {@link x2gParser#func_param}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunc_param(graflParser.Func_paramContext ctx);
+	void enterFunc_param(x2gParser.Func_paramContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#func_param}.
+	 * Exit a parse tree produced by {@link x2gParser#func_param}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunc_param(graflParser.Func_paramContext ctx);
+	void exitFunc_param(x2gParser.Func_paramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#scalar_func}.
+	 * Enter a parse tree produced by {@link x2gParser#scalar_func}.
 	 * @param ctx the parse tree
 	 */
-	void enterScalar_func(graflParser.Scalar_funcContext ctx);
+	void enterScalar_func(x2gParser.Scalar_funcContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#scalar_func}.
+	 * Exit a parse tree produced by {@link x2gParser#scalar_func}.
 	 * @param ctx the parse tree
 	 */
-	void exitScalar_func(graflParser.Scalar_funcContext ctx);
+	void exitScalar_func(x2gParser.Scalar_funcContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#nid}.
+	 * Enter a parse tree produced by {@link x2gParser#nid}.
 	 * @param ctx the parse tree
 	 */
-	void enterNid(graflParser.NidContext ctx);
+	void enterNid(x2gParser.NidContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#nid}.
+	 * Exit a parse tree produced by {@link x2gParser#nid}.
 	 * @param ctx the parse tree
 	 */
-	void exitNid(graflParser.NidContext ctx);
+	void exitNid(x2gParser.NidContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#eid}.
+	 * Enter a parse tree produced by {@link x2gParser#eid}.
 	 * @param ctx the parse tree
 	 */
-	void enterEid(graflParser.EidContext ctx);
+	void enterEid(x2gParser.EidContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#eid}.
+	 * Exit a parse tree produced by {@link x2gParser#eid}.
 	 * @param ctx the parse tree
 	 */
-	void exitEid(graflParser.EidContext ctx);
+	void exitEid(x2gParser.EidContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#node_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#node_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterNode_expr(graflParser.Node_exprContext ctx);
+	void enterNode_expr(x2gParser.Node_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#node_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#node_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitNode_expr(graflParser.Node_exprContext ctx);
+	void exitNode_expr(x2gParser.Node_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#nodeset_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#nodeset_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterNodeset_expr(graflParser.Nodeset_exprContext ctx);
+	void enterNodeset_expr(x2gParser.Nodeset_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#nodeset_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#nodeset_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitNodeset_expr(graflParser.Nodeset_exprContext ctx);
+	void exitNodeset_expr(x2gParser.Nodeset_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#node_constructor}.
+	 * Enter a parse tree produced by {@link x2gParser#node_constructor}.
 	 * @param ctx the parse tree
 	 */
-	void enterNode_constructor(graflParser.Node_constructorContext ctx);
+	void enterNode_constructor(x2gParser.Node_constructorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#node_constructor}.
+	 * Exit a parse tree produced by {@link x2gParser#node_constructor}.
 	 * @param ctx the parse tree
 	 */
-	void exitNode_constructor(graflParser.Node_constructorContext ctx);
+	void exitNode_constructor(x2gParser.Node_constructorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#edge_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#edge_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterEdge_expr(graflParser.Edge_exprContext ctx);
+	void enterEdge_expr(x2gParser.Edge_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#edge_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#edge_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitEdge_expr(graflParser.Edge_exprContext ctx);
+	void exitEdge_expr(x2gParser.Edge_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#edgeset_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#edgeset_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterEdgeset_expr(graflParser.Edgeset_exprContext ctx);
+	void enterEdgeset_expr(x2gParser.Edgeset_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#edgeset_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#edgeset_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitEdgeset_expr(graflParser.Edgeset_exprContext ctx);
+	void exitEdgeset_expr(x2gParser.Edgeset_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#edge_constructor}.
+	 * Enter a parse tree produced by {@link x2gParser#edge_constructor}.
 	 * @param ctx the parse tree
 	 */
-	void enterEdge_constructor(graflParser.Edge_constructorContext ctx);
+	void enterEdge_constructor(x2gParser.Edge_constructorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#edge_constructor}.
+	 * Exit a parse tree produced by {@link x2gParser#edge_constructor}.
 	 * @param ctx the parse tree
 	 */
-	void exitEdge_constructor(graflParser.Edge_constructorContext ctx);
+	void exitEdge_constructor(x2gParser.Edge_constructorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#role_node_sequence}.
+	 * Enter a parse tree produced by {@link x2gParser#role_node_sequence}.
 	 * @param ctx the parse tree
 	 */
-	void enterRole_node_sequence(graflParser.Role_node_sequenceContext ctx);
+	void enterRole_node_sequence(x2gParser.Role_node_sequenceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#role_node_sequence}.
+	 * Exit a parse tree produced by {@link x2gParser#role_node_sequence}.
 	 * @param ctx the parse tree
 	 */
-	void exitRole_node_sequence(graflParser.Role_node_sequenceContext ctx);
+	void exitRole_node_sequence(x2gParser.Role_node_sequenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_sequence}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_sequence}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_sequence(graflParser.Attr_sequenceContext ctx);
+	void enterAttr_sequence(x2gParser.Attr_sequenceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_sequence}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_sequence}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_sequence(graflParser.Attr_sequenceContext ctx);
+	void exitAttr_sequence(x2gParser.Attr_sequenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#scalar_sequence}.
+	 * Enter a parse tree produced by {@link x2gParser#scalar_sequence}.
 	 * @param ctx the parse tree
 	 */
-	void enterScalar_sequence(graflParser.Scalar_sequenceContext ctx);
+	void enterScalar_sequence(x2gParser.Scalar_sequenceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#scalar_sequence}.
+	 * Exit a parse tree produced by {@link x2gParser#scalar_sequence}.
 	 * @param ctx the parse tree
 	 */
-	void exitScalar_sequence(graflParser.Scalar_sequenceContext ctx);
+	void exitScalar_sequence(x2gParser.Scalar_sequenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#boolean_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#boolean_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolean_expr(graflParser.Boolean_exprContext ctx);
+	void enterBoolean_expr(x2gParser.Boolean_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#boolean_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#boolean_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolean_expr(graflParser.Boolean_exprContext ctx);
+	void exitBoolean_expr(x2gParser.Boolean_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#boolean_attr_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#boolean_attr_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolean_attr_expr(graflParser.Boolean_attr_exprContext ctx);
+	void enterBoolean_attr_expr(x2gParser.Boolean_attr_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#boolean_attr_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#boolean_attr_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolean_attr_expr(graflParser.Boolean_attr_exprContext ctx);
+	void exitBoolean_attr_expr(x2gParser.Boolean_attr_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#qual_attr_name}.
+	 * Enter a parse tree produced by {@link x2gParser#qual_attr_name}.
 	 * @param ctx the parse tree
 	 */
-	void enterQual_attr_name(graflParser.Qual_attr_nameContext ctx);
+	void enterQual_attr_name(x2gParser.Qual_attr_nameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#qual_attr_name}.
+	 * Exit a parse tree produced by {@link x2gParser#qual_attr_name}.
 	 * @param ctx the parse tree
 	 */
-	void exitQual_attr_name(graflParser.Qual_attr_nameContext ctx);
+	void exitQual_attr_name(x2gParser.Qual_attr_nameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#value_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#value_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterValue_expr(graflParser.Value_exprContext ctx);
+	void enterValue_expr(x2gParser.Value_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#value_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#value_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitValue_expr(graflParser.Value_exprContext ctx);
+	void exitValue_expr(x2gParser.Value_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#boolean_node_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#boolean_node_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolean_node_expr(graflParser.Boolean_node_exprContext ctx);
+	void enterBoolean_node_expr(x2gParser.Boolean_node_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#boolean_node_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#boolean_node_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolean_node_expr(graflParser.Boolean_node_exprContext ctx);
+	void exitBoolean_node_expr(x2gParser.Boolean_node_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#boolean_edge_expr}.
+	 * Enter a parse tree produced by {@link x2gParser#boolean_edge_expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolean_edge_expr(graflParser.Boolean_edge_exprContext ctx);
+	void enterBoolean_edge_expr(x2gParser.Boolean_edge_exprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#boolean_edge_expr}.
+	 * Exit a parse tree produced by {@link x2gParser#boolean_edge_expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolean_edge_expr(graflParser.Boolean_edge_exprContext ctx);
+	void exitBoolean_edge_expr(x2gParser.Boolean_edge_exprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#comp_op}.
+	 * Enter a parse tree produced by {@link x2gParser#comp_op}.
 	 * @param ctx the parse tree
 	 */
-	void enterComp_op(graflParser.Comp_opContext ctx);
+	void enterComp_op(x2gParser.Comp_opContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#comp_op}.
+	 * Exit a parse tree produced by {@link x2gParser#comp_op}.
 	 * @param ctx the parse tree
 	 */
-	void exitComp_op(graflParser.Comp_opContext ctx);
+	void exitComp_op(x2gParser.Comp_opContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#unary_op}.
+	 * Enter a parse tree produced by {@link x2gParser#unary_op}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnary_op(graflParser.Unary_opContext ctx);
+	void enterUnary_op(x2gParser.Unary_opContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#unary_op}.
+	 * Exit a parse tree produced by {@link x2gParser#unary_op}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnary_op(graflParser.Unary_opContext ctx);
+	void exitUnary_op(x2gParser.Unary_opContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#binary_op}.
+	 * Enter a parse tree produced by {@link x2gParser#binary_op}.
 	 * @param ctx the parse tree
 	 */
-	void enterBinary_op(graflParser.Binary_opContext ctx);
+	void enterBinary_op(x2gParser.Binary_opContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#binary_op}.
+	 * Exit a parse tree produced by {@link x2gParser#binary_op}.
 	 * @param ctx the parse tree
 	 */
-	void exitBinary_op(graflParser.Binary_opContext ctx);
+	void exitBinary_op(x2gParser.Binary_opContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#namespace}.
+	 * Enter a parse tree produced by {@link x2gParser#namespace}.
 	 * @param ctx the parse tree
 	 */
-	void enterNamespace(graflParser.NamespaceContext ctx);
+	void enterNamespace(x2gParser.NamespaceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#namespace}.
+	 * Exit a parse tree produced by {@link x2gParser#namespace}.
 	 * @param ctx the parse tree
 	 */
-	void exitNamespace(graflParser.NamespaceContext ctx);
+	void exitNamespace(x2gParser.NamespaceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#node_type}.
+	 * Enter a parse tree produced by {@link x2gParser#node_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterNode_type(graflParser.Node_typeContext ctx);
+	void enterNode_type(x2gParser.Node_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#node_type}.
+	 * Exit a parse tree produced by {@link x2gParser#node_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitNode_type(graflParser.Node_typeContext ctx);
+	void exitNode_type(x2gParser.Node_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#edge_type}.
+	 * Enter a parse tree produced by {@link x2gParser#edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterEdge_type(graflParser.Edge_typeContext ctx);
+	void enterEdge_type(x2gParser.Edge_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#edge_type}.
+	 * Exit a parse tree produced by {@link x2gParser#edge_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitEdge_type(graflParser.Edge_typeContext ctx);
+	void exitEdge_type(x2gParser.Edge_typeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#role_name}.
+	 * Enter a parse tree produced by {@link x2gParser#role_name}.
 	 * @param ctx the parse tree
 	 */
-	void enterRole_name(graflParser.Role_nameContext ctx);
+	void enterRole_name(x2gParser.Role_nameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#role_name}.
+	 * Exit a parse tree produced by {@link x2gParser#role_name}.
 	 * @param ctx the parse tree
 	 */
-	void exitRole_name(graflParser.Role_nameContext ctx);
+	void exitRole_name(x2gParser.Role_nameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#attr_name}.
+	 * Enter a parse tree produced by {@link x2gParser#attr_name}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttr_name(graflParser.Attr_nameContext ctx);
+	void enterAttr_name(x2gParser.Attr_nameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#attr_name}.
+	 * Exit a parse tree produced by {@link x2gParser#attr_name}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttr_name(graflParser.Attr_nameContext ctx);
+	void exitAttr_name(x2gParser.Attr_nameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#func_name}.
+	 * Enter a parse tree produced by {@link x2gParser#func_name}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunc_name(graflParser.Func_nameContext ctx);
+	void enterFunc_name(x2gParser.Func_nameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#func_name}.
+	 * Exit a parse tree produced by {@link x2gParser#func_name}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunc_name(graflParser.Func_nameContext ctx);
+	void exitFunc_name(x2gParser.Func_nameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#node_var}.
+	 * Enter a parse tree produced by {@link x2gParser#node_var}.
 	 * @param ctx the parse tree
 	 */
-	void enterNode_var(graflParser.Node_varContext ctx);
+	void enterNode_var(x2gParser.Node_varContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#node_var}.
+	 * Exit a parse tree produced by {@link x2gParser#node_var}.
 	 * @param ctx the parse tree
 	 */
-	void exitNode_var(graflParser.Node_varContext ctx);
+	void exitNode_var(x2gParser.Node_varContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#nodeset_var}.
+	 * Enter a parse tree produced by {@link x2gParser#nodeset_var}.
 	 * @param ctx the parse tree
 	 */
-	void enterNodeset_var(graflParser.Nodeset_varContext ctx);
+	void enterNodeset_var(x2gParser.Nodeset_varContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#nodeset_var}.
+	 * Exit a parse tree produced by {@link x2gParser#nodeset_var}.
 	 * @param ctx the parse tree
 	 */
-	void exitNodeset_var(graflParser.Nodeset_varContext ctx);
+	void exitNodeset_var(x2gParser.Nodeset_varContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#edge_var}.
+	 * Enter a parse tree produced by {@link x2gParser#edge_var}.
 	 * @param ctx the parse tree
 	 */
-	void enterEdge_var(graflParser.Edge_varContext ctx);
+	void enterEdge_var(x2gParser.Edge_varContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#edge_var}.
+	 * Exit a parse tree produced by {@link x2gParser#edge_var}.
 	 * @param ctx the parse tree
 	 */
-	void exitEdge_var(graflParser.Edge_varContext ctx);
+	void exitEdge_var(x2gParser.Edge_varContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link graflParser#edgeset_var}.
+	 * Enter a parse tree produced by {@link x2gParser#edgeset_var}.
 	 * @param ctx the parse tree
 	 */
-	void enterEdgeset_var(graflParser.Edgeset_varContext ctx);
+	void enterEdgeset_var(x2gParser.Edgeset_varContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link graflParser#edgeset_var}.
+	 * Exit a parse tree produced by {@link x2gParser#edgeset_var}.
 	 * @param ctx the parse tree
 	 */
-	void exitEdgeset_var(graflParser.Edgeset_varContext ctx);
+	void exitEdgeset_var(x2gParser.Edgeset_varContext ctx);
 }

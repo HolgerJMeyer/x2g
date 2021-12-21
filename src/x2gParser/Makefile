@@ -8,7 +8,6 @@ CLASSPATH=".:antlr-4.7/antlr-4.7-complete.jar:antlr-4.7/antlr-runtime-4.7.jar:$(
 #ANTLR = antlr4
 ANTLR = java -jar ./antlr-4.7/antlr-4.7-complete.jar
 #AFLAGS = -package $(TARGET)
-AFLAGS = 
 ASRCS = $(wildcard *.g4)
 # GRAFL
 TARGET = x2g

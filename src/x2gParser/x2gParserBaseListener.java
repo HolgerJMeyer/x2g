@@ -1,4 +1,6 @@
-// Generated from graflParser.g4 by ANTLR 4.7
+// Generated from x2gParser.g4 by ANTLR 4.7
+
+//package x2g;
 
 import java.util.*;
 
@@ -8,1043 +10,1043 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link graflParserListener},
+ * This class provides an empty implementation of {@link x2gParserListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-public class graflParserBaseListener implements graflParserListener {
+public class x2gParserBaseListener implements x2gParserListener {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGrafl(graflParser.GraflContext ctx) { }
+	@Override public void enterX2g(x2gParser.X2gContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGrafl(graflParser.GraflContext ctx) { }
+	@Override public void exitX2g(x2gParser.X2gContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGrafl_statement(graflParser.Grafl_statementContext ctx) { }
+	@Override public void enterX2g_statement(x2gParser.X2g_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGrafl_statement(graflParser.Grafl_statementContext ctx) { }
+	@Override public void exitX2g_statement(x2gParser.X2g_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDdl_statement(graflParser.Ddl_statementContext ctx) { }
+	@Override public void enterDdl_statement(x2gParser.Ddl_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDdl_statement(graflParser.Ddl_statementContext ctx) { }
+	@Override public void exitDdl_statement(x2gParser.Ddl_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCreate_node_type(graflParser.Create_node_typeContext ctx) { }
+	@Override public void enterCreate_node_type(x2gParser.Create_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCreate_node_type(graflParser.Create_node_typeContext ctx) { }
+	@Override public void exitCreate_node_type(x2gParser.Create_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSuper_node_type(graflParser.Super_node_typeContext ctx) { }
+	@Override public void enterSuper_node_type(x2gParser.Super_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSuper_node_type(graflParser.Super_node_typeContext ctx) { }
+	@Override public void exitSuper_node_type(x2gParser.Super_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAlter_node_type(graflParser.Alter_node_typeContext ctx) { }
+	@Override public void enterAlter_node_type(x2gParser.Alter_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAlter_node_type(graflParser.Alter_node_typeContext ctx) { }
+	@Override public void exitAlter_node_type(x2gParser.Alter_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDrop_node_type(graflParser.Drop_node_typeContext ctx) { }
+	@Override public void enterDrop_node_type(x2gParser.Drop_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDrop_node_type(graflParser.Drop_node_typeContext ctx) { }
+	@Override public void exitDrop_node_type(x2gParser.Drop_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCreate_edge_type(graflParser.Create_edge_typeContext ctx) { }
+	@Override public void enterCreate_edge_type(x2gParser.Create_edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCreate_edge_type(graflParser.Create_edge_typeContext ctx) { }
+	@Override public void exitCreate_edge_type(x2gParser.Create_edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEdge_type_definition(graflParser.Edge_type_definitionContext ctx) { }
+	@Override public void enterEdge_type_definition(x2gParser.Edge_type_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEdge_type_definition(graflParser.Edge_type_definitionContext ctx) { }
+	@Override public void exitEdge_type_definition(x2gParser.Edge_type_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterContent_model(graflParser.Content_modelContext ctx) { }
+	@Override public void enterContent_model(x2gParser.Content_modelContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitContent_model(graflParser.Content_modelContext ctx) { }
+	@Override public void exitContent_model(x2gParser.Content_modelContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRole_node_type_list(graflParser.Role_node_type_listContext ctx) { }
+	@Override public void enterRole_node_type_list(x2gParser.Role_node_type_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRole_node_type_list(graflParser.Role_node_type_listContext ctx) { }
+	@Override public void exitRole_node_type_list(x2gParser.Role_node_type_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRole_node_type(graflParser.Role_node_typeContext ctx) { }
+	@Override public void enterRole_node_type(x2gParser.Role_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRole_node_type(graflParser.Role_node_typeContext ctx) { }
+	@Override public void exitRole_node_type(x2gParser.Role_node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQuantifier(graflParser.QuantifierContext ctx) { }
+	@Override public void enterQuantifier(x2gParser.QuantifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQuantifier(graflParser.QuantifierContext ctx) { }
+	@Override public void exitQuantifier(x2gParser.QuantifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSuper_edge_type(graflParser.Super_edge_typeContext ctx) { }
+	@Override public void enterSuper_edge_type(x2gParser.Super_edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSuper_edge_type(graflParser.Super_edge_typeContext ctx) { }
+	@Override public void exitSuper_edge_type(x2gParser.Super_edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAlter_edge_type(graflParser.Alter_edge_typeContext ctx) { }
+	@Override public void enterAlter_edge_type(x2gParser.Alter_edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAlter_edge_type(graflParser.Alter_edge_typeContext ctx) { }
+	@Override public void exitAlter_edge_type(x2gParser.Alter_edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDrop_edge_type(graflParser.Drop_edge_typeContext ctx) { }
+	@Override public void enterDrop_edge_type(x2gParser.Drop_edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDrop_edge_type(graflParser.Drop_edge_typeContext ctx) { }
+	@Override public void exitDrop_edge_type(x2gParser.Drop_edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDml_statement(graflParser.Dml_statementContext ctx) { }
+	@Override public void enterDml_statement(x2gParser.Dml_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDml_statement(graflParser.Dml_statementContext ctx) { }
+	@Override public void exitDml_statement(x2gParser.Dml_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCreate_node(graflParser.Create_nodeContext ctx) { }
+	@Override public void enterCreate_node(x2gParser.Create_nodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCreate_node(graflParser.Create_nodeContext ctx) { }
+	@Override public void exitCreate_node(x2gParser.Create_nodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUpdate_node(graflParser.Update_nodeContext ctx) { }
+	@Override public void enterUpdate_node(x2gParser.Update_nodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUpdate_node(graflParser.Update_nodeContext ctx) { }
+	@Override public void exitUpdate_node(x2gParser.Update_nodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDelete_node(graflParser.Delete_nodeContext ctx) { }
+	@Override public void enterDelete_node(x2gParser.Delete_nodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDelete_node(graflParser.Delete_nodeContext ctx) { }
+	@Override public void exitDelete_node(x2gParser.Delete_nodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReturns_clause(graflParser.Returns_clauseContext ctx) { }
+	@Override public void enterReturns_clause(x2gParser.Returns_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReturns_clause(graflParser.Returns_clauseContext ctx) { }
+	@Override public void exitReturns_clause(x2gParser.Returns_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCreate_edge(graflParser.Create_edgeContext ctx) { }
+	@Override public void enterCreate_edge(x2gParser.Create_edgeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCreate_edge(graflParser.Create_edgeContext ctx) { }
+	@Override public void exitCreate_edge(x2gParser.Create_edgeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUpdate_edge(graflParser.Update_edgeContext ctx) { }
+	@Override public void enterUpdate_edge(x2gParser.Update_edgeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUpdate_edge(graflParser.Update_edgeContext ctx) { }
+	@Override public void exitUpdate_edge(x2gParser.Update_edgeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDelete_edge(graflParser.Delete_edgeContext ctx) { }
+	@Override public void enterDelete_edge(x2gParser.Delete_edgeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDelete_edge(graflParser.Delete_edgeContext ctx) { }
+	@Override public void exitDelete_edge(x2gParser.Delete_edgeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_list(graflParser.Attr_listContext ctx) { }
+	@Override public void enterAttr_list(x2gParser.Attr_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_list(graflParser.Attr_listContext ctx) { }
+	@Override public void exitAttr_list(x2gParser.Attr_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAlter_attr_list(graflParser.Alter_attr_listContext ctx) { }
+	@Override public void enterAlter_attr_list(x2gParser.Alter_attr_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAlter_attr_list(graflParser.Alter_attr_listContext ctx) { }
+	@Override public void exitAlter_attr_list(x2gParser.Alter_attr_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAlter_attr(graflParser.Alter_attrContext ctx) { }
+	@Override public void enterAlter_attr(x2gParser.Alter_attrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAlter_attr(graflParser.Alter_attrContext ctx) { }
+	@Override public void exitAlter_attr(x2gParser.Alter_attrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQuery_statement(graflParser.Query_statementContext ctx) { }
+	@Override public void enterQuery_statement(x2gParser.Query_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQuery_statement(graflParser.Query_statementContext ctx) { }
+	@Override public void exitQuery_statement(x2gParser.Query_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariable_assignments(graflParser.Variable_assignmentsContext ctx) { }
+	@Override public void enterVariable_assignments(x2gParser.Variable_assignmentsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariable_assignments(graflParser.Variable_assignmentsContext ctx) { }
+	@Override public void exitVariable_assignments(x2gParser.Variable_assignmentsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterItervar_assignment_list(graflParser.Itervar_assignment_listContext ctx) { }
+	@Override public void enterItervar_assignment_list(x2gParser.Itervar_assignment_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitItervar_assignment_list(graflParser.Itervar_assignment_listContext ctx) { }
+	@Override public void exitItervar_assignment_list(x2gParser.Itervar_assignment_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterItervar_assignment(graflParser.Itervar_assignmentContext ctx) { }
+	@Override public void enterItervar_assignment(x2gParser.Itervar_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitItervar_assignment(graflParser.Itervar_assignmentContext ctx) { }
+	@Override public void exitItervar_assignment(x2gParser.Itervar_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSetvar_assignment_list(graflParser.Setvar_assignment_listContext ctx) { }
+	@Override public void enterSetvar_assignment_list(x2gParser.Setvar_assignment_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSetvar_assignment_list(graflParser.Setvar_assignment_listContext ctx) { }
+	@Override public void exitSetvar_assignment_list(x2gParser.Setvar_assignment_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSetvar_assignment(graflParser.Setvar_assignmentContext ctx) { }
+	@Override public void enterSetvar_assignment(x2gParser.Setvar_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSetvar_assignment(graflParser.Setvar_assignmentContext ctx) { }
+	@Override public void exitSetvar_assignment(x2gParser.Setvar_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSet_expr(graflParser.Set_exprContext ctx) { }
+	@Override public void enterSet_expr(x2gParser.Set_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSet_expr(graflParser.Set_exprContext ctx) { }
+	@Override public void exitSet_expr(x2gParser.Set_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhere_clause(graflParser.Where_clauseContext ctx) { }
+	@Override public void enterWhere_clause(x2gParser.Where_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWhere_clause(graflParser.Where_clauseContext ctx) { }
+	@Override public void exitWhere_clause(x2gParser.Where_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOrder_by_clause(graflParser.Order_by_clauseContext ctx) { }
+	@Override public void enterOrder_by_clause(x2gParser.Order_by_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOrder_by_clause(graflParser.Order_by_clauseContext ctx) { }
+	@Override public void exitOrder_by_clause(x2gParser.Order_by_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReturn_clause(graflParser.Return_clauseContext ctx) { }
+	@Override public void enterReturn_clause(x2gParser.Return_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReturn_clause(graflParser.Return_clauseContext ctx) { }
+	@Override public void exitReturn_clause(x2gParser.Return_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterScalar_expr(graflParser.Scalar_exprContext ctx) { }
+	@Override public void enterScalar_expr(x2gParser.Scalar_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitScalar_expr(graflParser.Scalar_exprContext ctx) { }
+	@Override public void exitScalar_expr(x2gParser.Scalar_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteral_value(graflParser.Literal_valueContext ctx) { }
+	@Override public void enterLiteral_value(x2gParser.Literal_valueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteral_value(graflParser.Literal_valueContext ctx) { }
+	@Override public void exitLiteral_value(x2gParser.Literal_valueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterString_literal(graflParser.String_literalContext ctx) { }
+	@Override public void enterString_literal(x2gParser.String_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitString_literal(graflParser.String_literalContext ctx) { }
+	@Override public void exitString_literal(x2gParser.String_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDatespan_literal(graflParser.Datespan_literalContext ctx) { }
+	@Override public void enterDatespan_literal(x2gParser.Datespan_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDatespan_literal(graflParser.Datespan_literalContext ctx) { }
+	@Override public void exitDatespan_literal(x2gParser.Datespan_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPoint_literal(graflParser.Point_literalContext ctx) { }
+	@Override public void enterPoint_literal(x2gParser.Point_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPoint_literal(graflParser.Point_literalContext ctx) { }
+	@Override public void exitPoint_literal(x2gParser.Point_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLinestring_literal(graflParser.Linestring_literalContext ctx) { }
+	@Override public void enterLinestring_literal(x2gParser.Linestring_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLinestring_literal(graflParser.Linestring_literalContext ctx) { }
+	@Override public void exitLinestring_literal(x2gParser.Linestring_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRegion_literal(graflParser.Region_literalContext ctx) { }
+	@Override public void enterRegion_literal(x2gParser.Region_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRegion_literal(graflParser.Region_literalContext ctx) { }
+	@Override public void exitRegion_literal(x2gParser.Region_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumeric_literal(graflParser.Numeric_literalContext ctx) { }
+	@Override public void enterNumeric_literal(x2gParser.Numeric_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumeric_literal(graflParser.Numeric_literalContext ctx) { }
+	@Override public void exitNumeric_literal(x2gParser.Numeric_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolean_literal(graflParser.Boolean_literalContext ctx) { }
+	@Override public void enterBoolean_literal(x2gParser.Boolean_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolean_literal(graflParser.Boolean_literalContext ctx) { }
+	@Override public void exitBoolean_literal(x2gParser.Boolean_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_type(graflParser.Attr_typeContext ctx) { }
+	@Override public void enterAttr_type(x2gParser.Attr_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_type(graflParser.Attr_typeContext ctx) { }
+	@Override public void exitAttr_type(x2gParser.Attr_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_value(graflParser.Attr_valueContext ctx) { }
+	@Override public void enterAttr_value(x2gParser.Attr_valueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_value(graflParser.Attr_valueContext ctx) { }
+	@Override public void exitAttr_value(x2gParser.Attr_valueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_type_list(graflParser.Attr_type_listContext ctx) { }
+	@Override public void enterAttr_type_list(x2gParser.Attr_type_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_type_list(graflParser.Attr_type_listContext ctx) { }
+	@Override public void exitAttr_type_list(x2gParser.Attr_type_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_definition(graflParser.Attr_definitionContext ctx) { }
+	@Override public void enterAttr_definition(x2gParser.Attr_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_definition(graflParser.Attr_definitionContext ctx) { }
+	@Override public void exitAttr_definition(x2gParser.Attr_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_value_list(graflParser.Attr_value_listContext ctx) { }
+	@Override public void enterAttr_value_list(x2gParser.Attr_value_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_value_list(graflParser.Attr_value_listContext ctx) { }
+	@Override public void exitAttr_value_list(x2gParser.Attr_value_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_assignment(graflParser.Attr_assignmentContext ctx) { }
+	@Override public void enterAttr_assignment(x2gParser.Attr_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_assignment(graflParser.Attr_assignmentContext ctx) { }
+	@Override public void exitAttr_assignment(x2gParser.Attr_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunc_expr(graflParser.Func_exprContext ctx) { }
+	@Override public void enterFunc_expr(x2gParser.Func_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunc_expr(graflParser.Func_exprContext ctx) { }
+	@Override public void exitFunc_expr(x2gParser.Func_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunc_param_list(graflParser.Func_param_listContext ctx) { }
+	@Override public void enterFunc_param_list(x2gParser.Func_param_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunc_param_list(graflParser.Func_param_listContext ctx) { }
+	@Override public void exitFunc_param_list(x2gParser.Func_param_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunc_param(graflParser.Func_paramContext ctx) { }
+	@Override public void enterFunc_param(x2gParser.Func_paramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunc_param(graflParser.Func_paramContext ctx) { }
+	@Override public void exitFunc_param(x2gParser.Func_paramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterScalar_func(graflParser.Scalar_funcContext ctx) { }
+	@Override public void enterScalar_func(x2gParser.Scalar_funcContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitScalar_func(graflParser.Scalar_funcContext ctx) { }
+	@Override public void exitScalar_func(x2gParser.Scalar_funcContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNid(graflParser.NidContext ctx) { }
+	@Override public void enterNid(x2gParser.NidContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNid(graflParser.NidContext ctx) { }
+	@Override public void exitNid(x2gParser.NidContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEid(graflParser.EidContext ctx) { }
+	@Override public void enterEid(x2gParser.EidContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEid(graflParser.EidContext ctx) { }
+	@Override public void exitEid(x2gParser.EidContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNode_expr(graflParser.Node_exprContext ctx) { }
+	@Override public void enterNode_expr(x2gParser.Node_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNode_expr(graflParser.Node_exprContext ctx) { }
+	@Override public void exitNode_expr(x2gParser.Node_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNodeset_expr(graflParser.Nodeset_exprContext ctx) { }
+	@Override public void enterNodeset_expr(x2gParser.Nodeset_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNodeset_expr(graflParser.Nodeset_exprContext ctx) { }
+	@Override public void exitNodeset_expr(x2gParser.Nodeset_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNode_constructor(graflParser.Node_constructorContext ctx) { }
+	@Override public void enterNode_constructor(x2gParser.Node_constructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNode_constructor(graflParser.Node_constructorContext ctx) { }
+	@Override public void exitNode_constructor(x2gParser.Node_constructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEdge_expr(graflParser.Edge_exprContext ctx) { }
+	@Override public void enterEdge_expr(x2gParser.Edge_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEdge_expr(graflParser.Edge_exprContext ctx) { }
+	@Override public void exitEdge_expr(x2gParser.Edge_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEdgeset_expr(graflParser.Edgeset_exprContext ctx) { }
+	@Override public void enterEdgeset_expr(x2gParser.Edgeset_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEdgeset_expr(graflParser.Edgeset_exprContext ctx) { }
+	@Override public void exitEdgeset_expr(x2gParser.Edgeset_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEdge_constructor(graflParser.Edge_constructorContext ctx) { }
+	@Override public void enterEdge_constructor(x2gParser.Edge_constructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEdge_constructor(graflParser.Edge_constructorContext ctx) { }
+	@Override public void exitEdge_constructor(x2gParser.Edge_constructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRole_node_sequence(graflParser.Role_node_sequenceContext ctx) { }
+	@Override public void enterRole_node_sequence(x2gParser.Role_node_sequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRole_node_sequence(graflParser.Role_node_sequenceContext ctx) { }
+	@Override public void exitRole_node_sequence(x2gParser.Role_node_sequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_sequence(graflParser.Attr_sequenceContext ctx) { }
+	@Override public void enterAttr_sequence(x2gParser.Attr_sequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_sequence(graflParser.Attr_sequenceContext ctx) { }
+	@Override public void exitAttr_sequence(x2gParser.Attr_sequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterScalar_sequence(graflParser.Scalar_sequenceContext ctx) { }
+	@Override public void enterScalar_sequence(x2gParser.Scalar_sequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitScalar_sequence(graflParser.Scalar_sequenceContext ctx) { }
+	@Override public void exitScalar_sequence(x2gParser.Scalar_sequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolean_expr(graflParser.Boolean_exprContext ctx) { }
+	@Override public void enterBoolean_expr(x2gParser.Boolean_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolean_expr(graflParser.Boolean_exprContext ctx) { }
+	@Override public void exitBoolean_expr(x2gParser.Boolean_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolean_attr_expr(graflParser.Boolean_attr_exprContext ctx) { }
+	@Override public void enterBoolean_attr_expr(x2gParser.Boolean_attr_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolean_attr_expr(graflParser.Boolean_attr_exprContext ctx) { }
+	@Override public void exitBoolean_attr_expr(x2gParser.Boolean_attr_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQual_attr_name(graflParser.Qual_attr_nameContext ctx) { }
+	@Override public void enterQual_attr_name(x2gParser.Qual_attr_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQual_attr_name(graflParser.Qual_attr_nameContext ctx) { }
+	@Override public void exitQual_attr_name(x2gParser.Qual_attr_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValue_expr(graflParser.Value_exprContext ctx) { }
+	@Override public void enterValue_expr(x2gParser.Value_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValue_expr(graflParser.Value_exprContext ctx) { }
+	@Override public void exitValue_expr(x2gParser.Value_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolean_node_expr(graflParser.Boolean_node_exprContext ctx) { }
+	@Override public void enterBoolean_node_expr(x2gParser.Boolean_node_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolean_node_expr(graflParser.Boolean_node_exprContext ctx) { }
+	@Override public void exitBoolean_node_expr(x2gParser.Boolean_node_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolean_edge_expr(graflParser.Boolean_edge_exprContext ctx) { }
+	@Override public void enterBoolean_edge_expr(x2gParser.Boolean_edge_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolean_edge_expr(graflParser.Boolean_edge_exprContext ctx) { }
+	@Override public void exitBoolean_edge_expr(x2gParser.Boolean_edge_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterComp_op(graflParser.Comp_opContext ctx) { }
+	@Override public void enterComp_op(x2gParser.Comp_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitComp_op(graflParser.Comp_opContext ctx) { }
+	@Override public void exitComp_op(x2gParser.Comp_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnary_op(graflParser.Unary_opContext ctx) { }
+	@Override public void enterUnary_op(x2gParser.Unary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnary_op(graflParser.Unary_opContext ctx) { }
+	@Override public void exitUnary_op(x2gParser.Unary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinary_op(graflParser.Binary_opContext ctx) { }
+	@Override public void enterBinary_op(x2gParser.Binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBinary_op(graflParser.Binary_opContext ctx) { }
+	@Override public void exitBinary_op(x2gParser.Binary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNamespace(graflParser.NamespaceContext ctx) { }
+	@Override public void enterNamespace(x2gParser.NamespaceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNamespace(graflParser.NamespaceContext ctx) { }
+	@Override public void exitNamespace(x2gParser.NamespaceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNode_type(graflParser.Node_typeContext ctx) { }
+	@Override public void enterNode_type(x2gParser.Node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNode_type(graflParser.Node_typeContext ctx) { }
+	@Override public void exitNode_type(x2gParser.Node_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEdge_type(graflParser.Edge_typeContext ctx) { }
+	@Override public void enterEdge_type(x2gParser.Edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEdge_type(graflParser.Edge_typeContext ctx) { }
+	@Override public void exitEdge_type(x2gParser.Edge_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRole_name(graflParser.Role_nameContext ctx) { }
+	@Override public void enterRole_name(x2gParser.Role_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRole_name(graflParser.Role_nameContext ctx) { }
+	@Override public void exitRole_name(x2gParser.Role_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttr_name(graflParser.Attr_nameContext ctx) { }
+	@Override public void enterAttr_name(x2gParser.Attr_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttr_name(graflParser.Attr_nameContext ctx) { }
+	@Override public void exitAttr_name(x2gParser.Attr_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunc_name(graflParser.Func_nameContext ctx) { }
+	@Override public void enterFunc_name(x2gParser.Func_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunc_name(graflParser.Func_nameContext ctx) { }
+	@Override public void exitFunc_name(x2gParser.Func_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNode_var(graflParser.Node_varContext ctx) { }
+	@Override public void enterNode_var(x2gParser.Node_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNode_var(graflParser.Node_varContext ctx) { }
+	@Override public void exitNode_var(x2gParser.Node_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNodeset_var(graflParser.Nodeset_varContext ctx) { }
+	@Override public void enterNodeset_var(x2gParser.Nodeset_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNodeset_var(graflParser.Nodeset_varContext ctx) { }
+	@Override public void exitNodeset_var(x2gParser.Nodeset_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEdge_var(graflParser.Edge_varContext ctx) { }
+	@Override public void enterEdge_var(x2gParser.Edge_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEdge_var(graflParser.Edge_varContext ctx) { }
+	@Override public void exitEdge_var(x2gParser.Edge_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEdgeset_var(graflParser.Edgeset_varContext ctx) { }
+	@Override public void enterEdgeset_var(x2gParser.Edgeset_varContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEdgeset_var(graflParser.Edgeset_varContext ctx) { }
+	@Override public void exitEdgeset_var(x2gParser.Edgeset_varContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
