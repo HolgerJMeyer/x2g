@@ -1,0 +1,21 @@
+// nested match example, the second match is evaluated within the context of the first
+match xpath(//story) using $s {
+	create node $sn label "story" {
+		// property list
+		content = "$s/content/text()",
+		title = "$s/title/text()"
+	}
+	match xpath(.//person[@role="narrator"]) using $n {
+		create node $pn label "person" {
+			// properties
+			name = "$n/name/text()",
+			if $n/appellation == "Mr" {
+				gender = "male"
+			}
+		}
+		create edge $e from $sn to $pn label "narrator" { /* no properties */ }
+	}
+}
+
+// vim: spell spelllang=en
+// vim: ff=unix ts=3 sw=3 sts=3 noet
