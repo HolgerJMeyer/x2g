@@ -14,7 +14,7 @@ match xpath("//story") {
 				gender = "male"
 			}
 		}
-		create edge $e from $s to $p label "narrator" { /* no properties */ }
+		create edge $e from $s to $p label "narrator" { /* no properties given */ }
 	}
 }
 
