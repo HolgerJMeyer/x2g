@@ -29,10 +29,11 @@ TRIPLEQDSTR: '"""' (('"'|'""')? ( ~('\''|'\\') | ESCCHAR ))* '"""' -> type(STR);
 
 ESCCHAR: '\\'('t'|'b'|'n'|'r'|'f'|'"'|'\'');
 
+// SECTION: Comments
 LINE_COMMENT:	'//' .*? '\r'?'\n'	{ System.out.println("found comment"); } -> skip;
-SQL_COMMENT:	'--' .*? '\r'?'\n'	-> skip;
-XML_COMMENT:	'(:' .*? ':)'			-> skip;
-C_COMMENT:  	'/*' .*? '*/'			-> skip;
+SQL_COMMENT:	'--' .*? '\r'?'\n'	{ System.out.println("found comment"); } -> skip;
+XML_COMMENT:	'(:' .*? ':)'			{ System.out.println("found comment"); } -> skip;
+C_COMMENT:  	'/*' .*? '*/'			{ System.out.println("found comment"); } -> skip;
 WS:				[ \t\r\n]+				->	skip;
 
 // SECTION: reserved words
