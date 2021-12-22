@@ -1,11 +1,11 @@
 // nested match example, the second match is evaluated within the context of the first
-match xpath(//story) using $s {
+match xpath("//story") using $s {
 	create node $sn label "story" {
 		// property list
 		content = "$s/content/text()",
 		title = "$s/title/text()"
 	}
-	match xpath(.//person[@role="narrator"]) using $n {
+	match xpath(".//person[@role='narrator']") using $n {
 		create node $pn label "person" {
 			// properties
 			name = "$n/name/text()",

@@ -13,7 +13,7 @@ ASRCS = $(wildcard *.g4)
 TARGET = x2g
 SOURCES = $(MYSRCS) $(GENSRCS)
 MYSRCS = $(TARGET)Main.java
-GENSRCS = $(TARGET)ParserBaseListener.java $(TARGET)ParserListener.java $(ASRCS:.g4=.java) 
+GENSRCS = $(TARGET)ParserBaseListener.java $(TARGET)ParserListener.java $(ASRCS:.g4=.java)
 GENCLASSES = $(GENSRCS:.java=.class)
 MYCLASSES = $(MYSRCS:.java=.class)
 CLASSES = $(GENCLASSES) $(MYCLASSES)
@@ -22,11 +22,11 @@ TOKENS = $(TARGET)Parser.tokens $(TARGET)Lexer.tokens
 
 all::	$(CLASSES)
 
+$(TARGET)Parser.g4:	$(TARGET)Lexer.tokens
+
 $(MYSRCS):	$(GENSRCS)
 
 $(GENSRCS):	$(ASRCS)
-
-$(TARGET)Parser.java:	$(TOKENS)
 
 $(TARGET)ParserBaseListener.class $(TARGET)ParserListener.class:	$(TARGET)Parser.java
 
