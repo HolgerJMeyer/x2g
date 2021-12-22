@@ -1,8 +1,6 @@
 parser grammar x2gParser;
 
 @header {
-//package x2g;
-
 import java.util.*;
 }
 
@@ -35,17 +33,17 @@ match_expression
 	: XPATH '(' string_literal ')' USING '$' ID {
 		// var to xml fragment binding
 		xmlFragVars.put($ID.text, $string_literal.text);
-		notifyErrorListeners("xpath variable $" + $ID.text + " bound to \'" + $string_literal.text);
+		notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $string_literal.text);
 	  } 
 	| NODE '(' string_literal ')' USING '$' ID {
 		// var to node type binding
 		nodeSetVars.put($ID.text, $string_literal.text);
-		notifyErrorListeners("node set variable $" + $ID.text + " bound to \'" + $string_literal.text);
+		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_literal.text);
 	  } 
 	| EDGE '(' string_literal ')' USING '$' ID {
 		// var to edge type binding
 		edgeSetVars.put($ID.text, $string_literal.text);
-		notifyErrorListeners("edge set variable $" + $ID.text + " bound to \'" + $string_literal.text);
+		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_literal.text);
 	  } 
 	;
 
