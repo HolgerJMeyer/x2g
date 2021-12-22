@@ -1,19 +1,20 @@
 // nested match example, the second match is evaluated within the context of the first
-match xpath("//story") using $s {
-	create node $sn label "story" {
-		// property list
-		content = "$s/content/text()",
-		title = "$s/title/text()"
+match xpath("//story") {
+	create node $s label "story" {
+		// properties
+		content = xpath("./content/text()"),
+		title = xpath("./title/text()"),
+		unique (title)
 	}
 	match xpath(".//person[@role='narrator']") using $n {
-		create node $pn label "person" {
+		create node $p label "person" {
 			// properties
-			name = "$n/name/text()",
-			if $n/appellation == "Mr" {
+			name = xpath("$n/name/text()"),
+			if xpath("$n/appellation/text()") == "Mr" {
 				gender = "male"
 			}
 		}
-		create edge $e from $sn to $pn label "narrator" { /* no properties */ }
+		create edge $e from $s to $p label "narrator" { /* no properties */ }
 	}
 }
 
