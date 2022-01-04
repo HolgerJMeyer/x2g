@@ -34,22 +34,23 @@ The evaluation of such `match` statement is a follows: each `<match-expression>`
 
 ```
 // nested match example, the second match is evaluated within the context of the first
-match xpath(//story) using $s {
-    create node $sn label "story" {
-        // property list
-        content = "$s/content/text()",
-        title = "$s/title/text()"
-    }
-    match xpath(.//person[@role="narrator"]) using $n {
-        create node $pn label "person" {
-            // properties
-            name = "$n/name/text()",
-            if $n/appellation == "Mr" {
-                gender = "male"
-            }
-        }
-        create edge $e from $sn to $pn label "narrator" { /* no properties */ }
-    }
+match xpath("//story") using $s {
+	create node $sn label "story" {
+		// properties
+		content = xpath("./content/text()"),
+		title = xpath("./title/text()"),
+		unique (title)
+	}
+	match xpath(".//person[@role='narrator']") using $p {
+		create node $pn label "person" {
+			// properties
+			name = xpath("$p/name/text()"),
+			if xpath("$p/appellation/text()") == "Mr" {
+				gender = "male"
+			}
+		}
+		create edge $e from $sn to $pn label "narrator" { /* no properties given */ }
+	}
 }
 ```
 
