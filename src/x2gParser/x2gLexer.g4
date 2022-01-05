@@ -94,33 +94,33 @@ LETTER:			[a-zA-Z\u0080-\u00FF_];
 
 // 
 COMMA:		',';
-DBLCOLON:	'::';
-COLON:		':';
-SEMICOLON:	';';
+//DBLCOLON:	'::';
+//COLON:		':';
+//SEMICOLON:	';';
 DOT:			'.';
 PLUS:			'+';
 MINUS:		'-';
 MULT:			'*';
 DIV:			'/';
 PERCENT:		'%';
-BITOR:		'|';
+//BITOR:		'|';
 BANG:			'!';
-QMARK:		'?';
+//QMARK:		'?';
 DOLLAR:		'$';
 LT:			'<';
 LE:			'<=';
 GT:			'>';
 GE:			'>=';
-EQ:			'=';
 BANGNOT:		'!='	-> type(NEQ);
 UNEQ:			'<>'	-> type(NEQ);
+EQ:			'=';
 IDENT:		'==';
 ASSIGN:		':=';
 LPAREN:		'(';
 RPAREN:		')';
 LBRACE:		'{';
 RBRACE:		'}';
-LBRACKET:	'[';
-RBRACKET:	']';
+//LBRACKET:	'[';
+//RBRACKET:	']';
 
 // vim: ts=3 sw=3 sts=3 noet

@@ -22,40 +22,53 @@ x2g
 	;
 
 x2g_rule
-	: MATCH head '{' body '}'
+	: MATCH bind_expression_list '{' body '}'
 	;
 
-head
-	: match_expression (',' match_expression)*
+bind_expression_list
+	: bind_expression ',' bind_expression_list
+	| bind_expression
 	;
 
-match_expression
-	: XPATH '(' string_literal ')' USING '$' ID {
+bind_expression
+	: xpath_expression USING '$' ID {
 		// var to xml fragment binding
-		xmlFragVars.put($ID.text, $string_literal.text);
-		notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $string_literal.text);
+		xmlFragVars.put($ID.text, $xpath_expression.text);
+		notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $xpath_expression.text);
 	  } 
-	| NODE '(' string_literal ')' USING '$' ID {
+	| node_expression USING '$' ID {
 		// var to node type binding
-		nodeSetVars.put($ID.text, $string_literal.text);
-		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_literal.text);
+		nodeSetVars.put($ID.text, $node_expression.text);
+		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $node_expression.text);
 	  } 
-	| EDGE '(' string_literal ')' USING '$' ID {
+	| edge_expression USING '$' ID {
 		// var to edge type binding
-		edgeSetVars.put($ID.text, $string_literal.text);
-		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_literal.text);
+		edgeSetVars.put($ID.text, $edge_expression.text);
+		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $edge_expression.text);
 	  } 
+	;
+
+xpath_expression
+	: XPATH '(' string_literal ')'
+	;
+node_expression
+	: NODE '(' string_literal ')'
+	;
+
+edge_expression
+	: EDGE '(' string_literal ')'
 	;
 
 body
-	: body_action (',' body_action)*
+	: body_action ',' body
+	| body_action
 	;
 
 body_action
 	: CREATE NODE '$' ID LABEL string_expr '{' property_assignment_list '}'
 	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_expr '{' property_assignment_list '}'
 	| IF boolean_expr '{' body_action '}'
-	| x2g_rule
+	| x2g_rule /* nested match */
 	| /* epsilon */
 	;
 
@@ -67,12 +80,13 @@ property_assignment_list
 property_assignment
 	: property_name '=' value_expr
 	| UNIQUE '(' property_name_list ')'
-	| /* null assignment */
+	| /* epsilon */
 	;
 
 	
 property_name_list
-	: property_name (',' property_name)*
+	: property_name ',' property_name_list
+	| property_name
 	;
 
 literal_value
@@ -117,18 +131,21 @@ property_type			// just a starting point
 // TODO: property_value_constructor
 property_value
 	: string_value
+	| xpath_expression
 	;
 
-property_type_list
-	: '(' property_definition (',' property_definition)* ')'
+property_definition_list
+	: property_definition ',' property_definition_list
+	| property_definition
 	;
 
 property_definition
 	: property_type property_name
 	;
 
-property_value_list
-	: property_assignment (',' property_assignment)*
+property_assignement_list
+	: property_assignment ',' property_assignment_list
+	| property_assignment
 	;
 
 // node and edge IDs
