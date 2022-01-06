@@ -65,8 +65,14 @@ body
 	;
 
 body_action
-	: CREATE NODE '$' ID LABEL string_expr '{' property_assignment_list '}'
-	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_expr '{' property_assignment_list '}'
+	: CREATE NODE '$' ID LABEL string_expr '{' property_assignment_list '}' {
+		nodeSetVars.put($ID.text, $string_expr.text);
+		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_expr.text);
+	  }
+	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_expr '{' property_assignment_list '}' {
+		edgeSetVars.put($ID.text, $string_expr.text);
+		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_expr.text);
+	  }
 	| IF boolean_expr '{' body_action '}'
 	| x2g_rule /* nested match */
 	| /* epsilon */
@@ -79,7 +85,9 @@ property_assignment_list
 
 property_assignment
 	: property_name '=' value_expr
-	| UNIQUE '(' property_name_list ')'
+	| UNIQUE '(' property_name_list ')' {
+		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
+	  }
 	| /* epsilon */
 	;
 
@@ -91,10 +99,7 @@ property_name_list
 
 literal_value
 	: string_literal
-	| datespan_literal
-	| point_literal
-	| linestring_literal
-	| region_literal
+	| date_literal
 	| numeric_literal
 	| boolean_literal
 	;
@@ -111,19 +116,13 @@ string_value
 
 // SECTION: Literal values
 string_literal: STR;
-datespan_literal: VALUE;
-point_literal: VALUE;
-linestring_literal: VALUE;
-region_literal: VALUE;
+date_literal: VALUE;
 numeric_literal: NUMBER;
 boolean_literal: TRUE | FALSE;
 
 property_type			// just a starting point
 	: STRING
-	| DATESPAN
-	| POINT
-	| LINESTRING
-	| REGION
+	| DATE
 	| NUMERIC
 	| BOOLEAN
 	;

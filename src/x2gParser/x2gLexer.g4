@@ -42,7 +42,7 @@ AND:			'AND' | 'and';
 ALTER:		'ALTER' | 'alter';
 BOOLEAN:		'BOOLEAN' | 'boolean';
 CREATE:		'CREATE' | 'create';
-DATESPAN:	'DATESPAN' | 'datespan';
+DATE:			'DATE' | 'date';
 DEL:			'DEL' | 'del';
 DELETE:		'DELETE' | 'delete';
 DROP:			'DROP' | 'drop';
