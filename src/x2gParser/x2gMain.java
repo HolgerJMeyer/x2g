@@ -11,8 +11,7 @@ public class x2gMain {
 	/* pretty print Error messages */
 	public static class x2gErrorListener extends BaseErrorListener {
 		@Override
-		public void syntaxError(Recognizer<?, ?> recognizer, Object sym, int line, int pos, String msg, RecognitionException e)
-		{
+		public void syntaxError(Recognizer<?, ?> recognizer, Object sym, int line, int pos, String msg, RecognitionException e) {
 			List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
 			Collections.reverse(stack);
 			System.err.println(x2g + " rule stack: " + stack);

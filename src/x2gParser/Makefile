@@ -2,14 +2,14 @@
 SHELL = /bin/bash
 JAVAC = javac
 JFLAGS = -g -cp $(CLASSPATH) -d $(CLASSDIR) -Xlint:deprecation
-CLASSDIR = x2g
+CLASSDIR = $(TARGET)
 CLASSPATH=".:antlr-4.7/antlr-4.7-complete.jar:antlr-4.7/antlr-runtime-4.7.jar:$(CLASSDIR):"
 # ANTLR4
 #ANTLR = antlr4
 ANTLR = java -jar ./antlr-4.7/antlr-4.7-complete.jar
-#AFLAGS = -package $(TARGET)
+#AFLAGS = -o $(TARGET) -package $(TARGET)
 ASRCS = $(wildcard *.g4)
-# GRAFL
+# X2G
 TARGET = x2g
 SOURCES = $(MYSRCS) $(GENSRCS)
 MYSRCS = $(TARGET)Main.java

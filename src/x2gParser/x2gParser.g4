@@ -1,6 +1,7 @@
 parser grammar x2gParser;
 
 @header {
+//package x2g;
 import java.util.*;
 }
 
@@ -212,9 +213,7 @@ namespace:	ID;
 // Typed Tokens
 node_type:	ID;
 edge_type:	ID;
-role_name:	ID;
 property_name:	ID;
-func_name:	ID;
 
 // SECTION: Bound and unbound variables
 xmlfrag_var:	'$' ID { if (!xmlFragVars.containsKey($ID.text))   notifyErrorListeners("xml fragment variable $"+$ID.text+" is unbound"); };
