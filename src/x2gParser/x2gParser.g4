@@ -13,6 +13,7 @@ options {
 	Map<String, String> xmlFragVars = new HashMap<String, String>();
 	Map<String, String> nodeSetVars = new HashMap<String, String>();
 	Map<String, String> edgeSetVars = new HashMap<String, String>();
+	AbstractList<String> bindExprList = new LinkedList<String>();
 }
 
 /*
@@ -23,40 +24,48 @@ x2g
 	;
 
 x2g_rule
-	: MATCH bind_expression_list '{' body '}'
+	: MATCH bind_expr_list '{' body '}' {
+		notifyErrorListeners("bindings: " + bindExprList.toString());
+		bindExprList.clear(); // bindings not used anymore
+	  }
 	;
 
-bind_expression_list
-	: bind_expression ',' bind_expression_list
-	| bind_expression
+bind_expr_list
+	: bind_expr ',' bind_expr_list {
+		bindExprList.add($bind_expr.text);
+	  }
+	| bind_expr {
+		bindExprList.add($bind_expr.text);
+	  }
 	;
 
-bind_expression
-	: xpath_expression USING '$' ID {
+bind_expr
+	: xpath_expr USING '$' ID {
 		// var to xml fragment binding
-		xmlFragVars.put($ID.text, $xpath_expression.text);
-		notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $xpath_expression.text);
+		xmlFragVars.put($ID.text, $xpath_expr.text);
+		notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $xpath_expr.text);
 	  } 
-	| node_expression USING '$' ID {
+	| node_expr USING '$' ID {
 		// var to node type binding
-		nodeSetVars.put($ID.text, $node_expression.text);
-		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $node_expression.text);
+		nodeSetVars.put($ID.text, $node_expr.text);
+		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $node_expr.text);
 	  } 
-	| edge_expression USING '$' ID {
+	| edge_expr USING '$' ID {
 		// var to edge type binding
-		edgeSetVars.put($ID.text, $edge_expression.text);
-		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $edge_expression.text);
+		edgeSetVars.put($ID.text, $edge_expr.text);
+		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $edge_expr.text);
 	  } 
 	;
 
-xpath_expression
+xpath_expr
 	: XPATH '(' string_literal ')'
 	;
-node_expression
+
+node_expr
 	: NODE '(' string_literal ')'
 	;
 
-edge_expression
+edge_expr
 	: EDGE '(' string_literal ')'
 	;
 
@@ -74,7 +83,8 @@ body_action
 		edgeSetVars.put($ID.text, $string_expr.text);
 		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_expr.text);
 	  }
-	| IF boolean_expr '{' body_action '}'
+	// TODO: body_action
+	//| IF boolean_expr '{' body_action '}'
 	| x2g_rule /* nested match */
 	| /* epsilon */
 	;
@@ -85,10 +95,14 @@ property_assignment_list
 	;
 
 property_assignment
-	: property_name '=' value_expr
+	: property_name '=' value_expr {
+		notifyErrorListeners("property: " + $property_name.text + " assignment: " + $value_expr.text);
+	  }
 	| UNIQUE '(' property_name_list ')' {
 		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
 	  }
+	//TODO: conditional assignment
+	| IF boolean_expr '{' property_assignment_list '}'
 	| /* epsilon */
 	;
 
@@ -131,7 +145,7 @@ property_type			// just a starting point
 // TODO: property_value_constructor
 property_value
 	: string_value
-	| xpath_expression
+	| xpath_expr
 	;
 
 property_definition_list
@@ -148,11 +162,7 @@ property_assignement_list
 	| property_assignment
 	;
 
-// node and edge IDs
-nid:	POSITIV_INTEGER;
-eid:	POSITIV_INTEGER;
-
-// SECTION: Boolean expression
+// SECTION: Boolean expr
 boolean_expr
 	: boolean_property_expr
 	| boolean_node_expr
@@ -164,14 +174,15 @@ boolean_expr
 	;
 
 boolean_property_expr
-	: qual_property_name comp_op value_expr
+	: xmlfrag_expr comp_op value_expr
+	| qual_property_name comp_op value_expr
 	| qual_property_name comp_op qual_property_name
 	;
 
 qual_property_name
-	: xmlfrag_var '.' property_name
-	| nodeset_var '.' property_name
-	| edgeset_var '.' property_name
+	//: xmlfrag_expr
+	: nodeset_expr
+	| edgeset_expr
 	;
 
 // TODO: 
@@ -184,6 +195,11 @@ value_expr
 
 boolean_node_expr
 	: nodeset_expr
+	;
+
+xmlfrag_expr
+	: xmlfrag_var
+	| xpath_expr
 	;
 
 nodeset_expr
