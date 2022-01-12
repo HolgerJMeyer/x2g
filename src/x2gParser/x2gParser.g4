@@ -89,20 +89,33 @@ body_action
 	| /* epsilon */
 	;
 
-property_assignment_list
-	: property_assignment ',' property_assignment_list
-	| property_assignment
+property_assignment_list returns [AbstractList<Map<String, String>> props]
+	: p=property_assignment ',' l=property_assignment_list {
+		$l.props.add($p);
+		$props = $l.props;
+	  }
+	| property_assignment {
+		$props.add($p);
+	  }
 	;
 
-property_assignment
+property_assignment returns [Map<String, String> prop]
 	: property_name '=' value_expr {
 		notifyErrorListeners("property: " + $property_name.text + " assignment: " + $value_expr.text);
+		$prop.add($property_name.text, $value_expr.text);
 	  }
 	| UNIQUE '(' property_name_list ')' {
 		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
+		$prop.add("__unique", $property_name_list.value_expr.text);
 	  }
 	//TODO: conditional assignment
-	| IF boolean_expr '{' property_assignment_list '}'
+	//context?
+	// IF boolean_expr '{' property_assignment_list '}' {
+	| IF boolean_expr '{' property_assignment '}' {
+		if ($boolean_expr == true) {
+			$prop = $property_assignment;
+		}
+	  }
 	| /* epsilon */
 	;
 
@@ -120,6 +133,18 @@ literal_value
 	;
 
 // SECTION: Expressions
+
+expr
+	: expr '+' expr
+	| ('+'|'-') expr
+	| expr ('*'|'/') expr
+	| expr ('+'|'-') expr
+	| expr AND expr
+	| expr OR expr
+	| NOT expr
+	| expr comp_op expr
+	;
+
 string_expr
 	: string_value '+' string_expr
 	| string_value
