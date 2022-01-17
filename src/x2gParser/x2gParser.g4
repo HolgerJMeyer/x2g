@@ -99,14 +99,14 @@ property_assignment_list returns [AbstractList<Map<String, String>> props = new 
 	  }
 	;
 
-property_assignment returns [Map<String, String> prop]
+property_assignment returns [Map<String, String> prop = new HashMap<String, String>()]
 	: property_name '=' expr {
-		notifyErrorListeners("property: " + $property_name.text + " assignment: " + "$expr.text");
-		$prop.add($property_name.text, "$expr.text");
+		notifyErrorListeners("property: " + $property_name.text + " assignment: " + $expr.text);
+		$prop.put($property_name.text, $expr.text);
 	  }
 	| UNIQUE '(' property_name_list ')' {
 		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
-		$prop.add("__unique", $property_name_list.text);
+		$prop.put("__unique", $property_name_list.text);
 	  }
 	//TODO: conditional assignment
 	//context?
