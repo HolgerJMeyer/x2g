@@ -6,6 +6,7 @@ lexer grammar x2gLexer;
 
 tokens {
 	STR,
+	AXIS,
 	NEQ
 }
 
@@ -18,7 +19,8 @@ POSITIV_DOUBLE: (DIGIT+ '.' DIGIT* EXPONENT | '.' DIGIT+ EXPONENT | DIGIT+ EXPON
 EXPONENT:		('e'|'E') ('+'|'-')? DIGIT+;
 fragment
 DIGIT:			[0-9];
-
+TIMESTAMP:		[0-9][0-9][0-9][0-9]'-'[01][0-9]'-'[0123][0-9];
+ 
 // SECTION: String literals
 // single line strings: 'ssssstrinnnng' "ssssstrinnnng"
 SINGLEQSTR: '\'' (~('\''|'\\'|'\r'|'\n') | ESCCHAR)* '\'' -> type(STR);
@@ -39,52 +41,27 @@ WS:				[ \t\r\n]+				->	skip;
 // SECTION: reserved words
 ADD:			'ADD' | 'add';
 AND:			'AND' | 'and';
-ALTER:		'ALTER' | 'alter';
 BOOLEAN:		'BOOLEAN' | 'boolean';
 CREATE:		'CREATE' | 'create';
 DATE:			'DATE' | 'date';
-DEL:			'DEL' | 'del';
-DELETE:		'DELETE' | 'delete';
-DROP:			'DROP' | 'drop';
 EDGE:			'EDGE' | 'edge';
-EDGETYPE:	'EDGETYPE' | 'edgetype';
-EID:			'EID' | 'eid';
 FALSE:		'FALSE' | 'false';
 FOR:			'FOR' | 'for';
 FROM:			'FROM' | 'from';
 IF:			'IF'| 'if';
-IN:			'IN' | 'in';
-INOUT:		'INOUT' | 'inout';
 INTEGER:		'INTEGER' | 'integer';
 LABEL:		'LABEL'| 'label';
-LET:			'LET' | 'let';
-LINESTRING:	'LINESTRING' | 'linestring';
 MATCH:		'MATCH'| 'match';
-MODEL:		'MODEL' | 'model';
-NID:			'NID' | 'nid';
 NODE:			'NODE' | 'node';
-NODETYPE:	'NODETYPE' | 'nodetype';
 NOT:			'NOT' | 'not';
 NUMERIC:		'NUMERIC' | 'numeric';
 OR:			'OR' | 'or';
-OUT:			'OUT' | 'out';
 ORDERBY:		'ORDERBY' | 'ORDER' 'BY' | 'orderby' | 'order' 'by';
-POINT:		'POINT' | 'point';
-REGION:		'REGION' | 'region';
-RETURN:		'RETURN' | 'return';
-RETURNS:		'RETURNS' | 'returns';
-ROLE:			'ROLE' | 'role';
-SELECT:		'SELECT' | 'select';
-SET:			'SET' | 'set';
 STRING:		'STRING' | 'string';
-TO:			'TO'| 'to';
+TO:			'TO' | 'to';
 TRUE:			'TRUE' | 'true';
-UNDER:		'UNDER' | 'under';
 UNIQUE:		'UNIQUE'| 'unique';
-UPDATE:		'UPDATE' | 'update';
 USING:		'USING'| 'using';
-VALUE:		'VALUE' | 'value';
-WHERE:		'WHERE' | 'where';
 XPATH:		'XPATH'| 'xpath';
 
 // SECTION: Identifiers
@@ -122,5 +99,20 @@ LBRACE:		'{';
 RBRACE:		'}';
 //LBRACKET:	'[';
 //RBRACKET:	']';
+
+// XPath axes
+ANCESTOR:				'ancestor'	-> type(AXIS);
+ANCESTOR_OR_SELS:		'ancestor-or-self'	-> type(AXIS);
+ATTRIBUTE:				'attribute'	-> type(AXIS);
+CHILD:					'child'	-> type(AXIS);
+DESCENDENT:				'descendent'	-> type(AXIS);
+DESCENDENT_OR_SELF:	'descendent-or-self'	-> type(AXIS);
+FOLLOWING:				'following'	-> type(AXIS);
+FOLLOWING_SIBLING:	'following-sibling'	-> type(AXIS);
+NAMESPACE:				'namespace'	-> type(AXIS);
+PARENT:					'parent'	-> type(AXIS);
+PRECEDING:				'preceding'	-> type(AXIS);
+PRECEDING_SIBLING:	'preceding-sibling'	-> type(AXIS);
+SELF:						'self'	-> type(AXIS);
 
 // vim: ts=3 sw=3 sts=3 noet

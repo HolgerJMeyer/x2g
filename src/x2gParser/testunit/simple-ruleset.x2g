@@ -2,15 +2,15 @@
 match xpath("//story") using $s {
 	create node $sn label "story" {
 		// properties
-		content = xpath("./content/text()"),
-		title = xpath("./title/text()"),
+		content = $s.xpath("content/text()"),
+		title = $s.xpath("title/text()"),
 		unique (title)
 	},
 	match xpath(".//person[@role='narrator']") using $p {
 		create node $pn label "person" {
 			// properties
-			name = xpath("$p/name/text()"),
-			if xpath("$p/appellation/text()") == "Mr" {
+			name = $p.xpath("name/text()"),
+			if $p.xpath("appellation/text()") == "Mr" {
 				gender = "male"
 			}
 		},

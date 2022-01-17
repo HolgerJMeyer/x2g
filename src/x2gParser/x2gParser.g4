@@ -89,33 +89,29 @@ body_action
 	| /* epsilon */
 	;
 
-property_assignment_list returns [AbstractList<Map<String, String>> props]
+property_assignment_list returns [AbstractList<Map<String, String>> props = new ArrayList<Map<String,String>>()]
 	: p=property_assignment ',' l=property_assignment_list {
-		$l.props.add($p);
+		$l.props.add($p.prop);
 		$props = $l.props;
 	  }
-	| property_assignment {
-		$props.add($p);
+	| p=property_assignment {
+		$props.add($p.prop);
 	  }
 	;
 
 property_assignment returns [Map<String, String> prop]
-	: property_name '=' value_expr {
-		notifyErrorListeners("property: " + $property_name.text + " assignment: " + $value_expr.text);
-		$prop.add($property_name.text, $value_expr.text);
+	: property_name '=' expr {
+		notifyErrorListeners("property: " + $property_name.text + " assignment: " + "$expr.text");
+		$prop.add($property_name.text, "$expr.text");
 	  }
 	| UNIQUE '(' property_name_list ')' {
 		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
-		$prop.add("__unique", $property_name_list.value_expr.text);
+		$prop.add("__unique", $property_name_list.text);
 	  }
 	//TODO: conditional assignment
 	//context?
 	// IF boolean_expr '{' property_assignment_list '}' {
-	| IF boolean_expr '{' property_assignment '}' {
-		if ($boolean_expr == true) {
-			$prop = $property_assignment;
-		}
-	  }
+	| IF boolean_expr '{' property_assignment '}'
 	| /* epsilon */
 	;
 
@@ -134,6 +130,7 @@ literal_value
 
 // SECTION: Expressions
 
+/*
 expr
 	: expr '+' expr
 	| ('+'|'-') expr
@@ -144,6 +141,7 @@ expr
 	| NOT expr
 	| expr comp_op expr
 	;
+*/
 
 string_expr
 	: string_value '+' string_expr
@@ -156,7 +154,7 @@ string_value
 
 // SECTION: Literal values
 string_literal: STR;
-date_literal: VALUE;
+date_literal: TIMESTAMP;
 numeric_literal: NUMBER;
 boolean_literal: TRUE | FALSE;
 
@@ -165,12 +163,6 @@ property_type			// just a starting point
 	| DATE
 	| NUMERIC
 	| BOOLEAN
-	;
-
-// TODO: property_value_constructor
-property_value
-	: string_value
-	| xpath_expr
 	;
 
 property_definition_list
@@ -189,19 +181,11 @@ property_assignement_list
 
 // SECTION: Boolean expr
 boolean_expr
-	: boolean_property_expr
-	| boolean_node_expr
-	| boolean_edge_expr
-	| boolean_expr AND boolean_expr
+	: boolean_expr AND boolean_expr
 	| boolean_expr OR boolean_expr
 	| NOT boolean_expr
 	| '(' boolean_expr ')'
-	;
-
-boolean_property_expr
-	: xmlfrag_expr comp_op value_expr
-	| qual_property_name comp_op value_expr
-	| qual_property_name comp_op qual_property_name
+	| expr relop expr
 	;
 
 qual_property_name
@@ -210,30 +194,23 @@ qual_property_name
 	| edgeset_expr
 	;
 
-// TODO: 
-value_expr
-	: unary_op value_expr
-	| value_expr binary_op value_expr
-	| '(' value_expr ')'
-	| property_value
+expr
+	: unaryop expr
+	| expr arithop expr
+	| '(' expr ')'
+	| xmlfrag_expr
+	| nodeset_expr
+	| edgeset_expr
 	; 
-
-boolean_node_expr
-	: nodeset_expr
-	;
 
 xmlfrag_expr
 	: xmlfrag_var
-	| xpath_expr
+	| xmlfrag_var '.' xpath_expr
 	;
 
 nodeset_expr
 	: nodeset_var
 	| nodeset_var '.' property_name
-	;
-
-boolean_edge_expr
-	: edgeset_expr
 	;
 
 edgeset_expr
@@ -242,11 +219,11 @@ edgeset_expr
 	;
 
 // comparison operators
-comp_op:		'<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
+relop:		'<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
 
-unary_op:	'-' | '!';  // unary MINUS
+unaryop:	'-' | '!';  // unary MINUS
 
-binary_op:	'+' | '-' | '*' | '/' | '%'; // binary MINUS
+arithop:	'+' | '-' | '*' | '/' | '%'; // binary MINUS
 
 // Namespace
 namespace:	ID;
