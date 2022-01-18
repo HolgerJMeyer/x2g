@@ -7,6 +7,7 @@ import java.util.*;
 
 public class x2gMain {
 	static String x2g = "X2G";
+	static Boolean verbose = false;
 
 	/* pretty print Error messages */
 	public static class x2gErrorListener extends BaseErrorListener {
@@ -14,8 +15,13 @@ public class x2gMain {
 		public void syntaxError(Recognizer<?, ?> recognizer, Object sym, int line, int pos, String msg, RecognitionException e) {
 			List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
 			Collections.reverse(stack);
-			System.err.println(x2g + " rule stack: " + stack);
-			System.err.println("line " + line + " char pos " + pos + " at " + sym + ": " + msg);
+			if (verbose) {
+				System.err.println(x2g + ": exception: " + e);
+				System.err.println(x2g + ": rule stack: " + stack);
+				System.err.println(x2g + ": line " + line + ": char " + pos + " at " + sym + ": " + msg);
+			} else {
+				System.err.println(x2g + ": line " + line + ": char " + pos + ": " + msg);
+			}
 		}
 	}
 

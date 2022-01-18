@@ -75,13 +75,13 @@ body
 	;
 
 body_action
-	: CREATE NODE '$' ID LABEL string_expr '{' property_assignment_list '}' {
-		nodeSetVars.put($ID.text, $string_expr.text);
-		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_expr.text);
+	: CREATE NODE '$' ID LABEL string_literal '{' property_assignment_list '}' {
+		nodeSetVars.put($ID.text, $string_literal.text);
+		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_literal.text);
 	  }
-	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_expr '{' property_assignment_list '}' {
-		edgeSetVars.put($ID.text, $string_expr.text);
-		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_expr.text);
+	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_literal '{' property_assignment_list '}' {
+		edgeSetVars.put($ID.text, $string_literal.text);
+		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_literal.text);
 	  }
 	// TODO: body_action
 	//| IF boolean_expr '{' body_action '}'
@@ -97,66 +97,30 @@ property_assignment_list returns [AbstractList<Map<String, String>> props = new 
 	| p=property_assignment {
 		$props.add($p.prop);
 	  }
+	| IF b=boolean_expr '{' l=property_assignment_list '}'{ // conditional assignment
+			$props = $l.props;
+	  }
+		// if ($b.value == true) {
+		//		$props = $l.props;
+		// } */
 	;
 
 property_assignment returns [Map<String, String> prop = new HashMap<String, String>()]
 	: property_name '=' expr {
-		notifyErrorListeners("property: " + $property_name.text + " assignment: " + $expr.text);
+		notifyErrorListeners("property " + $property_name.text + "=" + $expr.text);
 		$prop.put($property_name.text, $expr.text);
 	  }
 	| UNIQUE '(' property_name_list ')' {
 		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
 		$prop.put("__unique", $property_name_list.text);
 	  }
-	//TODO: conditional assignment
-	//context?
-	// IF boolean_expr '{' property_assignment_list '}' {
-	| IF boolean_expr '{' property_assignment '}'
 	| /* epsilon */
 	;
-
 	
 property_name_list
 	: property_name ',' property_name_list
 	| property_name
 	;
-
-literal_value
-	: string_literal
-	| date_literal
-	| numeric_literal
-	| boolean_literal
-	;
-
-// SECTION: Expressions
-
-/*
-expr
-	: expr '+' expr
-	| ('+'|'-') expr
-	| expr ('*'|'/') expr
-	| expr ('+'|'-') expr
-	| expr AND expr
-	| expr OR expr
-	| NOT expr
-	| expr comp_op expr
-	;
-*/
-
-string_expr
-	: string_value '+' string_expr
-	| string_value
-	;
-
-string_value
-	: string_literal
-	;
-
-// SECTION: Literal values
-string_literal: STR;
-date_literal: TIMESTAMP;
-numeric_literal: NUMBER;
-boolean_literal: TRUE | FALSE;
 
 property_type			// just a starting point
 	: STRING
@@ -174,12 +138,7 @@ property_definition
 	: property_type property_name
 	;
 
-property_assignement_list
-	: property_assignment ',' property_assignment_list
-	| property_assignment
-	;
-
-// SECTION: Boolean expr
+// SECTION: expressions
 boolean_expr
 	: boolean_expr AND boolean_expr
 	| boolean_expr OR boolean_expr
@@ -188,20 +147,19 @@ boolean_expr
 	| expr relop expr
 	;
 
-qual_property_name
-	//: xmlfrag_expr
-	: nodeset_expr
-	| edgeset_expr
-	;
-
 expr
 	: unaryop expr
 	| expr arithop expr
 	| '(' expr ')'
-	| xmlfrag_expr
+	| eval_expr
+	| literal_expr
+	; 
+
+eval_expr
+	: xmlfrag_expr
 	| nodeset_expr
 	| edgeset_expr
-	; 
+	;
 
 xmlfrag_expr
 	: xmlfrag_var
@@ -218,17 +176,35 @@ edgeset_expr
 	| edgeset_var '.' property_name
 	;
 
-// comparison operators
+literal_expr
+	: string_literal
+	| date_literal
+	| numeric_literal
+	| boolean_literal
+	;
+
+string_expr returns [String str]
+	: s1=string_expr '+' s2=string_expr {
+		$str = $s1.str + $s2.str;
+	  }
+	| eval_expr
+	| string_literal
+	;
+
+// SECTION: Literal values
+string_literal: STR;
+date_literal: TIMESTAMP;
+numeric_literal: NUMBER;
+boolean_literal: TRUE | FALSE;
+
+// SECTION: Operators
 relop:		'<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
 
 unaryop:	'-' | '!';  // unary MINUS
 
-arithop:	'+' | '-' | '*' | '/' | '%'; // binary MINUS
+arithop:	'+' | '-' | '*' | DIV | MOD; // binary MINUS
 
-// Namespace
-namespace:	ID;
-
-// Typed Tokens
+// SECTION: Typed Tokens
 node_type:	ID;
 edge_type:	ID;
 property_name:	ID;

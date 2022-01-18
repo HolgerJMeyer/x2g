@@ -10,8 +10,9 @@ match xpath("//story") using $s {
 		create node $pn label "person" {
 			// properties
 			name = $p.xpath("name/text()"),
+			age = $x.xpath("age"),
 			if $p.xpath("appellation/text()") == "Mr" {
-				gender = "male"
+				gender = "male" + "narrator"
 			}
 		},
 		create edge $e from $sn to $pn label "narrator" { /* no properties given */ }

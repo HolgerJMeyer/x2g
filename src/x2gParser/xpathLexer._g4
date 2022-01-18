@@ -77,9 +77,9 @@ COMMA:		',';
 DOT:			'.';
 PLUS:			'+';
 MINUS:		'-';
-TIMES:		'*';
-DIV:			'/'|'div'|'DIV';
-MOD:			'%'|'mod'|'MOD';
+MULT:			'*';
+DIV:			'/';
+PERCENT:		'%';
 //BITOR:		'|';
 BANG:			'!';
 //QMARK:		'?';
@@ -99,5 +99,20 @@ LBRACE:		'{';
 RBRACE:		'}';
 //LBRACKET:	'[';
 //RBRACKET:	']';
+
+// XPath axes
+ANCESTOR:				'ancestor'	-> type(AXIS);
+ANCESTOR_OR_SELS:		'ancestor-or-self'	-> type(AXIS);
+ATTRIBUTE:				'attribute'	-> type(AXIS);
+CHILD:					'child'	-> type(AXIS);
+DESCENDENT:				'descendent'	-> type(AXIS);
+DESCENDENT_OR_SELF:	'descendent-or-self'	-> type(AXIS);
+FOLLOWING:				'following'	-> type(AXIS);
+FOLLOWING_SIBLING:	'following-sibling'	-> type(AXIS);
+NAMESPACE:				'namespace'	-> type(AXIS);
+PARENT:					'parent'	-> type(AXIS);
+PRECEDING:				'preceding'	-> type(AXIS);
+PRECEDING_SIBLING:	'preceding-sibling'	-> type(AXIS);
+SELF:						'self'	-> type(AXIS);
 
 // vim: ts=3 sw=3 sts=3 noet
