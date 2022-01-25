@@ -13,14 +13,15 @@ public class x2gMain {
 	public static class x2gErrorListener extends BaseErrorListener {
 		@Override
 		public void syntaxError(Recognizer<?, ?> recognizer, Object sym, int line, int pos, String msg, RecognitionException e) {
-			List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
-			Collections.reverse(stack);
 			if (verbose) {
+				List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
+				Collections.reverse(stack);
+
 				System.err.println(x2g + ": exception: " + e);
 				System.err.println(x2g + ": rule stack: " + stack);
-				System.err.println(x2g + ": line " + line + ": char " + pos + " at " + sym + ": " + msg);
+				System.err.println(x2g + ": line " + line + ":" + pos + ": " + msg);
 			} else {
-				System.err.println(x2g + ": line " + line + ": char " + pos + ": " + msg);
+				System.err.println(x2g + ": line " + line + ":" + pos + ": " + msg);
 			}
 		}
 	}

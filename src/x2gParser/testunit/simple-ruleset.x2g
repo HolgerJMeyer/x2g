@@ -8,14 +8,18 @@ match xpath("//story") using $s {
 	},
 	match xpath(".//person[@role='narrator']") using $p {
 		create node $pn label "person" {
-			// properties
+			// properties with optional type declaration
 			name = $p.xpath("name/text()"),
 			age = $x.xpath("age"),
+			// conditional assignment
 			if $p.xpath("appellation/text()") == "Mr" {
 				gender = "male" + "narrator"
 			}
 		},
-		create edge $e from $sn to $pn label "narrator" { /* no properties given */ }
+		create edge $e from $sn to $pn label "narrator" {
+			alt = "story-teller"
+			/* no more properties given */
+		}
 	}
 }
 

@@ -31,10 +31,7 @@ x2g_rule
 	;
 
 bind_expr_list
-	: bind_expr ',' bind_expr_list {
-		bindExprList.add($bind_expr.text);
-	  }
-	| bind_expr {
+	: bind_expr (',' bind_expr)* {
 		bindExprList.add($bind_expr.text);
 	  }
 	;
@@ -58,15 +55,15 @@ bind_expr
 	;
 
 xpath_expr
-	: XPATH '(' string_literal ')'
+	: XPATH '(' string_expr ')'
 	;
 
 node_expr
-	: NODE '(' string_literal ')'
+	: NODE '(' string_expr ')'
 	;
 
 edge_expr
-	: EDGE '(' string_literal ')'
+	: EDGE '(' string_expr ')'
 	;
 
 body
@@ -75,13 +72,13 @@ body
 	;
 
 body_action
-	: CREATE NODE '$' ID LABEL string_literal '{' property_assignment_list '}' {
-		nodeSetVars.put($ID.text, $string_literal.text);
-		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_literal.text);
+	: CREATE NODE '$' ID LABEL string_expr '{' property_assignment_list '}' {
+		nodeSetVars.put($ID.text, $string_expr.text);
+		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_expr.text);
 	  }
-	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_literal '{' property_assignment_list '}' {
-		edgeSetVars.put($ID.text, $string_literal.text);
-		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_literal.text);
+	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_expr '{' property_assignment_list '}' {
+		edgeSetVars.put($ID.text, $string_expr.text);
+		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_expr.text);
 	  }
 	// TODO: body_action
 	//| IF boolean_expr '{' body_action '}'
@@ -118,8 +115,7 @@ property_assignment returns [Map<String, String> prop = new HashMap<String, Stri
 	;
 	
 property_name_list
-	: property_name ',' property_name_list
-	| property_name
+	: property_name (',' property_name)*
 	;
 
 property_type			// just a starting point
@@ -129,21 +125,13 @@ property_type			// just a starting point
 	| BOOLEAN
 	;
 
-property_definition_list
-	: property_definition ',' property_definition_list
-	| property_definition
-	;
-
-property_definition
-	: property_type property_name
-	;
-
 // SECTION: expressions
 boolean_expr
 	: boolean_expr AND boolean_expr
 	| boolean_expr OR boolean_expr
 	| NOT boolean_expr
 	| '(' boolean_expr ')'
+	| boolean_literal
 	| expr relop expr
 	;
 
@@ -156,24 +144,9 @@ expr
 	; 
 
 eval_expr
-	: xmlfrag_expr
-	| nodeset_expr
-	| edgeset_expr
-	;
-
-xmlfrag_expr
-	: xmlfrag_var
-	| xmlfrag_var '.' xpath_expr
-	;
-
-nodeset_expr
-	: nodeset_var
-	| nodeset_var '.' property_name
-	;
-
-edgeset_expr
-	: edgeset_var
-	| edgeset_var '.' property_name
+	: xmlfrag_var ('.' xpath_expr)?
+	| nodeset_var ('.' property_name)?
+	| edgeset_var ('.' property_name)?
 	;
 
 literal_expr
@@ -183,6 +156,14 @@ literal_expr
 	| boolean_literal
 	;
 
+string_literal: STR;
+
+date_literal: DATETIME;
+
+numeric_literal: NUMBER;
+
+boolean_literal: (TRUE|FALSE);
+
 string_expr returns [String str]
 	: s1=string_expr '+' s2=string_expr {
 		$str = $s1.str + $s2.str;
@@ -191,14 +172,9 @@ string_expr returns [String str]
 	| string_literal
 	;
 
-// SECTION: Literal values
-string_literal: STR;
-date_literal: TIMESTAMP;
-numeric_literal: NUMBER;
-boolean_literal: TRUE | FALSE;
 
 // SECTION: Operators
-relop:		'<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
+relop:	'<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
 
 unaryop:	'-' | '!';  // unary MINUS
 

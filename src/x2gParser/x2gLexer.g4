@@ -19,7 +19,7 @@ POSITIV_DOUBLE: (DIGIT+ '.' DIGIT* EXPONENT | '.' DIGIT+ EXPONENT | DIGIT+ EXPON
 EXPONENT:		('e'|'E') ('+'|'-')? DIGIT+;
 fragment
 DIGIT:			[0-9];
-TIMESTAMP:		[0-9][0-9][0-9][0-9]'-'[01][0-9]'-'[0123][0-9];
+DATETIME:		DIGIT DIGIT DIGIT DIGIT '-'[01] DIGIT '-'[0-3] DIGIT ([0-2] DIGIT ':' [0-5] DIGIT)?;
  
 // SECTION: String literals
 // single line strings: 'ssssstrinnnng' "ssssstrinnnng"
@@ -32,10 +32,10 @@ TRIPLEQDSTR: '"""' (('"'|'""')? ( ~('\''|'\\') | ESCCHAR ))* '"""' -> type(STR);
 ESCCHAR: '\\'('t'|'b'|'n'|'r'|'f'|'"'|'\'');
 
 // SECTION: Comments
-LINE_COMMENT:	'//' .*? '\r'?'\n'	{ System.out.println("found comment"); } -> skip;
-SQL_COMMENT:	'--' .*? '\r'?'\n'	{ System.out.println("found comment"); } -> skip;
-XML_COMMENT:	'(:' .*? ':)'			{ System.out.println("found comment"); } -> skip;
-C_COMMENT:  	'/*' .*? '*/'			{ System.out.println("found comment"); } -> skip;
+LINE_COMMENT:	'//' .*? '\r'?'\n'	-> skip;
+SQL_COMMENT:	'--' .*? '\r'?'\n'	-> skip;
+XML_COMMENT:	'(:' .*? ':)'			-> skip;
+C_COMMENT:  	'/*' .*? '*/'			{ /*System.out.println("found comment");*/ } -> skip;
 WS:				[ \t\r\n]+				->	skip;
 
 // SECTION: reserved words
