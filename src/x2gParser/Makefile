@@ -12,7 +12,7 @@ ASRCS = $(wildcard *.g4)
 # X2G
 TARGET = x2g
 SOURCES = $(MYSRCS) $(GENSRCS)
-MYSRCS = $(TARGET)Main.java
+MYSRCS = $(TARGET)Main.java $(TARGET)Evaluator.java
 GENSRCS = $(TARGET)ParserBaseListener.java $(TARGET)ParserListener.java $(ASRCS:.g4=.java)
 GENCLASSES = $(GENSRCS:.java=.class)
 MYCLASSES = $(MYSRCS:.java=.class)
