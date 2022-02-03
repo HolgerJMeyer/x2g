@@ -150,26 +150,18 @@ eval_expr
 	;
 
 literal_expr
-	: string_literal
-	| date_literal
-	| numeric_literal
+	: STR
+	| DATETIME
+	| NUMBER
 	| boolean_literal
 	;
 
-string_literal: STR;
-
-date_literal: DATETIME;
-
-numeric_literal: NUMBER;
-
 boolean_literal: (TRUE|FALSE);
 
-string_expr returns [String str]
-	: s1=string_expr '+' s2=string_expr {
-		$str = $s1.str + $s2.str;
-	  }
+string_expr
+	: string_expr '+' string_expr
 	| eval_expr
-	| string_literal
+	| STR
 	;
 
 
@@ -181,8 +173,6 @@ unaryop:	'-' | '!';  // unary MINUS
 arithop:	'+' | '-' | '*' | DIV | MOD; // binary MINUS
 
 // SECTION: Typed Tokens
-node_type:	ID;
-edge_type:	ID;
 property_name:	ID;
 
 // SECTION: Bound and unbound variables
