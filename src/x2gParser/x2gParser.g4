@@ -14,6 +14,7 @@ options {
 	Map<String, String> nodeSetVars = new HashMap<String, String>();
 	Map<String, String> edgeSetVars = new HashMap<String, String>();
 	AbstractList<String> bindExprList = new LinkedList<String>();
+	AbstractList<String> registeredProps = new LinkedList<String>();
 }
 
 /*
@@ -150,10 +151,23 @@ eval_expr
 	;
 
 literal_expr
-	: STR
-	| DATETIME
-	| NUMBER
+	: string_literal
+	| date_literal
+	| numeric_literal
 	| boolean_literal
+	;
+
+
+string_literal
+	: STR
+	;
+
+date_literal
+	: DATETIME
+	;
+
+numeric_literal
+	: NUMBER
 	;
 
 boolean_literal: (TRUE|FALSE);
@@ -161,7 +175,7 @@ boolean_literal: (TRUE|FALSE);
 string_expr
 	: string_expr '+' string_expr
 	| eval_expr
-	| STR
+	| string_literal
 	;
 
 
@@ -172,7 +186,7 @@ unaryop:	'-' | '!';  // unary MINUS
 
 arithop:	'+' | '-' | '*' | DIV | MOD; // binary MINUS
 
-// SECTION: Typed Tokens
+// SECTION: Property names
 property_name:	ID;
 
 // SECTION: Bound and unbound variables

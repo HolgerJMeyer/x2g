@@ -116,6 +116,24 @@ public interface x2gParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteral_expr(x2gParser.Literal_exprContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link x2gParser#string_literal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitString_literal(x2gParser.String_literalContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link x2gParser#date_literal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDate_literal(x2gParser.Date_literalContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link x2gParser#numeric_literal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumeric_literal(x2gParser.Numeric_literalContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link x2gParser#boolean_literal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
