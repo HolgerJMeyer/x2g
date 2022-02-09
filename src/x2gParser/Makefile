@@ -8,7 +8,7 @@ CLASSPATH=".:antlr-4.7/antlr-4.7-complete.jar:antlr-4.7/antlr-runtime-4.7.jar:$(
 #ANTLR = antlr4
 ANTLR = java -jar ./antlr-4.7/antlr-4.7-complete.jar
 #AFLAGS = -o $(TARGET) -package $(TARGET)
-AFLAGS = -visitor
+AFLAGS = -visitor -listener
 ASRCS = $(wildcard *.g4)
 # X2G
 TARGET = x2g
@@ -16,7 +16,7 @@ SOURCES = $(MYSRCS) $(GENSRCS)
 MYSRCS = $(TARGET)Main.java $(TARGET)Evaluator.java
 LISTENER = $(TARGET)ParserBaseListener.java $(TARGET)ParserListener.java
 VISITOR = $(TARGET)ParserBaseVisitor.java $(TARGET)ParserVisitor.java
-GENSRCS = $(VISITOR) $(ASRCS:.g4=.java)
+GENSRCS = $(VISITOR) $(LISTENER) $(ASRCS:.g4=.java)
 GENCLASSES = $(GENSRCS:.java=.class)
 MYCLASSES = $(MYSRCS:.java=.class)
 CLASSES = $(GENCLASSES) $(MYCLASSES)
@@ -29,7 +29,7 @@ $(TARGET)Parser.g4:	$(TARGET)Lexer.tokens
 
 $(MYSRCS):	$(GENSRCS)
 
-$(GENSRCS):	$(ASRCS)
+$(GENSRCS):	$(TARGET)Parser.tokens
 
 $(TARGET)ParserBaseListener.class $(TARGET)ParserListener.class:	$(TARGET)Parser.java
 

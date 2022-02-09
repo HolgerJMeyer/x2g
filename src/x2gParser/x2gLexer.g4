@@ -6,15 +6,14 @@ lexer grammar x2gLexer;
 
 tokens {
 	STR,
-	AXIS,
 	NEQ
 }
 
 // Integers and Numbers
-NUMBER:	[+-]? (POSITIV_INTEGER | POSITIV_DECIMAL | POSITIV_DOUBLE);
+NUMBER:	[+-]? (POSITIV_INTEGER | POSITIV_DECIMAL | POSITIV_FLOAT);
 POSITIV_INTEGER: DIGIT+;
 POSITIV_DECIMAL: (DIGIT+ '.' DIGIT* | '.' DIGIT+);
-POSITIV_DOUBLE: (DIGIT+ '.' DIGIT* EXPONENT | '.' DIGIT+ EXPONENT | DIGIT+ EXPONENT);
+POSITIV_FLOAT: (DIGIT+ '.' DIGIT* EXPONENT | '.' DIGIT+ EXPONENT | DIGIT+ EXPONENT);
 
 EXPONENT:		('e'|'E') ('+'|'-')? DIGIT+;
 fragment
@@ -35,7 +34,7 @@ ESCCHAR: '\\'('t'|'b'|'n'|'r'|'f'|'"'|'\'');
 LINE_COMMENT:	'//' .*? '\r'?'\n'	-> skip;
 SQL_COMMENT:	'--' .*? '\r'?'\n'	-> skip;
 XML_COMMENT:	'(:' .*? ':)'			-> skip;
-C_COMMENT:  	'/*' .*? '*/'			{ /*System.out.println("found comment");*/ } -> skip;
+C_COMMENT:  	'/*' .*? '*/'			-> skip;
 WS:				[ \t\r\n]+				->	skip;
 
 // SECTION: reserved words

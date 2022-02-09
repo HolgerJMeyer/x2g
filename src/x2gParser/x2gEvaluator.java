@@ -92,7 +92,13 @@ public class x2gEvaluator extends x2gParserBaseVisitor<Void> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitProperty_assignment(x2gParser.Property_assignmentContext ctx) { return visitChildren(ctx); }
+	public Void visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
+		visitChildren(ctx);
+		String name = ctx.property_name().getText();
+		String value = ctx.expr().getText();
+		props.put(name, value);
+		return null;
+	}
 	/**
 	 * {@inheritDoc}
 	 *

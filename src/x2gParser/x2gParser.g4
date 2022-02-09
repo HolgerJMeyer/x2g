@@ -101,6 +101,7 @@ property_assignment_list returns [AbstractList<Map<String, String>> props = new 
 		// if ($b.value == true) {
 		//		$props = $l.props;
 		// } */
+	| /* epsilon */
 	;
 
 property_assignment returns [Map<String, String> prop = new HashMap<String, String>()]
@@ -112,7 +113,6 @@ property_assignment returns [Map<String, String> prop = new HashMap<String, Stri
 		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
 		$prop.put("__unique", $property_name_list.text);
 	  }
-	| /* epsilon */
 	;
 	
 property_name_list
