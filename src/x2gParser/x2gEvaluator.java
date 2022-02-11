@@ -15,7 +15,9 @@ public class x2gEvaluator extends x2gParserBaseVisitor<Void> {
 	Map<String, String> props = new LinkedHashMap<String, String>();
 	Map<Integer, Object> nodes = new HashMap<Integer, Object>();
 	Map<Integer, Object> edges = new HashMap<Integer, Object>();
+	String xmlfile = null;
 
+	public x2gEvaluator(String xf) { xmlfile = xf; }
 	/**
 	 * {@inheritDoc}
 	 *

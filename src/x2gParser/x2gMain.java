@@ -42,7 +42,7 @@ public class x2gMain {
 
 		ParseTree tree = parser.x2g();	// begin parsing at init rule
 		System.out.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
-		x2gEvaluator eval = new x2gEvaluator();
+		x2gEvaluator eval = new x2gEvaluator("axmlfile");
 		eval.visit(tree);
 		System.out.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
 	}
