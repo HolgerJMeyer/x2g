@@ -208,4 +208,4 @@ public class x2gEvaluator extends x2gParserBaseVisitor<Void> {
 	@Override public Void visitEdgeset_var(x2gParser.Edgeset_varContext ctx) { return visitChildren(ctx); }
 }
 
-// vim: ts=3 sw=3 sts=3 noet
+// vim: ff=unix ts=3 sw=3 sts=3 noet

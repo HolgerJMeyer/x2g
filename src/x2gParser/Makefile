@@ -17,10 +17,9 @@ MYSRCS = \
 	$(TARGET)Main.java \
 	$(TARGET)Evaluator.java \
 	Scope.java \
-	ScopeType.java \
-	Symbol.java \
 	SymbolTable.java \
-	ValueType.java
+	Variable.java \
+	VarType.java
 LISTENER = $(TARGET)ParserBaseListener.java $(TARGET)ParserListener.java
 VISITOR = $(TARGET)ParserBaseVisitor.java $(TARGET)ParserVisitor.java
 GENSRCS = $(VISITOR) $(LISTENER) $(ASRCS:.g4=.java)

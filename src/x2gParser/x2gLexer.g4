@@ -99,4 +99,4 @@ RBRACE:		'}';
 //LBRACKET:	'[';
 //RBRACKET:	']';
 
-// vim: ts=3 sw=3 sts=3 noet
+// vim: ff=unix ts=3 sw=3 sts=3 noet
