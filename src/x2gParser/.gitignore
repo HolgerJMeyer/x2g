@@ -3,5 +3,7 @@ x2g
 *.tokens
 x2gParser.java
 x2gParserBaseListener.java
+x2gParserBaseVisitor.java
 x2gParserListener.java
+x2gParserVisitor.java
 x2gLexer.java
