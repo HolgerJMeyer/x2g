@@ -3,13 +3,14 @@ SHELL = /bin/bash
 JAVAC = javac
 JFLAGS = -g -cp $(CLASSPATH) -d $(CLASSDIR) -Xlint:deprecation
 CLASSDIR = $(TARGET)
-CLASSPATH=".:antlr-4.7/antlr-4.7-complete.jar:antlr-4.7/antlr-runtime-4.7.jar:$(CLASSDIR):"
-# ANTLR4
-#ANTLR = antlr4
-ANTLR = java -jar ./antlr-4.7/antlr-4.7-complete.jar
+CLASSPATH=".:$(AJARS):$(CLASSDIR):"
+# ANTLR4 expecting version 4.9.3
+ANTLR = antlr4
 #AFLAGS = -o $(TARGET) -package $(TARGET)
 AFLAGS = -visitor -listener
 ASRCS = $(wildcard *.g4)
+LIBDIR = /usr/share/java/antlr4
+AJARS = "$(LIBDIR)/antlr4.jar:$(LIBDIR)/antlr4-runtime.jar"
 # X2G
 TARGET = x2g
 SOURCES = $(MYSRCS) $(GENSRCS)
@@ -22,7 +23,7 @@ MYSRCS = \
 	VarType.java
 LISTENER = $(TARGET)ParserBaseListener.java $(TARGET)ParserListener.java
 VISITOR = $(TARGET)ParserBaseVisitor.java $(TARGET)ParserVisitor.java
-GENSRCS = $(VISITOR) $(LISTENER) $(ASRCS:.g4=.java)
+GENSRCS = $(LISTENER) $(VISITOR) $(ASRCS:.g4=.java)
 GENCLASSES = $(GENSRCS:.java=.class)
 MYCLASSES = $(MYSRCS:.java=.class)
 CLASSES = $(GENCLASSES) $(MYCLASSES)
@@ -31,13 +32,13 @@ TOKENS = $(TARGET)Parser.tokens $(TARGET)Lexer.tokens
 
 all::	$(CLASSES)
 
-$(TARGET)Parser.g4:	$(TARGET)Lexer.tokens
+$(TARGET)Parser.g4:	$(TARGET)Lexer.g4
+
+$(GENSRCS):	$(ASRCS)
 
 $(MYSRCS):	$(GENSRCS)
 
-$(GENSRCS):	$(TARGET)Parser.tokens
-
-$(TARGET)ParserBaseListener.class $(TARGET)ParserListener.class:	$(TARGET)Parser.java
+$(CLASSES):	$(GENSRCS) $(MYSRCS)
 
 run:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java $(TARGET)Main <$$g ; done
