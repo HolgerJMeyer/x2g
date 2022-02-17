@@ -12,19 +12,26 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * operations with no return type.
  */
 public class x2gEvaluator extends x2gParserBaseVisitor<Void> {
-	Map<String, String> props = new LinkedHashMap<String, String>();
-	Map<Integer, Object> nodes = new HashMap<Integer, Object>();
-	Map<Integer, Object> edges = new HashMap<Integer, Object>();
-	String xmlfile = null;
+	String xmlfile;
+	SymbolTable symtab;
 
-	public x2gEvaluator(String xf) { xmlfile = xf; }
+	public x2gEvaluator(SymbolTable symtab) { this.symtab = symtab; }
+
+	public String getXmlFile() { return xmlfile; }
+
+	public Void setXmlFile(String path) { xmlfile = path; return null; }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitX2g(x2gParser.X2gContext ctx) { return visitChildren(ctx); }
+	@Override public Void visitX2g(x2gParser.X2gContext ctx) {
+		visitChildren(ctx);
+		System.err.println("symtab: " + symtab);
+		return null;
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -95,11 +102,7 @@ public class x2gEvaluator extends x2gParserBaseVisitor<Void> {
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	public Void visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
-		visitChildren(ctx);
-		String name = ctx.property_name().getText();
-		String value = ctx.expr().getText();
-		props.put(name, value);
-		return null;
+		return visitChildren(ctx);
 	}
 	/**
 	 * {@inheritDoc}

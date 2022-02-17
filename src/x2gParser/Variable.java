@@ -1,38 +1,35 @@
 /**
- * Based on Chapter 6 from Terence Parr: Language Implementation
+ * Inpired by Chapter 6 from Terence Parr: Language Implementation
  * Patterns. The Pragmatic Bookshelf, Releigh, MA, 2010.
  */
 
 public class Variable {
 	protected String name;
 	protected VarType type;
-	protected String binding;
+	protected Object binding;
+	protected Scope scope;
 
-	public Variable(String name) {
+	protected Variable(String name) {
 		this.name = name;
 	}
 
-	public Variable(String name, VarType type) {
+	protected Variable(String name, VarType type) {
 		this(name);
 		this.type = type;
 	}
 
-	public Variable(String name, VarType type, String binding) {
+	protected Variable(String name, VarType type, Object binding) {
 		this(name, type);
 		this.binding = binding;
 	}
 
-	public String getName() {
-		return name;
-	}
+	protected String getName() { return name; }
 
-	public VarType getType() {
-		return type;
-	}
+	protected VarType getType() { return type; }
 
-	public String getBinding() {
-		return binding;
-	}
+	protected Object getBinding() { return binding; }
+
+	protected Scope getScope() { return scope; }
 
 	public String toString() {
 		if (binding != null)

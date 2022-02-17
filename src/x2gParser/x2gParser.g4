@@ -10,11 +10,15 @@ options {
 }
 
 @members {
-	Map<String, String> xmlFragVars = new HashMap<String, String>();
-	Map<String, String> nodeSetVars = new HashMap<String, String>();
-	Map<String, String> edgeSetVars = new HashMap<String, String>();
-	AbstractList<String> bindExprList = new LinkedList<String>();
 	AbstractList<String> registeredProps = new LinkedList<String>();
+
+	SymbolTable symtab;
+
+	// overload costructor
+	public x2gParser(TokenStream input, SymbolTable symtab) {
+		this(input);
+		this.symtab = symtab;
+	}
 }
 
 /*
@@ -25,33 +29,33 @@ x2g
 	;
 
 x2g_rule
-	: MATCH bind_expr_list '{' body '}' {
-		notifyErrorListeners("bindings: " + bindExprList.toString());
-		bindExprList.clear(); // bindings not used anymore
+	: MATCH {
+		symtab.newScope("match#" + _localctx.start.getLine());
+	  } bind_expr_list '{' body '}' {
+		notifyErrorListeners("ending scope: " + symtab.getCurrentScope().toString());
+		symtab.endScope();
 	  }
 	;
 
 bind_expr_list
-	: bind_expr (',' bind_expr)* {
-		bindExprList.add($bind_expr.text);
-	  }
+	: bind_expr (',' bind_expr)*
 	;
 
 bind_expr
 	: xpath_expr USING '$' ID {
 		// var to xml fragment binding
-		xmlFragVars.put($ID.text, $xpath_expr.text);
 		notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $xpath_expr.text);
+		symtab.define($ID.text, VarType.XPATH, $xpath_expr.text);
 	  } 
 	| node_expr USING '$' ID {
 		// var to node type binding
-		nodeSetVars.put($ID.text, $node_expr.text);
 		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $node_expr.text);
+		symtab.define($ID.text, VarType.NODE, $node_expr.text);
 	  } 
 	| edge_expr USING '$' ID {
 		// var to edge type binding
-		edgeSetVars.put($ID.text, $edge_expr.text);
 		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $edge_expr.text);
+		symtab.define($ID.text, VarType.EDGE, $edge_expr.text);
 	  } 
 	;
 
@@ -73,13 +77,21 @@ body
 	;
 
 body_action
-	: CREATE NODE '$' ID LABEL string_expr '{' property_assignment_list '}' {
-		nodeSetVars.put($ID.text, $string_expr.text);
+	: CREATE NODE '$' ID LABEL string_expr {
 		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_expr.text);
+		symtab.define($ID.text, VarType.NODESET, $string_expr.text);
+		symtab.newScope("node.properties");
+	  } '{' property_assignment_list '}' {
+		notifyErrorListeners("ending scope: " + symtab.getCurrentScope().toString());
+		symtab.endScope();
 	  }
-	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_expr '{' property_assignment_list '}' {
-		edgeSetVars.put($ID.text, $string_expr.text);
+	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_expr {
 		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_expr.text);
+		symtab.define($ID.text, VarType.EDGESET, $string_expr.text);
+		symtab.newScope("edge.properties");
+	  } '{' property_assignment_list '}' {
+		notifyErrorListeners("ending scope: " + symtab.getCurrentScope().toString());
+		symtab.endScope();
 	  }
 	// TODO: body_action
 	//| IF boolean_expr '{' body_action '}'
@@ -87,31 +99,24 @@ body_action
 	| /* epsilon */
 	;
 
-property_assignment_list returns [AbstractList<Map<String, String>> props = new ArrayList<Map<String,String>>()]
-	: p=property_assignment ',' l=property_assignment_list {
-		$l.props.add($p.prop);
-		$props = $l.props;
-	  }
-	| p=property_assignment {
-		$props.add($p.prop);
-	  }
-	| IF b=boolean_expr '{' l=property_assignment_list '}'{ // conditional assignment
-			$props = $l.props;
-	  }
+property_assignment_list
+	: property_assignment ',' property_assignment_list
+	| property_assignment
+	| IF boolean_expr '{' property_assignment_list '}'
 		// if ($b.value == true) {
 		//		$props = $l.props;
 		// } */
 	| /* epsilon */
 	;
 
-property_assignment returns [Map<String, String> prop = new HashMap<String, String>()]
+property_assignment
 	: property_name '=' expr {
 		notifyErrorListeners("property " + $property_name.text + "=" + $expr.text);
-		$prop.put($property_name.text, $expr.text);
+		symtab.define($property_name.text, VarType.PROPERTY, $expr.text);
 	  }
 	| UNIQUE '(' property_name_list ')' {
 		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
-		$prop.put("__unique", $property_name_list.text);
+		symtab.define("__unique", VarType.PROPERTY, $property_name_list.text);
 	  }
 	;
 	
@@ -190,8 +195,20 @@ arithop:	'+' | '-' | '*' | DIV | MOD; // binary MINUS
 property_name:	ID;
 
 // SECTION: Bound and unbound variables
-xmlfrag_var:	'$' ID { if (!xmlFragVars.containsKey($ID.text))   notifyErrorListeners("xml fragment variable $"+$ID.text+" is unbound"); };
-nodeset_var:	'$' ID { if (!nodeSetVars.containsKey($ID.text))   notifyErrorListeners("node variable $"+$ID.text+" is unbound"); };
-edgeset_var:	'$' ID { if (!edgeSetVars.containsKey($ID.text))   notifyErrorListeners("edge variable $"+$ID.text+" is unbound"); };
+xmlfrag_var:
+	'$' ID {
+		if (symtab.resolve($ID.text) == null)
+			notifyErrorListeners("xml fragment variable $"+$ID.text+" is unbound");
+	};
+nodeset_var:
+	'$' ID {
+		if (symtab.resolve($ID.text) == null)
+			notifyErrorListeners("node variable $"+$ID.text+" is unbound");
+	};
+edgeset_var:
+	'$' ID {
+		if (symtab.resolve($ID.text) == null)
+			notifyErrorListeners("edge variable $"+$ID.text+" is unbound");
+	};
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet

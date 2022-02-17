@@ -1,54 +1,39 @@
 import java.util.ArrayList;
-import java.util.Stack;
 
 /**
- * Based on Chapter 6 from Terence Parr: Language Implementation
+ * Inspired by Chapter 6 from Terence Parr: Language Implementation
  * Patterns. The Pragmatic Bookshelf, Releigh, MA, 2010.
  */
-
 public class SymbolTable {
-	protected Stack<Scope> scopeStack = new Stack<>();
-	protected ArrayList<Scope> allScopes = new ArrayList<>();
+	Scope globals;
+	Scope current;
+	ArrayList<Scope> scopes = new ArrayList<Scope>();	
 
 	public SymbolTable() {
-		Scope globals = new Scope("GLOBAL");
-		scopeStack.push(globals);
-		allScopes.add(globals);
+		current = globals = new Scope("GLOBAL");
+		globals.define("$allnodes", VarType.NODESET);
+		globals.define("$alledges", VarType.EDGESET);
 	}
 
-	public Scope pushScope() {
-		Scope enclosingScope = scopeStack.peek();
-		Scope scope = new Scope("LOCAL", enclosingScope);
-		scopeStack.push(scope);
-		allScopes.add(scope);
-		return scope;
-	}
+	public Scope newScope(String name) { scopes.add(current = new Scope(name, current)); return current; }
 
-	public void popScope() {
-		scopeStack.pop();
-	}
+	public Scope endScope() { return current = current.getEnclosingScope(); }
 
-	public Scope currentScope() {
-		if (scopeStack.size() > 0) {
-			return scopeStack.peek();
-		}
-		System.err.println(this + "Unbalanced scope stack.");
-		return allScopes.get(0);
-	}
+   public void define(String name, VarType type, Object binding) { current.define(name, type, binding); }
 
-	public Scope getScope(String name) {
-		for (Scope scope : scopeStack) {
-			if (scope.name == name) return scope;
-		}
-		return null;
-	}
+   public void define(String name, VarType type) { current.define(name, type); }
+
+	public Variable resolve(String name) { return current.resolve(name); }
+
+	public Scope getCurrentScope() { return current; }
 
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		for (Scope scope : scopeStack.subList(0, scopeStack.size() - 1)) {
-			sb.append(scope.toString());
+		//return globals.toString();
+		StringBuilder buf = new StringBuilder();
+		for (Scope scope : scopes) {
+			buf.append('\n' + scope.toString());
 		}
-		return sb.toString();
+		return buf.toString();
 	}
 }
 

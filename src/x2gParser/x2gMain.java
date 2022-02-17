@@ -34,17 +34,19 @@ public class x2gMain {
 		x2gLexer lexer = new x2gLexer(input);
 		// Create buffer of tokens pulled from lexer
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		// Create symbol table with global scope
+		SymbolTable symtab = new SymbolTable();
 		// Create parser that feeds off of the token buffer
-		x2gParser parser = new x2gParser(tokens);
+		x2gParser parser = new x2gParser(tokens, symtab);
 		// Remove standard ErrorListener ConsoleErrorListener
 		parser.removeErrorListeners();
 		parser.addErrorListener(new x2gErrorListener());
 
 		ParseTree tree = parser.x2g();	// begin parsing at init rule
 		System.out.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
-		x2gEvaluator eval = new x2gEvaluator("axmlfile");
+		x2gEvaluator eval = new x2gEvaluator(symtab);
+		eval.setXmlFile("an-xml-file");
 		eval.visit(tree);
-		System.out.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
 	}
 }
 
