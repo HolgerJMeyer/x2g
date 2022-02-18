@@ -10,9 +10,8 @@ options {
 }
 
 @members {
-	AbstractList<String> registeredProps = new LinkedList<String>();
-
 	SymbolTable symtab;
+	boolean verbose = false;
 
 	// overload costructor
 	public x2gParser(TokenStream input, SymbolTable symtab) {
@@ -30,9 +29,9 @@ x2g
 
 x2g_rule
 	: MATCH {
-		symtab.newScope("match#" + _localctx.start.getLine());
+		symtab.newScope("match-" + $MATCH.line);
 	  } bind_expr_list '{' body '}' {
-		notifyErrorListeners("ending scope: " + symtab.getCurrentScope().toString());
+		if (verbose) notifyErrorListeners("ending scope: " + symtab.getCurrentScope().toString());
 		symtab.endScope();
 	  }
 	;
@@ -42,55 +41,60 @@ bind_expr_list
 	;
 
 bind_expr
-	: xpath_expr USING '$' ID {
-		// var to xml fragment binding
-		notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $xpath_expr.text);
-		symtab.define($ID.text, VarType.XPATH, $xpath_expr.text);
+	: XPATH '(' string_expr ')' USING '$' ID {
+		if (verbose) notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $string_expr.text);
+		if (symtab.resolve($ID.text) != null)
+			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+		symtab.define($ID.text, VarType.XPATH, $string_expr.text);
+	  }
+	| NODE '(' string_expr ')' USING '$' ID {
+		if (verbose) notifyErrorListeners("node variable $" + $ID.text + " bound to " + $string_expr.text);
+		if (symtab.resolve($ID.text) != null)
+			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+		symtab.define($ID.text, VarType.NODE, $string_expr.text);
+	  }
+	| EDGE '(' string_expr ')' USING '$' ID {
+		if (verbose) notifyErrorListeners("edge variable $" + $ID.text + " bound to " + $string_expr.text);
+		if (symtab.resolve($ID.text) != null)
+			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+		symtab.define($ID.text, VarType.EDGE, $string_expr.text);
 	  } 
-	| node_expr USING '$' ID {
-		// var to node type binding
-		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $node_expr.text);
-		symtab.define($ID.text, VarType.NODE, $node_expr.text);
-	  } 
-	| edge_expr USING '$' ID {
-		// var to edge type binding
-		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $edge_expr.text);
-		symtab.define($ID.text, VarType.EDGE, $edge_expr.text);
-	  } 
-	;
-
-xpath_expr
-	: XPATH '(' string_expr ')'
-	;
-
-node_expr
-	: NODE '(' string_expr ')'
-	;
-
-edge_expr
-	: EDGE '(' string_expr ')'
 	;
 
 body
-	: body_action ',' body
-	| body_action
+	: body_action (',' body_action)*
 	;
 
 body_action
 	: CREATE NODE '$' ID LABEL string_expr {
-		notifyErrorListeners("node set variable $" + $ID.text + " bound to " + $string_expr.text);
-		symtab.define($ID.text, VarType.NODESET, $string_expr.text);
+		if (verbose) notifyErrorListeners("node set variable $" + $ID.text + " labeled " + $string_expr.text);
+		if (symtab.resolve($ID.text) != null)
+			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+		symtab.define($ID.text, VarType.NODE);
 		symtab.newScope("node.properties");
+		symtab.define("__label", VarType.PROPERTY, $string_expr.text);
 	  } '{' property_assignment_list '}' {
-		notifyErrorListeners("ending scope: " + symtab.getCurrentScope().toString());
+		Scope scope = symtab.getCurrentScope();
+		symtab.define("__binding", VarType.PROPERTY, scope);
+		if (verbose) notifyErrorListeners("ending scope: " + scope.toString());
 		symtab.endScope();
 	  }
-	| CREATE EDGE '$' ID FROM nodeset_var TO nodeset_var LABEL string_expr {
-		notifyErrorListeners("edge set variable $" + $ID.text + " bound to " + $string_expr.text);
-		symtab.define($ID.text, VarType.EDGESET, $string_expr.text);
+	| CREATE EDGE '$' ID FROM '$' n1=ID TO '$'n2=ID LABEL string_expr {
+		if (verbose) notifyErrorListeners("edgeset variable $" + $ID.text + " labeled " + $string_expr.text);
+		if (symtab.resolve($ID.text) != null)
+			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+		if (symtab.resolve($n1.text) == null)
+			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
+		if (symtab.resolve($n2.text) == null)
+			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
 		symtab.newScope("edge.properties");
+		symtab.define("__label", VarType.PROPERTY, $string_expr.text);
+		symtab.define("__from", VarType.PROPERTY, $n1.text);
+		symtab.define("__to", VarType.PROPERTY, $n2.text);
 	  } '{' property_assignment_list '}' {
-		notifyErrorListeners("ending scope: " + symtab.getCurrentScope().toString());
+		Scope scope = symtab.getCurrentScope();
+		symtab.define("__binding", VarType.PROPERTY, scope);
+		if (verbose) notifyErrorListeners("ending scope: " + scope.toString());
 		symtab.endScope();
 	  }
 	// TODO: body_action
@@ -100,24 +104,30 @@ body_action
 	;
 
 property_assignment_list
-	: property_assignment ',' property_assignment_list
-	| property_assignment
-	| IF boolean_expr '{' property_assignment_list '}'
-		// if ($b.value == true) {
-		//		$props = $l.props;
-		// } */
-	| /* epsilon */
+	: property_assignment (',' property_assignment)*
 	;
 
 property_assignment
 	: property_name '=' expr {
-		notifyErrorListeners("property " + $property_name.text + "=" + $expr.text);
+		if (verbose) notifyErrorListeners("property " + $property_name.text + "=" + $expr.text);
+		if (symtab.resolveOnly($property_name.text) != null)
+			notifyErrorListeners("property " + $property_name.text + " overidden!");
 		symtab.define($property_name.text, VarType.PROPERTY, $expr.text);
 	  }
 	| UNIQUE '(' property_name_list ')' {
-		notifyErrorListeners("unique constraint found: " + $property_name_list.text);
+		if (verbose) notifyErrorListeners("unique constraint found: " + $property_name_list.text);
+		if (symtab.resolveOnly("__unique") != null)
+			notifyErrorListeners("unique constraint (" + $property_name_list.text + ") redefines earlier one!");
 		symtab.define("__unique", VarType.PROPERTY, $property_name_list.text);
 	  }
+		// TODO
+		//for (String prop : $property_name_list)
+		//	if (symtab.resolveOnly(prop) == null)
+		//		notifyErrorListeners("unique constraint: property " + prop + " unknown!");
+	| IF boolean_expr '{' property_assignment_list '}'
+		// if ($b.value == true) {
+		//		$props = $l.props;
+		// } */
 	;
 	
 property_name_list
@@ -150,9 +160,14 @@ expr
 	; 
 
 eval_expr
-	: xmlfrag_var ('.' xpath_expr)?
-	| nodeset_var ('.' property_name)?
-	| edgeset_var ('.' property_name)?
+	: '$' ID ('.' XPATH '(' string_expr ')')? {
+		if (symtab.resolve($ID.text) == null)
+			notifyErrorListeners("xml fragment variable $" + $ID.text + " is unbound!");
+	  }
+	| '$' ID ('.' property_name)? {
+		if (symtab.resolve($ID.text) == null)
+			notifyErrorListeners("node or edge variable $" + $ID.text + " is unbound!");
+	  }
 	;
 
 literal_expr
@@ -183,7 +198,6 @@ string_expr
 	| string_literal
 	;
 
-
 // SECTION: Operators
 relop:	'<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
 
@@ -193,22 +207,5 @@ arithop:	'+' | '-' | '*' | DIV | MOD; // binary MINUS
 
 // SECTION: Property names
 property_name:	ID;
-
-// SECTION: Bound and unbound variables
-xmlfrag_var:
-	'$' ID {
-		if (symtab.resolve($ID.text) == null)
-			notifyErrorListeners("xml fragment variable $"+$ID.text+" is unbound");
-	};
-nodeset_var:
-	'$' ID {
-		if (symtab.resolve($ID.text) == null)
-			notifyErrorListeners("node variable $"+$ID.text+" is unbound");
-	};
-edgeset_var:
-	'$' ID {
-		if (symtab.resolve($ID.text) == null)
-			notifyErrorListeners("edge variable $"+$ID.text+" is unbound");
-	};
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet

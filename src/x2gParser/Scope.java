@@ -43,7 +43,7 @@ public class Scope {
 	/**
 	 * Look up the variable name in this scope and, if not found, 
 	 * progressively search the enclosing scopes. 
-	 * Return null if not found in any applicable scope.
+	 * Returns null if not found in any applicable scope.
 	 */
 	protected Variable resolve(String name) {
 		Variable variable = members.get(name);
@@ -53,6 +53,12 @@ public class Scope {
 			return enclosingScope.resolve(name);
 		return null; // not found
 	}
+
+	/**
+	 * Look up the variable name in this scope only.
+	 * Returns null if not found.
+	 */
+	protected Variable resolveOnly(String name) { return members.get(name); }
 
 	/** Where to look next for variable */
 	protected Scope getEnclosingScope() {

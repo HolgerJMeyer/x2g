@@ -55,7 +55,7 @@ NODE:			'NODE' | 'node';
 NOT:			'NOT' | 'not';
 NUMERIC:		'NUMERIC' | 'numeric';
 OR:			'OR' | 'or';
-ORDERBY:		'ORDERBY' | 'ORDER' 'BY' | 'orderby' | 'order' 'by';
+ORDERBY:		'ORDER' 'BY' | 'order' 'by';
 STRING:		'STRING' | 'string';
 TO:			'TO' | 'to';
 TRUE:			'TRUE' | 'true';

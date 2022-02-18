@@ -59,27 +59,6 @@ public class x2gEvaluator extends x2gParserBaseVisitor<Void> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitXpath_expr(x2gParser.Xpath_exprContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public Void visitNode_expr(x2gParser.Node_exprContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public Void visitEdge_expr(x2gParser.Edge_exprContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public Void visitBody(x2gParser.BodyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -188,27 +167,6 @@ public class x2gEvaluator extends x2gParserBaseVisitor<Void> {
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public Void visitProperty_name(x2gParser.Property_nameContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public Void visitXmlfrag_var(x2gParser.Xmlfrag_varContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public Void visitNodeset_var(x2gParser.Nodeset_varContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public Void visitEdgeset_var(x2gParser.Edgeset_varContext ctx) { return visitChildren(ctx); }
 }
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet

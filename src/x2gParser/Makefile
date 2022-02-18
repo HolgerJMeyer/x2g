@@ -3,6 +3,7 @@ SHELL = /bin/bash
 JAVAC = javac
 JFLAGS = -g -cp $(CLASSPATH) -d $(CLASSDIR) -Xlint:deprecation
 CLASSDIR = $(TARGET)
+CLASSDIR = .
 CLASSPATH=".:$(AJARS):$(CLASSDIR):"
 # ANTLR4 expecting version 4.9.3
 ANTLR = antlr4
@@ -26,7 +27,7 @@ VISITOR = $(TARGET)ParserBaseVisitor.java $(TARGET)ParserVisitor.java
 GENSRCS = $(LISTENER) $(VISITOR) $(ASRCS:.g4=.java)
 GENCLASSES = $(GENSRCS:.java=.class)
 MYCLASSES = $(MYSRCS:.java=.class)
-CLASSES = $(GENCLASSES) $(MYCLASSES)
+CLASSES = $(GENCLASSES) $(MYCLASSES) $(CLASSDIR)/*.class
 MANIFEST = Manifest.txt
 TOKENS = $(TARGET)Parser.tokens $(TARGET)Lexer.tokens
 
@@ -47,7 +48,7 @@ grun:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java org.antlr.v4.gui.TestRig $(TARGET) $(TARGET) -token -tree -gui $$g ; done
 
 clean:
-	-rm -rf $(GENSRCS) $(TOKENS)
+	-rm -rf $(GENSRCS) $(TOKENS) $(CLASSES)
 
 .SUFFIXES:
 

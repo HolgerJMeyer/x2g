@@ -25,6 +25,8 @@ public class SymbolTable {
 
 	public Variable resolve(String name) { return current.resolve(name); }
 
+	public Variable resolveOnly(String name) { return current.resolveOnly(name); }
+
 	public Scope getCurrentScope() { return current; }
 
 	public String toString() {
