@@ -3,15 +3,17 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
+//import org.apache.commons.cli.*; // otherwise conclicts with antlr4 parser class
+
 import java.util.*;
 
 public class x2gMain {
 	static String x2g = "X2G";
-	static Boolean verbose = false;
+	static boolean verbose = false;
+	static boolean parseonly = false;
 
 	/* pretty print Error messages */
 	public static class x2gErrorListener extends BaseErrorListener {
-		@Override
 		public void syntaxError(Recognizer<?, ?> recognizer, Object sym, int line, int pos, String msg, RecognitionException e) {
 			if (verbose) {
 				List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
@@ -28,6 +30,33 @@ public class x2gMain {
 
 	/* main parser entry */
 	public static void main(String[] args) throws Exception {
+		// command line parsing
+		org.apache.commons.cli.Options options = new org.apache.commons.cli.Options();
+
+		options.addOption("c", "csv", true, "generate nodes and edges files (default)");
+		options.addOption("d", "dir", true, "transform all xml files found in directory");
+		options.addOption("h", "help", false, "print this help");
+		options.addOption("o", "out-file", true, "basename of output file(s)");
+		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
+		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
+		options.addOption("v", "verbose", false, "being verbose");
+
+		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
+		org.apache.commons.cli.CommandLine cmd = cmdparser.parse(options, args);
+
+		if (cmd.hasOption("verbose")) {
+			verbose = true;
+		}
+
+		if (cmd.hasOption("parseonly")) {
+			parseonly = true;
+		}
+
+		if (cmd.hasOption("help")) {
+			org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
+			formatter.printHelp("x2g [options] [xml-file ...]", options);
+		}
+
 		// CharStream from Stadard Input
 		CharStream input = CharStreams.fromStream(System.in);
 		// Lexer feeds off of input CharStream
@@ -43,7 +72,8 @@ public class x2gMain {
 		parser.addErrorListener(new x2gErrorListener());
 
 		ParseTree tree = parser.x2g();	// begin parsing at init rule
-		System.out.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
+		if (verbose)
+			System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
 		x2gEvaluator eval = new x2gEvaluator(symtab);
 		eval.setXmlFile("an-xml-file");
 		eval.visit(tree);

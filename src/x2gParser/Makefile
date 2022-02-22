@@ -4,13 +4,14 @@ JAVAC = javac
 JFLAGS = -g -cp $(CLASSPATH) -d $(CLASSDIR) -Xlint:deprecation
 CLASSDIR = $(TARGET)
 CLASSDIR = .
-CLASSPATH=".:$(AJARS):$(CLASSDIR):"
+CLASSPATH=".:$(COMMONS):$(AJARS):$(CLASSDIR):"
 # ANTLR4 expecting version 4.9.3
 ANTLR = antlr4
 #AFLAGS = -o $(TARGET) -package $(TARGET)
 AFLAGS = -visitor -listener
 ASRCS = $(wildcard *.g4)
 LIBDIR = /usr/share/java/antlr4
+COMMONS = /usr/share/java/apache-commons-cli.jar
 AJARS = "$(LIBDIR)/antlr4.jar:$(LIBDIR)/antlr4-runtime.jar"
 # X2G
 TARGET = x2g
@@ -42,7 +43,7 @@ $(MYSRCS):	$(GENSRCS)
 $(CLASSES):	$(GENSRCS) $(MYSRCS)
 
 run:
-	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java $(TARGET)Main <$$g ; done
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java $(TARGET)Main -h <$$g ; done
 
 grun:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java org.antlr.v4.gui.TestRig $(TARGET) $(TARGET) -token -tree -gui $$g ; done
