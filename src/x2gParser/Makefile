@@ -19,6 +19,10 @@ SOURCES = $(MYSRCS) $(GENSRCS)
 MYSRCS = \
 	$(TARGET)Main.java \
 	$(TARGET)Evaluator.java \
+	gElement.java \
+	gEdge.java \
+	gNode.java \
+	gGraph.java \
 	Scope.java \
 	SymbolTable.java \
 	Variable.java \
@@ -43,7 +47,8 @@ $(MYSRCS):	$(GENSRCS)
 $(CLASSES):	$(GENSRCS) $(MYSRCS)
 
 run:
-	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java $(TARGET)Main -h <$$g ; done
+	export CLASSPATH=$(CLASSPATH) ; java $(TARGET)Main -h
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java $(TARGET)Main <$$g ; done
 
 grun:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java org.antlr.v4.gui.TestRig $(TARGET) $(TARGET) -token -tree -gui $$g ; done

@@ -55,6 +55,7 @@ public class x2gMain {
 		if (cmd.hasOption("help")) {
 			org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
 			formatter.printHelp("x2g [options] [xml-file ...]", options);
+			return;
 		}
 
 		// CharStream from Stadard Input
