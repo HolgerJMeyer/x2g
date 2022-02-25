@@ -7,13 +7,13 @@ import org.antlr.v4.runtime.tree.*;
 
 import java.util.*;
 
-public class x2gMain {
+public class Main {
 	static String x2g = "X2G";
 	static boolean verbose = false;
 	static boolean parseonly = false;
 
 	/* pretty print Error messages */
-	public static class x2gErrorListener extends BaseErrorListener {
+	public static class ErrorListener extends BaseErrorListener {
 		public void syntaxError(Recognizer<?, ?> recognizer, Object sym, int line, int pos, String msg, RecognitionException e) {
 			if (verbose) {
 				List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
@@ -70,12 +70,12 @@ public class x2gMain {
 		x2gParser parser = new x2gParser(tokens, symtab);
 		// Remove standard ErrorListener ConsoleErrorListener
 		parser.removeErrorListeners();
-		parser.addErrorListener(new x2gErrorListener());
+		parser.addErrorListener(new ErrorListener());
 
 		ParseTree tree = parser.x2g();	// begin parsing at init rule
 		if (verbose)
 			System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
-		x2gEvaluator eval = new x2gEvaluator(symtab);
+		Evaluator eval = new Evaluator(symtab);
 		eval.setXmlFile("an-xml-file");
 		eval.visit(tree);
 	}

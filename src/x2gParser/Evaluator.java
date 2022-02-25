@@ -11,11 +11,11 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * @param <T> The return type of the visit operation. Use {@link Void} for
  * operations with no return type.
  */
-public class x2gEvaluator extends x2gParserBaseVisitor<Void> {
+public class Evaluator extends x2gParserBaseVisitor<Void> {
 	String xmlfile;
 	SymbolTable symtab;
 
-	public x2gEvaluator(SymbolTable symtab) { this.symtab = symtab; }
+	public Evaluator(SymbolTable symtab) { this.symtab = symtab; }
 
 	public String getXmlFile() { return xmlfile; }
 
