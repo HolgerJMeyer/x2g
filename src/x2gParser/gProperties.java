@@ -1,7 +1,9 @@
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
-public class gProperties extends SortedMap {
+public class gProperties extends LinkedHashMap<String, Object> {
 
 }
 
