@@ -21,8 +21,9 @@ MYSRCS = \
 	$(TARGET)Evaluator.java \
 	gElement.java \
 	gEdge.java \
-	gNode.java \
 	gGraph.java \
+	gNode.java \
+	gProperties.java \
 	Scope.java \
 	SymbolTable.java \
 	Variable.java \
