@@ -12,7 +12,7 @@ public class gNode extends gElement {
 	final List<gEdge> outgoingEdges = new ArrayList<>();
 	final List<gEdge> incomingEdges = new ArrayList<>();
 
-	public gNode(String label, Map<String, Object> properties) {
+	public gNode(String label, gProperties properties) {
 		super(label, properties);
 		this.id = ++numNodes;
 	}

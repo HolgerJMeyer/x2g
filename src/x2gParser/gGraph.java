@@ -27,14 +27,15 @@ public class gGraph {
 	 *      Return the existing node.
 	 * (5) Create a new node with given label and properties.
 	 */
-	public gNode createNode(String label, Map<String, Object> properties) {
+	public gNode createNode(String label, gProperties properties) {
 		// (1)
 		gNode n = getNode(label, properties);
 		if (n != null) return n;
 
 		// go thru all nodes with the same label
 		for (gNode node : getNodes(label)) {
-			Map<String, Object> props = node.getProperties();
+			//Map<String, Object> props = node.getProperties();
+			gProperties props = node.getProperties();
 
 			// (2)
 			boolean allequal = true;
@@ -53,8 +54,10 @@ public class gGraph {
 				return node;
 			}
 
-			Map<String, Object> propsA = new HashMap<String, Object>(props);
-			Map<String, Object> propsB = new HashMap<String, Object>(properties);
+			//Map<String, Object> propsA = new HashMap<String, Object>(props);
+			//Map<String, Object> propsB = new HashMap<String, Object>(properties);
+			gProperties propsA = new gProperties(props);
+			gProperties propsB = new gProperties(properties);
 
 			Set<String> keysA = props.keySet();
 			Set<String> keysB = properties.keySet();
@@ -65,10 +68,10 @@ public class gGraph {
 			//	return node;
 			//}
 			// (4)
-			//if (props.subsetOf(properties)) {
+			if (props.subsetOf(properties)) {
 				node.setProperties(properties);
 				return node;
-			//}
+			}
 		}
 		// (5)
 		n = new gNode(label, properties);
@@ -79,7 +82,7 @@ public class gGraph {
 		return n;
 	}
 
-	public gEdge createEdge(String label, int srcId, int dstId, Map<String, Object> properties) {
+	public gEdge createEdge(String label, int srcId, int dstId, gProperties properties) {
 		final gNode src = getNode(srcId);
 		final gNode dst = getNode(dstId);
 		

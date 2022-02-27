@@ -21,7 +21,7 @@ GRAPHSRCS = \
 	gEdge.java \
 	gGraph.java \
 	gNode.java \
-	gProperties.java \
+	gProperties.java
 XMLSRCS = \
 	xNamespaceResolver.java
 MYSRCS = \
@@ -41,7 +41,7 @@ CLASSES = $(GENCLASSES) $(MYCLASSES)
 MANIFEST = Manifest.txt
 TOKENS = x2gParser.tokens x2gLexer.tokens
 
-all:	Main.class
+all:	$(CLASSES)
 
 #$(CLASSES)::	$(SOURCES)
 

@@ -4,15 +4,16 @@ import java.util.HashMap;
 
 public abstract class gElement {
 	protected final String label;
-	protected Map<String, Object> properties;
+	//protected Map<String, Object> properties;
+	protected gProperties properties;
 
-	protected gElement(String label, Map<String, Object> properties) {
+	protected gElement(String label, gProperties properties) {
 		this.label = label;
 		this.properties = properties;
 	}
 	protected String getLabel() { return label; }
-	protected Map<String, Object> getProperties() { return properties; }
-	protected void setProperties(Map<String, Object> props) { this.properties = props; }
+	protected gProperties getProperties() { return properties; }
+	protected void setProperties(gProperties props) { this.properties = props; }
 	public String toString() { return "todo GrapElement"; }
 }
 

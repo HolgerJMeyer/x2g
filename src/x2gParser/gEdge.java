@@ -7,7 +7,7 @@ public class gEdge extends gElement {
 	private final gNode src;
 	private final gNode dst;
 
-	public gEdge(String label, gNode src, gNode dst, Map<String, Object> properties) {
+	public gEdge(String label, gNode src, gNode dst, gProperties properties) {
 		super(label, properties);
 		this.src = src;
 		this.dst = dst;
@@ -15,7 +15,7 @@ public class gEdge extends gElement {
 
 	public String getLabel() { return label; }
 
-	public Map<String, Object> getProps() { return properties; }
+	public gProperties getProps() { return properties; }
 
 	public gNode getSrc() { return src; }
 
