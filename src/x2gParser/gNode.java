@@ -1,3 +1,4 @@
+import java.util.Objects;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -11,14 +12,14 @@ public class gNode extends gElement {
 	final List<gEdge> outgoingEdges = new ArrayList<>();
 	final List<gEdge> incomingEdges = new ArrayList<>();
 
-	public gNode(String label, Map<String, Object> props) {
-		super(label, props);
+	public gNode(String label, Map<String, Object> properties) {
+		super(label, properties);
 		this.id = ++numNodes;
 	}
 	
 	public String getLabel() { return label; }
 
-	public Map<String, Object> getProps() { return props; }
+	public Map<String, Object> getProps() { return properties; }
 
 	public int getId() { return id; }
 
@@ -30,7 +31,22 @@ public class gNode extends gElement {
 		return outgoingEdges.stream().filter(e -> e.label.equals(edgeLabel));
 	}
 
-	public String toString() { return "todo Node"; }
+	@Override
+	public boolean equals(final Object other) {
+		if (this == other) return true;
+		if (other == null || getClass() != other.getClass()) return false;
+		final gNode node = (gNode)other;
+		return Objects.equals(id, node.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Node{" +
+				"label=\"" + label + '"' +
+				", id=" + id +
+				", properties=" + properties +
+				'}';
+	}
 }
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet

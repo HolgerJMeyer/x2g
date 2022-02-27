@@ -1,7 +1,7 @@
 # JAVA
 SHELL = /bin/bash
 JAVAC = javac
-JFLAGS = -g -cp $(CLASSPATH) -d $(CLASSDIR) -Xlint:deprecation
+JFLAGS = -g -cp $(CLASSPATH) -d $(CLASSDIR) -Xlint:deprecation -Xlint:unchecked
 CLASSDIR = $(TARGET)
 CLASSDIR = .
 CLASSPATH=".:$(COMMONS):$(AJARS):$(CLASSDIR):"
@@ -16,53 +16,64 @@ AJARS = "$(LIBDIR)/antlr4.jar:$(LIBDIR)/antlr4-runtime.jar"
 # X2G
 TARGET = x2g
 SOURCES = $(MYSRCS) $(GENSRCS)
-MYSRCS = \
-	$(TARGET)Main.java \
-	$(TARGET)Evaluator.java \
+GRAPHSRCS = \
 	gElement.java \
 	gEdge.java \
 	gGraph.java \
 	gNode.java \
 	gProperties.java \
+XMLSRCS = \
+	xNamespaceResolver.java
+MYSRCS = \
+	Evaluator.java \
 	Scope.java \
 	SymbolTable.java \
 	Variable.java \
-	VarType.java
-LISTENER = $(TARGET)ParserBaseListener.java $(TARGET)ParserListener.java
-VISITOR = $(TARGET)ParserBaseVisitor.java $(TARGET)ParserVisitor.java
+	VarType.java \
+	$(GRAPHSRCS) \
+	$(XMLSRCS)
+LISTENER = x2gParserBaseListener.java x2gParserListener.java
+VISITOR = x2gParserBaseVisitor.java x2gParserVisitor.java
 GENSRCS = $(LISTENER) $(VISITOR) $(ASRCS:.g4=.java)
 GENCLASSES = $(GENSRCS:.java=.class)
 MYCLASSES = $(MYSRCS:.java=.class)
-CLASSES = $(GENCLASSES) $(MYCLASSES) $(CLASSDIR)/*.class
+CLASSES = $(GENCLASSES) $(MYCLASSES)
 MANIFEST = Manifest.txt
-TOKENS = $(TARGET)Parser.tokens $(TARGET)Lexer.tokens
+TOKENS = x2gParser.tokens x2gLexer.tokens
 
-all::	$(CLASSES)
+all:	Main.class
 
-$(TARGET)Parser.g4:	$(TARGET)Lexer.g4
+#$(CLASSES)::	$(SOURCES)
 
-$(GENSRCS):	$(ASRCS)
+Main.class:	Main.java
+Main.java:	$(SOURCES)
 
-$(MYSRCS):	$(GENSRCS)
-
-$(CLASSES):	$(GENSRCS) $(MYSRCS)
+x2gParserListener.java:	x2gParser.java
+x2gParserVisitor.java:	x2gParser.java
+x2gParserBaseListener.java:	x2gParserListener.java
+x2gParserBaseVisitor.java:	x2gParserVisitor.java
+Evaluator.java:	x2gParserBaseVisitor.java
+x2gParser.java:	x2gLexer.java
 
 run:
-	export CLASSPATH=$(CLASSPATH) ; java $(TARGET)Main -h
-	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java $(TARGET)Main <$$g ; done
+	export CLASSPATH=$(CLASSPATH) ; java x2gMain -h
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java x2gMain <$$g ; done
 
 grun:
-	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.$(TARGET) ; do java org.antlr.v4.gui.TestRig $(TARGET) $(TARGET) -token -tree -gui $$g ; done
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui $$g ; done
 
 clean:
 	-rm -rf $(GENSRCS) $(TOKENS) $(CLASSES)
 
 .SUFFIXES:
 
-.SUFFIXES:	.g4 .tokens .java .class .jar
+.SUFFIXES:	.g4 .tokens .interp .java .class .jar
 
 .java.class:
 	$(JAVAC) $(JFLAGS) $<
+
+.g4.interp:
+	$(ANTLR) $(AFLAGS) $<
 
 .g4.tokens:
 	$(ANTLR) $(AFLAGS) $<
