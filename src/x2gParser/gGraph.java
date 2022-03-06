@@ -1,8 +1,9 @@
 import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 
 public class gGraph {
@@ -33,7 +34,7 @@ public class gGraph {
 		if (n != null) return n;
 
 		// go thru all nodes with the same label
-		for (gNode node : getNodes(label)) {
+		if (getNodes(label) != null) for (gNode node : getNodes(label)) {
 			//Map<String, Object> props = node.getProperties();
 			gProperties props = node.getProperties();
 
@@ -75,10 +76,12 @@ public class gGraph {
 		}
 		// (5)
 		n = new gNode(label, properties);
-		
 		nodesById.put(n.getId(), n);
-		nodesByLabel.get(label).add(n);
-		
+		Set<gNode> nl = nodesByLabel.get(label);
+		if (nl == null) {
+			nl = new HashSet<gNode>();
+		}
+		nl.add(n);
 		return n;
 	}
 
@@ -99,10 +102,47 @@ public class gGraph {
 	public gNode getNode(int id) { return nodesById.get(id); }
 
 	public gNode getNode(String label, Map<String, Object> properties) {
-		for (gNode n : getNodes(label)) {
-			if (n.getProperties().equals(properties)) return n;
+		if (getNodes(label) != null) {
+			for (gNode n : getNodes(label)) {
+				if (n.getProperties().equals(properties)) return n;
+			}
 		}
 		return null;
+	}
+
+	/**
+	 * Just a little self test.
+	 */
+	public static void main(String[] args) throws Exception {
+		gProperties props1 = new gProperties() {{
+			put("born", 1960);
+			put("firstname", "Willi");
+			put("name", "Meyer");
+		}};
+		gProperties props2 = new gProperties() {{
+			put("born", 1962);
+			put("firstname", "Bernhard");
+			put("name", "Meyer");
+		}};
+		gProperties props3 = new gProperties() {{
+			put("born", 1962);
+			put("firstname", "Holger");
+			put("name", "Meyer");
+		}};
+		gProperties props4 = new gProperties() {{
+			put("since", 2017);
+		}};
+		gGraph g = new gGraph();
+		gNode n1 = g.createNode("person", props1);
+		gNode n2 = g.createNode("person", props2);
+		gNode n3 = g.createNode("person", props3);
+		gNode n4 = g.createNode("person", props3);
+		g.createEdge("knows", n1.getId(), n2.getId(), props4);
+		g.createEdge("knows", n2.getId(), n3.getId(), props4);
+		g.createEdge("knows", n3.getId(), n1.getId(), props4);
+
+		System.err.println("=========================");
+		System.err.println("The graph: " + g.nodesById);
 	}
 }
 

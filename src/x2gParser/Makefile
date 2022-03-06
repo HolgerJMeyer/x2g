@@ -56,8 +56,9 @@ Evaluator.java:	x2gParserBaseVisitor.java
 x2gParser.java:	x2gLexer.java
 
 run:
-	export CLASSPATH=$(CLASSPATH) ; java x2gMain -h
-	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java x2gMain <$$g ; done
+	export CLASSPATH=$(CLASSPATH) ; java Main -h
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java Main <$$g ; done
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java gGraph <$$g ; done
 
 grun:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui $$g ; done
