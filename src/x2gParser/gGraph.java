@@ -88,13 +88,22 @@ public class gGraph {
 	public gEdge createEdge(String label, int srcId, int dstId, gProperties properties) {
 		final gNode src = getNode(srcId);
 		final gNode dst = getNode(dstId);
-		
 		final gEdge e = new gEdge(label, src, dst, properties);
 		
 		src.outgoingEdges.add(e);
 		dst.incomingEdges.add(e);
-
 		return e;
+	}
+
+	public gEdge createEdge(String label, gNode src, gNode dst, gProperties properties) {
+		final gEdge e = new gEdge(label, src, dst, properties);
+
+		src.outgoingEdges.add(e);
+		dst.incomingEdges.add(e);
+		return e;
+	}
+	public gEdge createEdge(String label, gNode src, gNode dst) {
+		return createEdge(label, src, dst, null);
 	}
 
 	public Set<gNode> getNodes(String label) { return nodesByLabel.get(label); }
@@ -137,9 +146,9 @@ public class gGraph {
 		gNode n2 = g.createNode("person", props2);
 		gNode n3 = g.createNode("person", props3);
 		gNode n4 = g.createNode("person", props3);
-		g.createEdge("knows", n1.getId(), n2.getId(), props4);
+		g.createEdge("knows", n1, n2, props4);
 		g.createEdge("knows", n2.getId(), n3.getId(), props4);
-		g.createEdge("knows", n3.getId(), n1.getId(), props4);
+		g.createEdge("knows", n3, n1, props4);
 
 		System.err.println("=========================");
 		System.err.println("The graph: " + g.nodesById);
