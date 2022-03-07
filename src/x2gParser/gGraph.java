@@ -29,9 +29,13 @@ public class gGraph {
 	 * (5) Create a new node with given label and properties.
 	 */
 	public gNode createNode(String label, gProperties properties) {
-		// (1)
 		gNode n = getNode(label, properties);
-		if (n != null) return n;
+
+		if (n != null) {
+			// (1)
+			System.err.println("createNode: Case #1");
+			return n;
+		}
 
 		// go thru all nodes with the same label
 		if (getNodes(label) != null) for (gNode node : getNodes(label)) {
@@ -39,6 +43,7 @@ public class gGraph {
 			gProperties props = node.getProperties();
 
 			// (2)
+			System.err.println("createNode: Case #2");
 			boolean allequal = true;
 			@SuppressWarnings("unchecked")
 			List<String> keys = (List<String>)props.get("__unique");
@@ -63,23 +68,27 @@ public class gGraph {
 			Set<String> keysA = props.keySet();
 			Set<String> keysB = properties.keySet();
 
-			//subMap.retainAll(keys);
 			// (3)
+			System.err.println("createNode: Case #3");
+			//subMap.retainAll(keys);
 			//if (properties.subsetOf(props)) {
 			//	return node;
 			//}
 			// (4)
+			System.err.println("createNode: Case #4");
 			if (props.subsetOf(properties)) {
 				node.setProperties(properties);
 				return node;
 			}
 		}
 		// (5)
+		System.err.println("createNode: Case #5");
 		n = new gNode(label, properties);
 		nodesById.put(n.getId(), n);
 		Set<gNode> nl = nodesByLabel.get(label);
 		if (nl == null) {
 			nl = new HashSet<gNode>();
+			nodesByLabel.put(label, nl);
 		}
 		nl.add(n);
 		return n;
@@ -111,47 +120,17 @@ public class gGraph {
 	public gNode getNode(int id) { return nodesById.get(id); }
 
 	public gNode getNode(String label, Map<String, Object> properties) {
+		System.err.println("getNode(" + label + ", " + properties);
 		if (getNodes(label) != null) {
+			System.err.println("getNode: label exists");
 			for (gNode n : getNodes(label)) {
-				if (n.getProperties().equals(properties)) return n;
+				if (n.getProperties().equals(properties)) {
+					return n;
+				}
 			}
 		}
+		System.err.println("getNode: returns null");
 		return null;
-	}
-
-	/**
-	 * Just a little self test.
-	 */
-	public static void main(String[] args) throws Exception {
-		gProperties props1 = new gProperties() {{
-			put("born", 1960);
-			put("firstname", "Willi");
-			put("name", "Meyer");
-		}};
-		gProperties props2 = new gProperties() {{
-			put("born", 1962);
-			put("firstname", "Bernhard");
-			put("name", "Meyer");
-		}};
-		gProperties props3 = new gProperties() {{
-			put("born", 1962);
-			put("firstname", "Holger");
-			put("name", "Meyer");
-		}};
-		gProperties props4 = new gProperties() {{
-			put("since", 2017);
-		}};
-		gGraph g = new gGraph();
-		gNode n1 = g.createNode("person", props1);
-		gNode n2 = g.createNode("person", props2);
-		gNode n3 = g.createNode("person", props3);
-		gNode n4 = g.createNode("person", props3);
-		g.createEdge("knows", n1, n2, props4);
-		g.createEdge("knows", n2.getId(), n3.getId(), props4);
-		g.createEdge("knows", n3, n1, props4);
-
-		System.err.println("=========================");
-		System.err.println("The graph: " + g.nodesById);
 	}
 }
 
