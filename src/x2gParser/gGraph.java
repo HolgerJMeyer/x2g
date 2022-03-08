@@ -2,11 +2,10 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
 
 
 public class gGraph {
+	public final boolean verbose = false;
 	public final Map<Integer, gNode> nodesById = new HashMap<>();
 	public final Map<String, Set<gNode>> nodesByLabel = new HashMap<>();
 
@@ -17,72 +16,98 @@ public class gGraph {
 	 * have the same values for the same property name.  Additionaly, if there is a special "__unique"
 	 * property, the value is a list property names which should be used for checking instead of
 	 * all properties. This leads to following cases:
-	 * (1) Let A be the set of properties of the existing node and B the set properties
+	 * (1) Let A be the set of properties of the existing node and B the set of properties
 	 *     of the node which should be created. If |A| == |B| and all properties
 	 *     have pairwise equal values, return the existing node.
 	 * (2) If there is a "__unique" property, it has to be in both A and B and has to have the
 	 *     same property names in both nodes.  All unique properties have to have the same values.
 	 *     The other properties are merged into a superset.
-	 * (3) If |A| > |B| and all properties B have the same values as in A. Return the existing node.
+	 * (3) If |A| > |B| and all properties B have the same values as in A.
+	 *		 Return the existing node.
 	 * (4) If |A| < |B| and all properties A have the same values as in B, replace A by B.
-	 *      Return the existing node.
+	 *     Return the existing node.
 	 * (5) Create a new node with given label and properties.
 	 */
 	public gNode createNode(String label, gProperties properties) {
 		gNode n = getNode(label, properties);
 
 		if (n != null) {
-			// (1)
-			System.err.println("createNode: Case #1");
+			// (1) there is an existing node with same label and property values
+			if (verbose) System.err.println("createNode: node with same label and properties exists");
 			return n;
 		}
 
 		// go thru all nodes with the same label
 		if (getNodes(label) != null) for (gNode node : getNodes(label)) {
-			//Map<String, Object> props = node.getProperties();
-			gProperties props = node.getProperties();
+			boolean allequal = false;
+			gProperties propsA = node.getProperties();
+			gProperties propsB = new gProperties(properties);
+			Set<String> keysA = propsA.keySet();
+			Set<String> keysB = properties.keySet();
 
-			// (2)
-			System.err.println("createNode: Case #2");
-			boolean allequal = true;
 			@SuppressWarnings("unchecked")
-			List<String> keys = (List<String>)props.get("__unique");
-			if (keys != null) {
-				for (String key : keys) {
-					Object p1 = props.get(key);
-					Object p2 = properties.get(key);
-					if (p1 != p2 || p1 == null || p2 == null) {
+			Set<String> ukeys = (Set<String>)propsA.get("__unique");
+			// (2) if there is a __unique set of properties
+			if (ukeys != null) {
+				if (verbose) System.err.println("createNode: unique keys (" + ukeys + ") are checked");
+				allequal = true;
+				for (String key : ukeys) {
+					Object o1 = propsA.get(key);
+					Object o2 = properties.get(key);
+					if (!o1.equals(o2) || o1 == null || o2 == null) {
 						allequal = false;
 						break;
 					}
 				}
-				// TODO: merge all other properties
-				return node;
+				if (allequal) {
+					// Merge all other properties
+					for (String key : keysB) {
+						if (propsA.get(key) == null) {
+							propsA.put(key, propsB.get(key));
+						} else if (!propsA.get(key).equals(propsB.get(key))) {
+							System.err.println("createNode could not merge: property values for '" + key + "' differ: '" + propsA.get(key) + "' vs. '" + propsB.get(key) + "'");
+						}
+					}
+					if (verbose) System.err.println("createNode: non-unique keys are merged");
+					return node;
+				}
 			}
 
-			//Map<String, Object> propsA = new HashMap<String, Object>(props);
-			//Map<String, Object> propsB = new HashMap<String, Object>(properties);
-			gProperties propsA = new gProperties(props);
-			gProperties propsB = new gProperties(properties);
-
-			Set<String> keysA = props.keySet();
-			Set<String> keysB = properties.keySet();
-
-			// (3)
-			System.err.println("createNode: Case #3");
-			//subMap.retainAll(keys);
-			//if (properties.subsetOf(props)) {
-			//	return node;
-			//}
-			// (4)
-			System.err.println("createNode: Case #4");
-			if (props.subsetOf(properties)) {
-				node.setProperties(properties);
-				return node;
+			// (3) if keysB are a subset of keysA
+			if (keysA.containsAll(keysB)) {
+				if (verbose) System.err.println("createNode: new keys are a subset");
+				allequal = true;
+				for (String key : keysB) {
+					if (!propsA.get(key).equals(propsB.get(key))) {
+						allequal = false;
+						break;
+					}
+				}
+				if (allequal) {
+					if (verbose) System.err.println("createNode: new properties are a subset");
+					return node;
+				}
+			}
+			
+			// (4) if keysA are a subset of keysB
+			if (keysB.containsAll(keysA)) {
+				if (verbose) System.err.println("createNode: new keys are a superset");
+				allequal = true;
+				for (String key : keysA) {
+					if (!propsA.get(key).equals(propsB.get(key))) {
+						allequal = false;
+						break;
+					}
+				}
+				if (allequal) {
+					if (verbose) System.err.println("createNode: new properties are a superset");
+					node.setProperties(propsB);
+					return node;
+				}
 			}
 		}
 		// (5)
-		System.err.println("createNode: Case #5");
+		if (verbose) System.err.println("createNode: new node created");
 		n = new gNode(label, properties);
 		nodesById.put(n.getId(), n);
 		Set<gNode> nl = nodesByLabel.get(label);
@@ -120,16 +145,16 @@ public class gGraph {
 	public gNode getNode(int id) { return nodesById.get(id); }
 
 	public gNode getNode(String label, Map<String, Object> properties) {
-		System.err.println("getNode(" + label + ", " + properties);
+		if (verbose) System.err.println("getNode(" + label + ", " + properties);
 		if (getNodes(label) != null) {
-			System.err.println("getNode: label exists");
+			if (verbose) if (verbose) System.err.println("getNode: label exists");
 			for (gNode n : getNodes(label)) {
 				if (n.getProperties().equals(properties)) {
 					return n;
 				}
 			}
 		}
-		System.err.println("getNode: returns null");
+		if (verbose) System.err.println("getNode: returns null");
 		return null;
 	}
 }

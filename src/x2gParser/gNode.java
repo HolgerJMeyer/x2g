@@ -1,6 +1,6 @@
 import java.util.Objects;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Stream;
@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 public class gNode extends gElement {
 	static int numNodes = 0;
 	final int id;
-	final List<gEdge> outgoingEdges = new ArrayList<>();
-	final List<gEdge> incomingEdges = new ArrayList<>();
+	final Set<gEdge> outgoingEdges = new HashSet<>();
+	final Set<gEdge> incomingEdges = new HashSet<>();
 
 	public gNode(String label, gProperties properties) {
 		super(label, properties);
