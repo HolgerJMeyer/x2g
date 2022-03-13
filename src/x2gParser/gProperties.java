@@ -4,7 +4,7 @@ import java.util.SortedMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class gProperties extends LinkedHashMap<String, Object> {
+public class gProperties extends HashMap<String, Object> {
 	public gProperties() {
 		super();
 	}
@@ -20,7 +20,16 @@ public class gProperties extends LinkedHashMap<String, Object> {
 	public gProperties getSubset(Set<String> keys) {
 		return new gProperties(this);
 	}
+	/* all key-value pairs are a subset of an other */
 	public boolean subsetOf(gProperties other) {
+		if (other.keySet().containsAll(keySet())) {
+			for (String key : keySet()) {
+				if (!get(key).equals(other.get(key))) {
+					return false;
+				}
+			}
+			return true;
+		}
 		return false;
 	}
 }

@@ -11,6 +11,10 @@ public class Main {
 	static String x2g = "X2G";
 	static boolean verbose = false;
 	static boolean parseonly = false;
+	static String conflict = "reject";
+	static String inputDir = null;
+	static String outFile = null;
+	static String outputFormat = ".csv";
 
 	/* pretty print Error messages */
 	public static class ErrorListener extends BaseErrorListener {
@@ -33,8 +37,9 @@ public class Main {
 		// command line parsing
 		org.apache.commons.cli.Options options = new org.apache.commons.cli.Options();
 
-		options.addOption("c", "csv", true, "generate nodes and edges files (default)");
-		options.addOption("d", "dir", true, "transform all xml files found in directory");
+		options.addOption("c", "conflict", true, "conflict resolution options during node creation: link, merge, reject, and warn are valid options");
+		options.addOption("d", "input-dir", true, "transform all xml files found in this directory");
+		options.addOption("f", "output-format", true, "output file format: csv, dot, gefx, graphml, and lg are supported options");
 		options.addOption("h", "help", false, "print this help");
 		options.addOption("o", "out-file", true, "basename of output file(s)");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
@@ -43,6 +48,22 @@ public class Main {
 
 		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
 		org.apache.commons.cli.CommandLine cmd = cmdparser.parse(options, args);
+
+		if (cmd.hasOption("conflict")) {
+			conflict = cmd.getOptionValue("c");
+		}
+
+		if (cmd.hasOption("input-dir")) {
+			inputDir = cmd.getOptionValue("d");
+		}
+
+		if (cmd.hasOption("output-format")) {
+			outputFormat = cmd.getOptionValue("f");
+		}
+
+		if (cmd.hasOption("out-file")) {
+			outFile = cmd.getOptionValue("o");
+		}
 
 		if (cmd.hasOption("verbose")) {
 			verbose = true;

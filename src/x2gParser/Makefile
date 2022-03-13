@@ -24,7 +24,8 @@ GRAPHSRCS = \
 	gProperties.java \
 	gTest.java
 XMLSRCS = \
-	xNamespaceResolver.java
+	xNamespaceResolver.java \
+	xTractor.java
 MYSRCS = \
 	Evaluator.java \
 	Scope.java \
@@ -42,7 +43,9 @@ CLASSES = $(GENCLASSES) $(MYCLASSES)
 MANIFEST = Manifest.txt
 TOKENS = x2gParser.tokens x2gLexer.tokens
 
-all:	$(CLASSES)
+all::	Main.class
+
+all::	$(CLASSES)
 
 #$(CLASSES)::	$(SOURCES)
 
@@ -65,7 +68,7 @@ grun:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui $$g ; done
 
 clean:
-	-rm -rf $(GENSRCS) $(TOKENS) $(CLASSES)
+	-rm -rf $(GENSRCS) $(TOKENS) $(CLASSES) *.class
 
 .SUFFIXES:
 

@@ -39,18 +39,15 @@ public class gGraph {
 
 		// go thru all nodes with the same label
 		if (getNodes(label) != null) for (gNode node : getNodes(label)) {
-			boolean allequal = false;
 			gProperties propsA = node.getProperties();
 			gProperties propsB = new gProperties(properties);
-			Set<String> keysA = propsA.keySet();
-			Set<String> keysB = properties.keySet();
 
 			@SuppressWarnings("unchecked")
 			Set<String> ukeys = (Set<String>)propsA.get("__unique");
 			// (2) if there is a __unique set of properties
 			if (ukeys != null) {
 				if (verbose) System.err.println("createNode: unique keys (" + ukeys + ") are checked");
-				allequal = true;
+				boolean allequal = true;
 				for (String key : ukeys) {
 					Object o1 = propsA.get(key);
 					Object o2 = properties.get(key);
@@ -61,7 +58,7 @@ public class gGraph {
 				}
 				if (allequal) {
 					// Merge all other properties
-					for (String key : keysB) {
+					for (String key : properties.keySet()) {
 						if (propsA.get(key) == null) {
 							propsA.put(key, propsB.get(key));
 						} else if (!propsA.get(key).equals(propsB.get(key))) {
@@ -73,37 +70,17 @@ public class gGraph {
 				}
 			}
 
-			// (3) if keysB are a subset of keysA
-			if (keysA.containsAll(keysB)) {
-				if (verbose) System.err.println("createNode: new keys are a subset");
-				allequal = true;
-				for (String key : keysB) {
-					if (!propsA.get(key).equals(propsB.get(key))) {
-						allequal = false;
-						break;
-					}
-				}
-				if (allequal) {
-					if (verbose) System.err.println("createNode: new properties are a subset");
-					return node;
-				}
+			// (3) if propsB are a subset of propsA
+			if (propsB.subsetOf(propsA)) {
+				if (verbose) System.err.println("createNode: new properties are a subset");
+				return node;
 			}
 			
-			// (4) if keysA are a subset of keysB
-			if (keysB.containsAll(keysA)) {
-				if (verbose) System.err.println("createNode: new keys are a superset");
-				allequal = true;
-				for (String key : keysA) {
-					if (!propsA.get(key).equals(propsB.get(key))) {
-						allequal = false;
-						break;
-					}
-				}
-				if (allequal) {
-					if (verbose) System.err.println("createNode: new properties are a superset");
-					node.setProperties(propsB);
-					return node;
-				}
+			// (4) if propsA are a subset of propsB
+			if (propsA.subsetOf(propsB)) {
+				if (verbose) System.err.println("createNode: new properties are a superset");
+				node.setProperties(propsB);
+				return node;
 			}
 		}
 		// (5)
