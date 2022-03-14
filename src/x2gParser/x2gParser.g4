@@ -160,11 +160,11 @@ expr
 	; 
 
 eval_expr
-	: '$' ID ('.' XPATH '(' string_expr ')')? {
+	: '$' ID '.' XPATH '(' string_expr ')' {
 		if (symtab.resolve($ID.text) == null)
 			notifyErrorListeners("xml fragment variable $" + $ID.text + " is unbound!");
 	  }
-	| '$' ID ('.' property_name)? {
+	| '$' ID '.' property_name {
 		if (symtab.resolve($ID.text) == null)
 			notifyErrorListeners("node or edge variable $" + $ID.text + " is unbound!");
 	  }

@@ -61,7 +61,7 @@ x2gParser.java:	x2gLexer.java
 
 run:
 	export CLASSPATH=$(CLASSPATH) ; java Main -h
-	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java Main <$$g ; done
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java Main -v -d isebel/werewolf <$$g ; done
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
 
 grun:

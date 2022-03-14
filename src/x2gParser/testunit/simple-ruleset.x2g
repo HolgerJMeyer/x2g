@@ -12,6 +12,7 @@ match xpath("//story") using $s {
 			name = $p.xpath("name/text()"),
 			// should complain about unbound $x
 			age = $x.xpath("age"),
+			person = $p,
 			unique (name, age),
 			unique (name, age),
 			// conditional assignment
