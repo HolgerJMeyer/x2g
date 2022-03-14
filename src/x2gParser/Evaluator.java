@@ -1,5 +1,8 @@
 //package x2g;
 import java.util.*;
+import java.io.*;
+
+import org.w3c.dom.Document;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -12,14 +15,19 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * operations with no return type.
  */
 public class Evaluator extends x2gParserBaseVisitor<Void> {
-	String xmlfile;
+	File file;
+	Document dom;
 	SymbolTable symtab;
 
 	public Evaluator(SymbolTable symtab) { this.symtab = symtab; }
 
-	public String getXmlFile() { return xmlfile; }
+	public File getFile() { return file; }
 
-	public Void setXmlFile(String path) { xmlfile = path; return null; }
+	public void setFile(File f) { file = f; }
+
+	public Document getDom() { return dom; }
+
+	public void setDom(Document d) { dom = d; }
 
 	/**
 	 * {@inheritDoc}

@@ -3,9 +3,15 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
+import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 //import org.apache.commons.cli.*; // otherwise conclicts with antlr4 parser class
 
 import java.util.*;
+import java.io.*;
 
 public class Main {
 	static String x2g = "X2G";
@@ -23,7 +29,7 @@ public class Main {
 				List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
 				Collections.reverse(stack);
 
-				System.err.println(x2g + ": exception: " + e);
+				if (e != null) System.err.println(x2g + ": exception: " + e);
 				System.err.println(x2g + ": rule stack: " + stack);
 				System.err.println(x2g + ": line " + line + ":" + pos + ": " + msg);
 			} else {
@@ -97,8 +103,42 @@ public class Main {
 		if (verbose)
 			System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
 		Evaluator eval = new Evaluator(symtab);
-		eval.setXmlFile("an-xml-file");
-		eval.visit(tree);
+
+
+		// process all xml files from a given folder or specified on command line
+		List<File> filelist = new ArrayList<File>();
+		if (inputDir != null) {
+			File[] files = new File(inputDir).listFiles();
+			for (File file : files) {
+				if (file.isFile() && file.getName().endsWith(".xml")) {
+					filelist.add(file);
+				}
+				else {
+					System.err.println(x2g + ": " + file.getName() + " is not a regular xml file");
+				}
+			}
+		}
+		if (cmd.getArgList() != null) {
+			for (String filename : cmd.getArgList()) {
+				File file = new File(filename);
+				if (file.isFile() && file.getName().endsWith(".xml")) {
+					filelist.add(file);
+				}
+				else {
+					System.err.println(x2g + ": " + file.getName() + " is not a regular xml file");
+				}
+			}
+		}
+		for (File file : filelist) {
+			if (verbose) System.err.println(x2g + ": processing xml file " + file.getName());
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(file);
+			eval.setFile(file);
+			eval.setDom(doc);
+			//eval.visit(tree);
+		}
 	}
 }
 
