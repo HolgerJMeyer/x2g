@@ -37,7 +37,7 @@ public class Scope {
 	}
 
 	private void define(Variable variable) {
-		members.put(variable.name, variable);
+		members.put(variable.getName(), variable);
 	}
 
 	/**

@@ -15,24 +15,29 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * operations with no return type.
  */
 public class Evaluator extends x2gParserBaseVisitor<Void> {
-	File file;
-	Document dom;
-	gGraph graph;
-	SymbolTable symtab;
+	private final SymbolTable symtab;
+	private final gGraph graph;
+	private final boolean verbose;
+	private File file;
+	private Document dom;
 
-	public Evaluator(SymbolTable symtab) { this.symtab = symtab; }
+	public Evaluator(SymbolTable symtab, gGraph graph, boolean verbose) {
+		this.symtab = symtab;
+		this.graph = graph;
+		this.verbose = verbose;
+	}
+
+	public Evaluator(SymbolTable symtab, gGraph graph) { this(symtab, graph, false); }
 
 	public File getFile() { return file; }
 
-	public void setFile(File f) { file = f; }
+	public void setFile(File file) { this.file = file; }
 
 	public Document getDom() { return dom; }
 
-	public void setDom(Document d) { dom = d; }
+	public void setDom(Document dom) { this.dom = dom; }
 
 	public gGraph getGraph() { return graph; }
-
-	public void setGraph(gGraph g) { graph = g; }
 
 	/**
 	 * {@inheritDoc}
@@ -42,8 +47,10 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 	 */
 	@Override public Void visitX2g(x2gParser.X2gContext ctx) {
 		visitChildren(ctx);
-		System.err.println("The Symtab: " + symtab);
-		System.err.println("The Graph: " + graph);
+		if (verbose) {
+			System.err.println("The Symtab: " + symtab);
+			System.err.println("The Graph: " + graph);
+		}
 		return null;
 	}
 	/**

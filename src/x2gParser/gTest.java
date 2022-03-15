@@ -68,7 +68,7 @@ public class gTest {
 		g.createEdge("knows", n3, n1, props5);
 
 		System.err.println("=========================");
-		System.err.println("The graph: " + g.nodesById);
+		System.err.println("The graph: " + g.toString());
 	}
 }
 

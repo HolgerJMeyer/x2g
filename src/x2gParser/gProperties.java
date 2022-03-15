@@ -8,18 +8,23 @@ public class gProperties extends HashMap<String, Object> {
 	public gProperties() {
 		super();
 	}
+
 	public gProperties(gProperties props) {
 		super(props);
 	}
+
 	public gProperties(Map<String, Object> props) {
 		super(props);
 	}
+
 	public Map<String, Object> getMap() {
 		return (Map<String, Object>)this;
 	}
+
 	public gProperties getSubset(Set<String> keys) {
 		return new gProperties(this);
 	}
+
 	/* all key-value pairs are a subset of an other */
 	public boolean subsetOf(gProperties other) {
 		if (other.keySet().containsAll(keySet())) {

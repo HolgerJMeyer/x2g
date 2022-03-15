@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 
 public class gGraph {
-	public boolean verbose;
-	public final Map<Integer, gNode> nodesById = new HashMap<>();
-	public final Map<String, Set<gNode>> nodesByLabel = new HashMap<>();
+	private boolean verbose;
+	private final Map<Integer, gNode> nodesById = new HashMap<>();
+	private final Map<String, Set<gNode>> nodesByLabel = new HashMap<>();
 
 	public gGraph(boolean verbose) { this.verbose = verbose; }
 
@@ -37,7 +37,8 @@ public class gGraph {
 
 		if (n != null) {
 			// (1) there is an existing node with same label and property values
-			if (verbose) System.err.println("createNode: node with same label and properties exists");
+			if (verbose)
+				System.err.println("createNode: node with same label and properties exists");
 			return n;
 		}
 
@@ -50,7 +51,8 @@ public class gGraph {
 			Set<String> ukeys = (Set<String>)propsA.get("__unique");
 			// (2) if there is a __unique set of properties
 			if (ukeys != null) {
-				if (verbose) System.err.println("createNode: unique keys (" + ukeys + ") are checked");
+				if (verbose)
+					System.err.println("createNode: unique keys (" + ukeys + ") are checked");
 				boolean allequal = true;
 				for (String key : ukeys) {
 					Object o1 = propsA.get(key);
@@ -69,26 +71,30 @@ public class gGraph {
 							System.err.println("createNode could not merge: property values for '" + key + "' differ: '" + propsA.get(key) + "' vs. '" + propsB.get(key) + "'");
 						}
 					}
-					if (verbose) System.err.println("createNode: non-unique keys are merged");
+					if (verbose)
+						System.err.println("createNode: non-unique keys are merged");
 					return node;
 				}
 			}
 
 			// (3) if propsB are a subset of propsA
 			if (propsB.subsetOf(propsA)) {
-				if (verbose) System.err.println("createNode: new properties are a subset");
+				if (verbose)
+					System.err.println("createNode: new properties are a subset");
 				return node;
 			}
 			
 			// (4) if propsA are a subset of propsB
 			if (propsA.subsetOf(propsB)) {
-				if (verbose) System.err.println("createNode: new properties are a superset");
+				if (verbose)
+					System.err.println("createNode: new properties are a superset");
 				node.setProperties(propsB);
 				return node;
 			}
 		}
 		// (5)
-		if (verbose) System.err.println("createNode: new node created");
+		if (verbose)
+			System.err.println("createNode: new node created");
 		n = new gNode(label, properties);
 		nodesById.put(n.getId(), n);
 		Set<gNode> nl = nodesByLabel.get(label);
@@ -127,16 +133,19 @@ public class gGraph {
 	public gNode getNode(int id) { return nodesById.get(id); }
 
 	public gNode getNode(String label, Map<String, Object> properties) {
-		if (verbose) System.err.println("getNode(" + label + ", " + properties);
+		if (verbose)
+			System.err.println("getNode(" + label + ", " + properties);
 		if (getNodes(label) != null) {
-			if (verbose) if (verbose) System.err.println("getNode: label exists");
+			if (verbose)
+				System.err.println("getNode: label exists");
 			for (gNode n : getNodes(label)) {
 				if (n.getProperties().equals(properties)) {
 					return n;
 				}
 			}
 		}
-		if (verbose) System.err.println("getNode: returns null");
+		if (verbose)
+			System.err.println("getNode: returns null");
 		return null;
 	}
 

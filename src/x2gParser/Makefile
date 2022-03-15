@@ -59,13 +59,22 @@ x2gParserBaseVisitor.java:	x2gParserVisitor.java
 Evaluator.java:	x2gParserBaseVisitor.java
 x2gParser.java:	x2gLexer.java
 
-run:
+run:	runhelp runparse runeval runtest
+
+runhelp:
 	export CLASSPATH=$(CLASSPATH) ; java Main -h
-	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java Main -v -d isebel/werewolf <$$g ; done
+
+runparse:
+	export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset-with-errors.x2g
+
+runeval:
+	export CLASSPATH=$(CLASSPATH) ; java Main -d isebel/werewolf <testunit/simple-ruleset.x2g
+
+runtest:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
 
 grun:
-	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui $$g ; done
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui <$$g ; done
 
 clean:
 	-rm -rf $(GENSRCS) $(TOKENS) $(CLASSES) *.class

@@ -29,7 +29,8 @@ public class Main {
 				List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
 				Collections.reverse(stack);
 
-				if (e != null) System.err.println(x2g + ": exception: " + e);
+				if (e != null)
+					System.err.println(x2g + ": exception: " + e);
 				System.err.println(x2g + ": rule stack: " + stack);
 				System.err.println(x2g + ": line " + line + ":" + pos + ": " + msg);
 			} else {
@@ -75,7 +76,7 @@ public class Main {
 			verbose = true;
 		}
 
-		if (cmd.hasOption("parseonly")) {
+		if (cmd.hasOption("parse-only")) {
 			parseOnly = true;
 		}
 
@@ -94,20 +95,21 @@ public class Main {
 		// Create symbol table with global scope
 		SymbolTable symtab = new SymbolTable();
 		// Create parser that feeds off of the token buffer
-		x2gParser parser = new x2gParser(tokens, symtab);
+		x2gParser parser = new x2gParser(tokens, symtab, false);
 		// Remove standard ErrorListener ConsoleErrorListener
 		parser.removeErrorListeners();
 		parser.addErrorListener(new ErrorListener());
 
 		ParseTree tree = parser.x2g();	// begin parsing at init rule
-		if (verbose) System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
+		if (verbose)
+			System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
 		
 		if (parseOnly) {
 			return;
 		}
 
-		Evaluator eval = new Evaluator(symtab);
-
+		final gGraph graph = new gGraph(verbose);
+		final Evaluator eval = new Evaluator(symtab, graph, verbose);
 
 		// process all xml files from a given folder or specified on command line
 		List<File> filelist = new ArrayList<File>();
@@ -133,16 +135,15 @@ public class Main {
 				}
 			}
 		}
-		gGraph graph = new gGraph();
 		for (File file : filelist) {
-			if (verbose) System.err.println(x2g + ": processing xml file " + file.getName());
+			if (verbose)
+				System.err.println(x2g + ": processing xml file " + file.getName());
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setNamespaceAware(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(file);
 			eval.setFile(file);
 			eval.setDom(doc);
-			eval.setGraph(graph);
 			eval.visit(tree);
 		}
 	}

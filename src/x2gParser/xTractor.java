@@ -16,7 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 public class xTractor {
-	protected Document doc;
+	private Document doc;
 
 	public xTractor(FileInputStream file) {
 		//Parse XML file

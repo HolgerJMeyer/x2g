@@ -11,12 +11,17 @@ options {
 
 @members {
 	SymbolTable symtab;
-	boolean verbose = false;
+	boolean verbose;
 
 	// overload costructor
-	public x2gParser(TokenStream input, SymbolTable symtab) {
+	public x2gParser(TokenStream input, SymbolTable symtab, boolean verbose) {
 		this(input);
 		this.symtab = symtab;
+		this.verbose = verbose;
+	}
+
+	public x2gParser(TokenStream input, SymbolTable symtab) {
+		this(input, symtab, false);
 	}
 }
 

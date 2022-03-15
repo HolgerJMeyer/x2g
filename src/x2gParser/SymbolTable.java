@@ -5,9 +5,9 @@ import java.util.ArrayList;
  * Patterns. The Pragmatic Bookshelf, Releigh, MA, 2010.
  */
 public class SymbolTable {
-	Scope globals;
-	Scope current;
-	ArrayList<Scope> scopes = new ArrayList<Scope>();	
+	private Scope globals;
+	private Scope current;
+	private ArrayList<Scope> scopes = new ArrayList<Scope>();	
 
 	public SymbolTable() {
 		current = globals = new Scope("GLOBAL");

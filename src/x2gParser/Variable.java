@@ -4,10 +4,10 @@
  */
 
 public class Variable {
-	protected String name;
-	protected VarType type;
-	protected Object binding;
-	protected Scope scope;
+	private String name;
+	private VarType type;
+	private Object binding;
+	private Scope scope;
 
 	protected Variable(String name) {
 		this.name = name;
