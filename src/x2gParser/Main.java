@@ -16,8 +16,8 @@ import java.io.*;
 public class Main {
 	static String x2g = "X2G";
 	static boolean verbose = false;
-	static boolean parseonly = false;
-	static String conflict = "reject";
+	static boolean parseOnly = false;
+	static String conflict = "reject"; // other options: merga, link
 	static String inputDir = null;
 	static String outFile = null;
 	static String outputFormat = ".csv";
@@ -76,7 +76,7 @@ public class Main {
 		}
 
 		if (cmd.hasOption("parseonly")) {
-			parseonly = true;
+			parseOnly = true;
 		}
 
 		if (cmd.hasOption("help")) {
@@ -100,8 +100,12 @@ public class Main {
 		parser.addErrorListener(new ErrorListener());
 
 		ParseTree tree = parser.x2g();	// begin parsing at init rule
-		if (verbose)
-			System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
+		if (verbose) System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
+		
+		if (parseOnly) {
+			return;
+		}
+
 		Evaluator eval = new Evaluator(symtab);
 
 
@@ -129,6 +133,7 @@ public class Main {
 				}
 			}
 		}
+		gGraph graph = new gGraph();
 		for (File file : filelist) {
 			if (verbose) System.err.println(x2g + ": processing xml file " + file.getName());
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -137,7 +142,8 @@ public class Main {
 			Document doc = builder.parse(file);
 			eval.setFile(file);
 			eval.setDom(doc);
-			//eval.visit(tree);
+			eval.setGraph(graph);
+			eval.visit(tree);
 		}
 	}
 }

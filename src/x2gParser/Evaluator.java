@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 public class Evaluator extends x2gParserBaseVisitor<Void> {
 	File file;
 	Document dom;
+	gGraph graph;
 	SymbolTable symtab;
 
 	public Evaluator(SymbolTable symtab) { this.symtab = symtab; }
@@ -29,6 +30,10 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 
 	public void setDom(Document d) { dom = d; }
 
+	public gGraph getGraph() { return graph; }
+
+	public void setGraph(gGraph g) { graph = g; }
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -37,7 +42,8 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 	 */
 	@Override public Void visitX2g(x2gParser.X2gContext ctx) {
 		visitChildren(ctx);
-		System.err.println("symtab: " + symtab);
+		System.err.println("The Symtab: " + symtab);
+		System.err.println("The Graph: " + graph);
 		return null;
 	}
 	/**

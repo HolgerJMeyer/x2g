@@ -5,9 +5,13 @@ import java.util.HashMap;
 
 
 public class gGraph {
-	public final boolean verbose = false;
+	public boolean verbose;
 	public final Map<Integer, gNode> nodesById = new HashMap<>();
 	public final Map<String, Set<gNode>> nodesByLabel = new HashMap<>();
+
+	public gGraph(boolean verbose) { this.verbose = verbose; }
+
+	public gGraph() { this(false); }
 
 	/**
 	 * Condtionally create a node by label and properties.
@@ -113,6 +117,7 @@ public class gGraph {
 		dst.incomingEdges.add(e);
 		return e;
 	}
+
 	public gEdge createEdge(String label, gNode src, gNode dst) {
 		return createEdge(label, src, dst, null);
 	}
@@ -134,6 +139,8 @@ public class gGraph {
 		if (verbose) System.err.println("getNode: returns null");
 		return null;
 	}
+
+	public String toString() { return nodesById.toString(); }
 }
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet
