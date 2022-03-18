@@ -65,7 +65,7 @@ runhelp:
 	export CLASSPATH=$(CLASSPATH) ; java Main -h
 
 runparse:
-	export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset-with-errors.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -pv <testunit/simple-ruleset-with-errors.x2g
 
 runeval:
 	export CLASSPATH=$(CLASSPATH) ; java Main -d isebel/werewolf <testunit/simple-ruleset.x2g

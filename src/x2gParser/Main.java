@@ -3,17 +3,13 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
-import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 //import org.apache.commons.cli.*; // otherwise conclicts with antlr4 parser class
 
 import java.util.*;
 import java.io.*;
 
 public class Main {
+	static final String conflictOptions[] = { "create", "link", "merge", "reject" };
 	static String x2g = "X2G";
 	static boolean verbose = false;
 	static boolean parseOnly = false;
@@ -44,7 +40,7 @@ public class Main {
 		// command line parsing
 		org.apache.commons.cli.Options options = new org.apache.commons.cli.Options();
 
-		options.addOption("c", "conflict", true, "conflict resolution options during node creation: link, merge, reject, and warn are valid options");
+		options.addOption("c", "conflict", true, "conflict resolution options during node creation: create, (create and) link, merge, reject are valid options");
 		options.addOption("d", "input-dir", true, "transform all xml files found in this directory");
 		options.addOption("f", "output-format", true, "output file format: csv, dot, gefx, graphml, and lg are supported options");
 		options.addOption("h", "help", false, "print this help");
@@ -138,12 +134,7 @@ public class Main {
 		for (File file : filelist) {
 			if (verbose)
 				System.err.println(x2g + ": processing xml file " + file.getName());
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setNamespaceAware(true);
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(file);
 			eval.setFile(file);
-			eval.setDom(doc);
 			eval.visit(tree);
 		}
 	}

@@ -18,7 +18,7 @@ import org.w3c.dom.NodeList;
 public class xTractor {
 	private Document doc;
 
-	public xTractor(FileInputStream file) {
+	public xTractor(File file) {
 		//Parse XML file
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true); 
@@ -27,7 +27,7 @@ public class xTractor {
 			Document doc = builder.parse(file);
 		}
 		catch (Exception pe) {
-			System.err.println("xpath xTractor creating DOM: " + pe);
+			System.err.println("xpath extractor creating DOM: " + pe);
 		}
 	}
 
@@ -49,6 +49,7 @@ public class xTractor {
 		}
 		catch (Exception pe) {
 			System.err.println("xpath xTractor extracting xpath[" + xp + "]: " + pe);
+			return null;
 		}
 		return nodeValues;
 	}

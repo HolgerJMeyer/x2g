@@ -2,8 +2,6 @@
 import java.util.*;
 import java.io.*;
 
-import org.w3c.dom.Document;
-
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -11,15 +9,14 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * which can be extended to create a visitor which only needs to handle a subset
  * of the available methods.
  *
- * @param <T> The return type of the visit operation. Use {@link Void} for
+ * @param <T> The return type of the visit operation. Use {@link List<String>} for
  * operations with no return type.
  */
-public class Evaluator extends x2gParserBaseVisitor<Void> {
+public class Evaluator extends x2gParserBaseVisitor<List<String>> {
 	private final SymbolTable symtab;
 	private final gGraph graph;
 	private final boolean verbose;
-	private File file;
-	private Document dom;
+	private xTractor xtractor;
 
 	public Evaluator(SymbolTable symtab, gGraph graph, boolean verbose) {
 		this.symtab = symtab;
@@ -29,13 +26,7 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 
 	public Evaluator(SymbolTable symtab, gGraph graph) { this(symtab, graph, false); }
 
-	public File getFile() { return file; }
-
-	public void setFile(File file) { this.file = file; }
-
-	public Document getDom() { return dom; }
-
-	public void setDom(Document dom) { this.dom = dom; }
+	public void setFile(File file) { this.xtractor = new xTractor(file); }
 
 	public gGraph getGraph() { return graph; }
 
@@ -45,7 +36,7 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitX2g(x2gParser.X2gContext ctx) {
+	@Override public List<String> visitX2g(x2gParser.X2gContext ctx) {
 		visitChildren(ctx);
 		if (verbose) {
 			System.err.println("The Symtab: " + symtab);
@@ -59,49 +50,49 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitX2g_rule(x2gParser.X2g_ruleContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitX2g_rule(x2gParser.X2g_ruleContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitBind_expr_list(x2gParser.Bind_expr_listContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitBind_expr_list(x2gParser.Bind_expr_listContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitBind_expr(x2gParser.Bind_exprContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitBind_expr(x2gParser.Bind_exprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitBody(x2gParser.BodyContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitBody(x2gParser.BodyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitBody_action(x2gParser.Body_actionContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitBody_action(x2gParser.Body_actionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitProperty_assignment_list(x2gParser.Property_assignment_listContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitProperty_assignment_list(x2gParser.Property_assignment_listContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	public Void visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
+	public List<String> visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
 		return visitChildren(ctx);
 	}
 	/**
@@ -110,84 +101,84 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitProperty_name_list(x2gParser.Property_name_listContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitProperty_name_list(x2gParser.Property_name_listContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitProperty_type(x2gParser.Property_typeContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitProperty_type(x2gParser.Property_typeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitBoolean_expr(x2gParser.Boolean_exprContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitBoolean_expr(x2gParser.Boolean_exprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitExpr(x2gParser.ExprContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitExpr(x2gParser.ExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitEval_expr(x2gParser.Eval_exprContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitEval_expr(x2gParser.Eval_exprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitLiteral_expr(x2gParser.Literal_exprContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitLiteral_expr(x2gParser.Literal_exprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitBoolean_literal(x2gParser.Boolean_literalContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitBoolean_literal(x2gParser.Boolean_literalContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitString_expr(x2gParser.String_exprContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitString_expr(x2gParser.String_exprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitRelop(x2gParser.RelopContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitRelop(x2gParser.RelopContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitUnaryop(x2gParser.UnaryopContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitUnaryop(x2gParser.UnaryopContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitArithop(x2gParser.ArithopContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitArithop(x2gParser.ArithopContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitProperty_name(x2gParser.Property_nameContext ctx) { return visitChildren(ctx); }
+	@Override public List<String> visitProperty_name(x2gParser.Property_nameContext ctx) { return visitChildren(ctx); }
 }
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet
