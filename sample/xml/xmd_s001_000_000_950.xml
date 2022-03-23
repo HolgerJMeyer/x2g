@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?><isebel:story xmlns:isebel="http://www.isebel.eu/ns/isebel" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:html="http://www.w3.org/1999/xhtml" xml:id="xmd-s001-000-000-950" xml:lang="deu">
+  <dc:identifier>de.wossidia.xmd-s001-000-000-950</dc:identifier>
+  <isebel:purl>https://apps.wossidia.de/webapp/run/node/XMD-S001-000-000-950</isebel:purl>
+  <dc:title>[950] eiserne Kette tragen</dc:title>
+  <dc:title xml:lang="nds"/>
+  <isebel:contents>
+    <isebel:content xml:lang="nds">En Kopmann in Wismar hett de Nikolai-Kirch bedragen, hett ne isern käd drägen müsst up 'n bloten liw. allen Stillen Fridag hett he hen müsst na 'n kalkbarg (ubi nescit) hett dor in arbeiten müsst, dat is sien straf wäst.</isebel:content>
+  </isebel:contents>
+  <isebel:places>
+    <isebel:place id="100001147">
+      <dc:title>Hoben</dc:title>
+      <isebel:point>
+        <datacite:pointLatitude xmlns:datacite="http://datacite.org/schema/kernel-4">53.91821</datacite:pointLatitude>
+        <datacite:pointLongitude xmlns:datacite="http://datacite.org/schema/kernel-4">11.40640</datacite:pointLongitude>
+      </isebel:point>
+      <isebel:role>narration</isebel:role>
+    </isebel:place>
+    <isebel:place id="100003101">
+      <dc:title>Wismar</dc:title>
+      <isebel:point>
+        <datacite:pointLatitude xmlns:datacite="http://datacite.org/schema/kernel-4">53.89126</datacite:pointLatitude>
+        <datacite:pointLongitude xmlns:datacite="http://datacite.org/schema/kernel-4">11.46613</datacite:pointLongitude>
+      </isebel:point>
+      <isebel:role>action</isebel:role>
+    </isebel:place>
+  </isebel:places>
+  <isebel:persons>
+    <isebel:person id="110006144">
+      <isebel:name>Schröder</isebel:name>
+      <isebel:gender>male</isebel:gender>
+      <isebel:role>narrator</isebel:role>
+    </isebel:person>
+  </isebel:persons>
+  <isebel:events>
+    <isebel:event id="990011721">
+      <isebel:date>1925-07-23</isebel:date>
+      <isebel:role>narration</isebel:role>
+    </isebel:event>
+  </isebel:events>
+  <isebel:keywords>
+    <isebel:keyword id="XMD-M030-000-002-494" type="controlled vocabulary" provenance="WossiDiA-Index">tragen</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-006-621" type="controlled vocabulary" provenance="WossiDiA-Index">Halskette</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-008-863" type="controlled vocabulary" provenance="WossiDiA-Index">Ring</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-030-625" type="controlled vocabulary" provenance="WossiDiA-Index">Frevelsage</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-001-316" type="controlled vocabulary" provenance="WossiDiA-Index">Kaufmann</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-001-529" type="controlled vocabulary" provenance="WossiDiA-Index">Kirchliches</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-001-918" type="controlled vocabulary" provenance="WossiDiA-Index">arbeiten, allgemein</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-002-261" type="controlled vocabulary" provenance="WossiDiA-Index">Strafe</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-003-438" type="controlled vocabulary" provenance="WossiDiA-Index">betrügen</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-032-316" type="controlled vocabulary" provenance="WossiDiA-Index">Freitag, stiller</isebel:keyword>
+    <isebel:keyword id="XMD-M030-000-037-497" type="controlled vocabulary" provenance="WossiDiA-Index">Kette</isebel:keyword>
+    <isebel:keyword xml:lang="deu" id="ZAW-B608" type="controlled vocabulary" provenance="RW-Index">Frevel</isebel:keyword>
+    <isebel:keyword xml:lang="eng" id="ZAW-B608" type="controlled vocabulary" provenance="RW-Index">sacrilege</isebel:keyword>
+    <isebel:keyword xml:lang="deu" id="ZAW-B608-018" type="controlled vocabulary" provenance="RW-Index">Kette tragen, Ring</isebel:keyword>
+    <isebel:keyword xml:lang="eng" id="ZAW-B608-018" type="controlled vocabulary" provenance="RW-Index">to wear a chain, ring</isebel:keyword>
+  </isebel:keywords>
+  <isebel:imageResources>
+    <isebel:imageResource id="ZAW-B608-018-014-002">
+      <isebel:purl>https://apps.wossidia.de/digipool/3bab5791/master</isebel:purl>
+    </isebel:imageResource>
+    <isebel:imageResource id="ZAW-B608-018-014-001">
+      <isebel:purl>https://apps.wossidia.de/digipool/3bab5790/master</isebel:purl>
+    </isebel:imageResource>
+  </isebel:imageResources>
+</isebel:story>
