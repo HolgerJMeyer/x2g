@@ -29,7 +29,13 @@ options {
  * Expression types
  */
 x2g
-	: x2g_rule*
+	: x2g_rule* {
+		if (verbose) {
+			System.err.println("Symtab[[");
+			System.err.println(symtab);
+			System.err.println("]]");
+		}
+	  }
 	;
 
 x2g_rule

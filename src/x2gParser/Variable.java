@@ -32,7 +32,7 @@ public class Variable {
 	protected Scope getScope() { return scope; }
 
 	public String toString() {
-		if (binding != null)
+		if (binding != null && type != null)
 			return '<' + getName() + ":" + type + "=" + binding + '>';
 		if (type != null)
 			return '<' + getName() + ":" + type + '>';

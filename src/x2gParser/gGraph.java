@@ -14,7 +14,7 @@ public class gGraph {
 	public gGraph() { this(false); }
 
 	/**
-	 * Condtionally create a node by label and properties.
+	 * Conditionally create a node by label and properties.
 	 * Basis for deciding to create or not a new node. Two nodes (an existing node and the label
 	 * and properties of a "potential new node") are equal if the labels and all properties
 	 * have the same values for the same property name.  Additionaly, if there is a special "__unique"
