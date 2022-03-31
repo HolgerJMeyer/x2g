@@ -44,6 +44,7 @@ public class Main {
 		options.addOption("d", "input-dir", true, "transform all xml files found in this directory");
 		options.addOption("f", "output-format", true, "output file format: csv, dot, gefx, graphml, and lg are supported options");
 		options.addOption("h", "help", false, "print this help");
+		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
 		options.addOption("o", "out-file", true, "basename of output file(s)");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
@@ -127,14 +128,14 @@ public class Main {
 					filelist.add(file);
 				}
 				else {
-					System.err.println(x2g + ": " + file.getName() + " is not a regular xml file");
+					System.err.println(x2g + ": " + file.getAbsolutePath() + " is not a regular xml file");
 				}
 			}
 		}
 		for (File file : filelist) {
 			if (verbose)
-				System.err.println(x2g + ": processing xml file " + file.getName());
-			eval.setFile(file);
+				System.err.println(x2g + ": processing xml file " + file.getAbsolutePath());
+			eval.setXtractor(file.getAbsolutePath());
 			eval.visit(tree);
 		}
 	}

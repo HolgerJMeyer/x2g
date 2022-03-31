@@ -26,7 +26,7 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 
 	public Evaluator(SymbolTable symtab, gGraph graph) { this(symtab, graph, false); }
 
-	public void setFile(File file) { this.xtractor = new xTractor(file); }
+	public void setXtractor(String filename) { xtractor = new xTractor(filename); }
 
 	public gGraph getGraph() { return graph; }
 
@@ -66,7 +66,14 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public Void visitBind_expr(x2gParser.Bind_exprContext ctx) { return visitChildren(ctx); }
+	@Override public Void visitBind_expr(x2gParser.Bind_exprContext ctx) {
+		visitChildren(ctx);
+		String kw = ctx.getChild(0).getText();
+		String xp = ctx.string_expr.getText();
+	  	List<String> list = xtractor.xtract(xp);
+		System.err.println("eval: " + kw + "(" + xp + ") = " + Arrays.toString(list.toArray()));
+		return null;
+	}
 	/**
 	 * {@inheritDoc}
 	 *

@@ -24,7 +24,6 @@ GRAPHSRCS = \
 	gProperties.java \
 	gTest.java
 XMLSRCS = \
-	xNamespaceResolver.java \
 	xTractor.java
 MYSRCS = \
 	Evaluator.java \
@@ -32,6 +31,7 @@ MYSRCS = \
 	SymbolTable.java \
 	Variable.java \
 	VarType.java \
+	XPathTest.java \
 	$(GRAPHSRCS) \
 	$(XMLSRCS)
 LISTENER = x2gParserBaseListener.java x2gParserListener.java
@@ -68,10 +68,16 @@ runparse:
 	export CLASSPATH=$(CLASSPATH) ; java Main -pv <testunit/simple-ruleset-with-errors.x2g
 
 runeval:
-	export CLASSPATH=$(CLASSPATH) ; java Main -d isebel/werewolf <testunit/simple-ruleset.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -v -d isebel/werewolf <testunit/simple-ruleset.x2g
 
 runtest:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
+
+runxpath:
+	export CLASSPATH=$(CLASSPATH) ; java -ea xTractor isebel/werewolf/xmd_s001_000_001_499.xml "/story//keyword/text()"
+
+run1:
+	export CLASSPATH=$(CLASSPATH) ; java Main -v testunit/catalog.xml <testunit/catalog.x2g
 
 grun:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui <$$g ; done

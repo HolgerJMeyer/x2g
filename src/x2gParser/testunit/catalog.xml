@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jpc:catalog>
+  <jpc:cd id='1'>
+	  <jpc:artist>Sufjan Stevens</jpc:artist>
+	  <jpc:title>Illinois</jpc:title>
+	  <jpc:src>http://www.sufjan.com/</jpc:src>
+  </jpc:cd>
+  <jpc:cd id='2'>
+	  <jpc:artist>Stoat</jpc:artist>
+	  <jpc:title>Future come and get me</jpc:title>
+	  <jpc:src>http://www.stoatmusic.com/</jpc:src>
+  </jpc:cd>
+  <jpc:cd id='3'>
+	  <jpc:artist>The White Stripes</jpc:artist>
+	  <jpc:title>Get behind me satan</jpc:title>
+	  <jpc:src>http://www.whitestripes.com/</jpc:src>
+  </jpc:cd>
+  <jpc:cd id='4'>
+	  <jpc:artist>Led Zeppelin</jpc:artist>
+	  <jpc:title>The Song Remains the Same</jpc:title>
+	  <jpc:src>http://www.led-zeppelin.com/</jpc:src>
+  </jpc:cd>
+  <jpc:cd id='5'>
+	  <jpc:artist>Led Zeppelin</jpc:artist>
+	  <jpc:title>IV (Four Symbols)</jpc:title>
+	  <jpc:src>http://www.led-zeppelin.com/</jpc:src>
+  </jpc:cd>
+  </jpc:catalog>
