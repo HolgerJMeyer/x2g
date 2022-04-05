@@ -95,6 +95,7 @@ public class xTractor {
 		return null;
 	}
 
+	//TODO: just some self-testing
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.out.println("xTractor <xml-file> <xpath-expr>");
