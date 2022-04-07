@@ -9,7 +9,10 @@ import org.jdom2.JDOMException;
 import org.jdom2.Element;
 import org.jdom2.Text;
 import org.jdom2.filter.Filters;
+import org.jdom2.input.DOMBuilder;
+import org.jdom2.input.DocumentBuilderFactory;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathFactory;
 import org.jdom2.xpath.XPathExpression;
 
 /*
@@ -34,10 +37,13 @@ public class xTractor {
 	public xTractor(String uri, boolean nsaware) {
 		// Initially parse XML @file and be namespace aware if @nsaware is true.
 		try {
-			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			//factory.setNamespaceAware(nsaware); 
-			SAXBuilder sax = new SAXBuilder();
-			doc = sax.build(new File(uri));
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(nsaware); 
+			DocumentBuilder dombuilder = factory.newDocumentBuilder();
+			doc = dombuilder.parse(new File(uri));
+			//https://www.studytrails.com/2016/09/12/java-xml-jdom2-dombuilde/
+			//SAXBuilder sax = new SAXBuilder();
+			//doc = sax.build(new File(uri));
 		}
 		catch (JDOMException | IOException pe) {
 			System.err.println("xpath extractor creating DOM: " + pe);
@@ -51,56 +57,17 @@ public class xTractor {
 	public List<String> xtract(String xp) {
 		try {
 			//TODO: XPathVariableResolver
-			XPathFactory xpathFactory = XPathFactory.newInstance();
-			XPath xpath = xpathFactory.newXPath();
-
 			List<String> list = new ArrayList<String>();
-			try {
-				System.err.println("xpath compile: " + xp);
-				XPathExpression expr = xpath.compile(xp);
-				NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-				for (int i = 0; i < nodes.getLength(); i++) {
-					list.add(nodes.item(i).getNodeValue());
-				}
-				return list;
-			} catch (XPathExpressionException e) {
-				System.err.println("xpath evaluate: " + e);
+			System.err.println("xpath compile: " + xp);
+			XPathFactory xpf = XPathFactory.instance();
+			XPathExpression<Element> expr = xpf.compile(xp, Filters.element(), null); //Namespace.getNamesace("xpns", "http://www.w3.org/2002/xforms")
+			List<Element> nodes = expr.evaluate(doc);
+			for (Element e : nodes) {
+				list.add(e.getText());
 			}
+			return list;
 		} catch (Exception e) {
-			System.err.println("xpath evaluate: " + e);
-		}
-		return null;
-	}
-
-	//TODO: unsed, just for testing
-	public List<String> xtract(File file, String xp) {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(false);
-		DocumentBuilder builder;
-		Document doc = null;
-		try {
-			builder = factory.newDocumentBuilder();
-			doc = builder.parse(file);
-
-			// Create XPathFactory object
-			XPathFactory xpathFactory = XPathFactory.newInstance();
-
-			// Create XPath object
-			XPath xpath = xpathFactory.newXPath();
-
-			List<String> list = new ArrayList<String>();
-			try {
-				XPathExpression expr = xpath.compile(xp);
-				NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-				for (int i = 0; i < nodes.getLength(); i++) {
-					list.add(nodes.item(i).getNodeValue());
-				}
-				return list;
-			} catch (XPathExpressionException e) {
-				e.printStackTrace();
-			}
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
+			System.err.println("xpath(" + xp + ") evaluation failed: " + e);
 		}
 		return null;
 	}
