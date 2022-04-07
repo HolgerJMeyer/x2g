@@ -4,7 +4,7 @@ JAVAC = javac
 JFLAGS = -g -cp $(CLASSPATH) -d $(CLASSDIR) -Xlint:deprecation -Xlint:unchecked
 CLASSDIR = $(TARGET)
 CLASSDIR = .
-CLASSPATH=".:$(COMMONS):$(AJARS):$(CLASSDIR):"
+CLASSPATH=".:$(COMMONS):$(JDOM):$(AJARS):$(CLASSDIR):"
 # ANTLR4 expecting version 4.9.3
 ANTLR = antlr4
 #AFLAGS = -o $(TARGET) -package $(TARGET)
@@ -12,6 +12,8 @@ AFLAGS = -visitor -listener
 ASRCS = $(wildcard *.g4)
 LIBDIR = /usr/share/java/antlr4
 COMMONS = /usr/share/java/apache-commons-cli.jar
+#JDOM = /usr/share/java/jdom2/jdom2.jar
+JDOM = ./jdom2/jdom-2.0.6.1.jar
 AJARS = "$(LIBDIR)/antlr4.jar:$(LIBDIR)/antlr4-runtime.jar"
 # X2G
 TARGET = x2g

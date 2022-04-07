@@ -4,16 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.jdom2.Element;
-import org.jdom2.Text;
-import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-
-/*
- * import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
@@ -25,7 +16,6 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-*/
 
 
 public class xTractor {
@@ -34,12 +24,12 @@ public class xTractor {
 	public xTractor(String uri, boolean nsaware) {
 		// Initially parse XML @file and be namespace aware if @nsaware is true.
 		try {
-			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			//factory.setNamespaceAware(nsaware); 
-			SAXBuilder sax = new SAXBuilder();
-			doc = sax.build(new File(uri));
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(nsaware); 
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			doc = builder.parse(uri);
 		}
-		catch (JDOMException | IOException pe) {
+		catch (ParserConfigurationException | SAXException | IOException pe) {
 			System.err.println("xpath extractor creating DOM: " + pe);
 		}
 	}
