@@ -12,12 +12,15 @@ public class Scope {
 	protected Scope enclosingScope;
 	protected Map<String, Variable> members = new LinkedHashMap<String, Variable>();
 
+	/* Scope without an enclosing scope is referencing itself */
 	protected Scope(String name) {
 		this.name = name;
+		this.enclosingScope = this;
 	}
 
+	/* Scope within an enclosing scope */
 	protected Scope(String name, Scope enclosingScope) {
-		this(name);
+		this.name = name;
 		this.enclosingScope = enclosingScope;
 	}
 
@@ -49,7 +52,7 @@ public class Scope {
 		Variable variable = members.get(name);
 		if (variable != null)
 			return variable;
-		if (enclosingScope != null)
+		if (enclosingScope != this)
 			return enclosingScope.resolve(name);
 		return null; // not found
 	}
@@ -66,7 +69,7 @@ public class Scope {
 	}
 
 	public String toString() {
-		return "<" + name + ": " + members.keySet().toString() + ">";
+		return "<" + name + "@" + enclosingScope.name + ": " + members.keySet().toString() + ">";
 	}
 }
 

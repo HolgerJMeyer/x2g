@@ -13,8 +13,10 @@ public class SymbolTable {
 		current = globals = new Scope("GLOBAL");
 		globals.define("$allnodes", VarType.NODESET);
 		globals.define("$alledges", VarType.EDGESET);
+		scopes.add(globals);
 	}
 
+	/* Attention: new scope defined under current scope, new scope becomes current */
 	public Scope newScope(String name) { scopes.add(current = new Scope(name, current)); return current; }
 
 	public Scope endScope() { return current = current.getEnclosingScope(); }

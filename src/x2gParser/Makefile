@@ -70,16 +70,16 @@ runhelp:
 runparse:
 	export CLASSPATH=$(CLASSPATH) ; java Main -pv <testunit/simple-ruleset-with-errors.x2g
 
-runeval:
+werewolf:
 	export CLASSPATH=$(CLASSPATH) ; java Main -v -d isebel/werewolf <testunit/simple-ruleset.x2g
 
-runtest:
+graphtest:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
 
-runxpath:
+xpathtest:
 	export CLASSPATH=$(CLASSPATH) ; java -ea xTractor testunit/catalog.xml "//cd"
 
-run1:
+cdcatalog:
 	export CLASSPATH=$(CLASSPATH) ; java Main -v testunit/catalog.xml <testunit/catalog.x2g
 
 grun:

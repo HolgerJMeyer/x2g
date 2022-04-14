@@ -2,6 +2,8 @@
 import java.util.*;
 import java.io.*;
 
+import org.jdom2.Content;
+
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -39,8 +41,8 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 	@Override public Void visitX2g(x2gParser.X2gContext ctx) {
 		visitChildren(ctx);
 		if (verbose) {
-			System.err.println("The Symtab: " + symtab);
-			System.err.println("The Graph: " + graph);
+			System.err.println("Symtab[[" + symtab + "]]");
+			System.err.println("Graph[[" + graph + "]]");
 		}
 		return null;
 	}
@@ -70,9 +72,30 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 		visitChildren(ctx);
 		String kw = ctx.getChild(0).getText();
 		String xp = ctx.string_expr.getText();
-		System.err.println("xtractor: " + xtractor);
-	  	List<String> list = xtractor.xtract(xp);
-		System.err.println("eval: " + kw + "('" + xp + "') = " + list);
+	  	List<Content> list = xtractor.xtract(xp);
+		/* TODO: Store all current bindings of an xpath result
+		 * A bind consiste of a varname, a type and an sequence/list of content values.
+		 */
+		List<String> slist = new ArrayList<String>();
+		for (Content n : list) {
+				switch (n.getCType()) {
+					case Element:
+					case CDATA:
+					case EntityRef:
+					case Text:
+						slist.add(n.getValue());
+						break;
+					case Comment:
+					case DocType:
+					case ProcessingInstruction:
+						slist.add(n.toString());
+						break;
+					default:
+						slist.add(n.toString());
+						break;
+				}
+		}
+		if (verbose) System.err.println("eval: " + kw + "(" + xp + ") = " + slist);
 		return null;
 	}
 	/**

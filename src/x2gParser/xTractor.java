@@ -9,7 +9,6 @@ import java.util.HashMap;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.Content;
-import org.jdom2.Text;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
@@ -26,8 +25,15 @@ public class xTractor {
 	private Document doc;
 	private boolean verbose;
 
+	/**
+	 * Initially parse XML file given by the specified uri and be namespace aware if nsaware is true.
+	 *
+	 * @param uri an URI specifying the xml file location
+	 * @param nsaware if true be namespace aware
+	 * @return a new XML xTractor instance
+	 * @see xTractor
+	 */
 	public xTractor(String uri, boolean nsaware) {
-		// Initially parse XML @file and be namespace aware if @nsaware is true.
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			// make it namespace aware or not
@@ -60,21 +66,20 @@ public class xTractor {
 
 	public boolean isVerbose() { return verbose; }
 
-	public List<String> xtract(String xp) {
+	public List<Content> xtract(String xp) {
 		return xtract(xp, new HashMap<String, Object>());
 	}
 
-	public List<String> xtract(String xp, Map<String, Object> vars) {
+	public List<Content> xtract(String xp, Map<String, Object> vars) {
 		try {
-			List<String> list = new ArrayList<String>();
+			List<Content> list = new ArrayList<Content>();
 			if (verbose) System.err.println("xpath compile: " + xp);
 			XPathFactory xpf = XPathFactory.instance();
 			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars);
-			//Namespace.getNamesace("xpns", "http://www.w3.org/2002/xforms")
 			List<Content> nodes = expr.evaluate(doc);
 			if (verbose) System.err.println("xpath evaluate: " + nodes);
 			for (Content n : nodes) {
-				list.add(n.toString());
+				list.add(n);
 			}
 			return list;
 		} catch (Exception e) {
@@ -94,7 +99,7 @@ public class xTractor {
 			return;
 		}
 		xTractor xt = new xTractor(args[0]);
-		List<String> list = xt.xtract(args[1]);
+		List<Content> list = xt.xtract(args[1]);
 		System.out.println("keywords are:" + Arrays.toString(list.toArray()));
 	}
 }

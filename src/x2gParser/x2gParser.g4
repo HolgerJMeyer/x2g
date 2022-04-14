@@ -30,11 +30,7 @@ options {
  */
 x2g
 	: x2g_rule* {
-		if (verbose) {
-			System.err.println("Symtab[[");
-			System.err.println(symtab);
-			System.err.println("]]");
-		}
+		if (verbose) System.err.println("Symtab[[" + symtab + "]]");
 	  }
 	;
 
