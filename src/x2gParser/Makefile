@@ -4,7 +4,7 @@ JAVAC = javac
 JFLAGS = -g -cp $(CLASSPATH) -d $(CLASSDIR) -Xlint:deprecation -Xlint:unchecked
 CLASSDIR = $(TARGET)
 CLASSDIR = .
-CLASSPATH=".:$(COMMONS):$(JDOM):$(AJARS):$(CLASSDIR):"
+CLASSPATH=".:$(COMMONS):$(JDOM):$(JAXEN):$(AJARS):$(CLASSDIR):"
 # ANTLR4 expecting version 4.9.3
 ANTLR = antlr4
 #AFLAGS = -o $(TARGET) -package $(TARGET)
@@ -14,6 +14,7 @@ LIBDIR = /usr/share/java/antlr4
 COMMONS = /usr/share/java/apache-commons-cli.jar
 #JDOM = /usr/share/java/jdom2/jdom2.jar
 JDOM = ./jdom2/jdom-2.0.6.1.jar
+JAXEN = ./jdom2/lib/jaxen-1.2.0.jar
 AJARS = "$(LIBDIR)/antlr4.jar:$(LIBDIR)/antlr4-runtime.jar"
 # X2G
 TARGET = x2g
@@ -76,7 +77,7 @@ runtest:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
 
 runxpath:
-	export CLASSPATH=$(CLASSPATH) ; java -ea xTractor isebel/werewolf/xmd_s001_000_001_499.xml "/story//keyword/text()"
+	export CLASSPATH=$(CLASSPATH) ; java -ea xTractor testunit/catalog.xml "//cd"
 
 run1:
 	export CLASSPATH=$(CLASSPATH) ; java Main -v testunit/catalog.xml <testunit/catalog.x2g

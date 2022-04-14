@@ -16,17 +16,25 @@ POSITIV_DECIMAL: (DIGIT+ '.' DIGIT* | '.' DIGIT+);
 POSITIV_FLOAT: (DIGIT+ '.' DIGIT* EXPONENT | '.' DIGIT+ EXPONENT | DIGIT+ EXPONENT);
 
 EXPONENT:		('e'|'E') ('+'|'-')? DIGIT+;
-fragment
-DIGIT:			[0-9];
+fragment DIGIT:			[0-9];
 DATETIME:		DIGIT DIGIT DIGIT DIGIT '-'[01] DIGIT '-'[0-3] DIGIT ([0-2] DIGIT ':' [0-5] DIGIT)?;
  
 // SECTION: String literals
 // single line strings: 'ssssstrinnnng' "ssssstrinnnng"
-SINGLEQSTR: '\'' (~('\''|'\\'|'\r'|'\n') | ESCCHAR)* '\'' -> type(STR);
-DOUBLEQSTR: '"'  (~('"'|'\\'|'\r'|'\n') | ESCCHAR)* '"' -> type(STR);
+SINGLEQSTR: '\'' (~('\''|'\\'|'\r'|'\n') | ESCCHAR)* '\'' {
+		setText(getText().substring(1, getText().length()-1));
+	} -> type(STR);
+
+DOUBLEQSTR: '"'  (~('"'|'\\'|'\r'|'\n') | ESCCHAR)* '"' {
+		setText(getText().substring(1, getText().length()-1));
+	} -> type(STR);
 // triple quoted python-like multi-line strings: '''...''' """..."""
-TRIPLEQSSTR: '\'\'\'' (('\''|'\'\'')? (~('\''|'\\') | ESCCHAR))* '\'\'\'' -> type(STR);
-TRIPLEQDSTR: '"""' (('"'|'""')? ( ~('\''|'\\') | ESCCHAR ))* '"""' -> type(STR);
+TRIPLEQSSTR: '\'\'\'' (('\''|'\'\'')? (~('\''|'\\') | ESCCHAR))* '\'\'\'' {
+		setText(getText().substring(3, getText().length()-3));
+	} -> type(STR);
+TRIPLEQDSTR: '"""' (('"'|'""')? ( ~('\''|'\\') | ESCCHAR ))* '"""' {
+		setText(getText().substring(3, getText().length()-3));
+	} -> type(STR);
 
 ESCCHAR: '\\'('t'|'b'|'n'|'r'|'f'|'"'|'\'');
 

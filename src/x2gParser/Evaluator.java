@@ -70,8 +70,9 @@ public class Evaluator extends x2gParserBaseVisitor<Void> {
 		visitChildren(ctx);
 		String kw = ctx.getChild(0).getText();
 		String xp = ctx.string_expr.getText();
+		System.err.println("xtractor: " + xtractor);
 	  	List<String> list = xtractor.xtract(xp);
-		System.err.println("eval: " + kw + "(" + xp + ") = " + Arrays.toString(list.toArray()));
+		System.err.println("eval: " + kw + "('" + xp + "') = " + list);
 		return null;
 	}
 	/**

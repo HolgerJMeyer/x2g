@@ -189,17 +189,11 @@ literal_expr
 	;
 
 
-string_literal
-	: STR
-	;
+string_literal: STR;
 
-date_literal
-	: DATETIME
-	;
+date_literal: DATETIME;
 
-numeric_literal
-	: NUMBER
-	;
+numeric_literal: NUMBER;
 
 boolean_literal: (TRUE|FALSE);
 
@@ -210,11 +204,11 @@ string_expr
 	;
 
 // SECTION: Operators
-relop:	'<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
+relop: '<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
 
-unaryop:	'-' | '!';  // unary MINUS
+unaryop: '-' | '!';  // unary MINUS
 
-arithop:	'+' | '-' | '*' | DIV | MOD; // binary MINUS
+arithop: '+' | '-' | '*' | DIV | MOD; // binary MINUS
 
 // SECTION: Property names
 property_name:	ID;
