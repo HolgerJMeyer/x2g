@@ -115,33 +115,42 @@ property_assignment_list
 	;
 
 property_assignment
+	: property_name_expr
+	| property_unique_stmt
+	| property_if_stmt
+	;
+
+property_name_expr
 	: property_name '=' expr {
 		if (verbose) notifyErrorListeners("property " + $property_name.text + "=" + $expr.text);
 		if (symtab.resolveOnly($property_name.text) != null)
 			notifyErrorListeners("property " + $property_name.text + " overidden!");
 		symtab.define($property_name.text, VarType.PROPERTY, $expr.text);
 	  }
-	| UNIQUE '(' property_name_list ')' {
+	;
+
+property_unique_stmt
+	: UNIQUE '(' property_name_list ')' {
 		if (verbose) notifyErrorListeners("unique constraint found: " + $property_name_list.text);
 		if (symtab.resolveOnly("__unique") != null)
 			notifyErrorListeners("unique constraint (" + $property_name_list.text + ") redefines earlier one!");
 		symtab.define("__unique", VarType.PROPERTY, $property_name_list.text);
 	  }
-		// TODO
+		// TODO:
 		//for (String prop : $property_name_list)
 		//	if (symtab.resolveOnly(prop) == null)
 		//		notifyErrorListeners("unique constraint: property " + prop + " unknown!");
-	| IF boolean_expr '{' property_assignment_list '}'
-		// if ($b.value == true) {
-		//		$props = $l.props;
-		// } */
+	;
+
+property_if_stmt
+	: IF boolean_expr '{' property_assignment_list '}'
 	;
 	
 property_name_list
 	: property_name (',' property_name)*
 	;
 
-property_type			// just a starting point
+property_type			// TODO: not used
 	: STRING
 	| DATE
 	| NUMERIC

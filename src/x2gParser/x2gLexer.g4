@@ -20,11 +20,10 @@ fragment DIGIT:			[0-9];
 DATETIME:		DIGIT DIGIT DIGIT DIGIT '-'[01] DIGIT '-'[0-3] DIGIT ([0-2] DIGIT ':' [0-5] DIGIT)?;
  
 // SECTION: String literals
-// single line strings: 'ssssstrinnnng' "ssssstrinnnng"
+// single line strings: 'string' "string"
 SINGLEQSTR: '\'' (~('\''|'\\'|'\r'|'\n') | ESCCHAR)* '\'' {
 		setText(getText().substring(1, getText().length()-1));
 	} -> type(STR);
-
 DOUBLEQSTR: '"'  (~('"'|'\\'|'\r'|'\n') | ESCCHAR)* '"' {
 		setText(getText().substring(1, getText().length()-1));
 	} -> type(STR);

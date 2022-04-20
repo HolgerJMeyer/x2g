@@ -4,6 +4,7 @@ match xpath("//cd") using $c {
 		// properties
 		title = $c.xpath("title/text()"),
 		src = $c.xpath("src/text()"),
+		avail = true,
 		unique (title)
 	},
 	match xpath("./artist") using $a {
