@@ -2,6 +2,8 @@
 import java.util.*;
 import java.io.*;
 
+import java.sql.Date;
+
 import org.jdom2.Content;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -32,10 +34,24 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	public gGraph getGraph() { return graph; }
 
+	public void evalError(Exception e, String where) {
+		System.err.println(Main.x2g + ": " + where + ": " + e);
+		System.err.println("Symtab[[" + symtab + "]]");
+		System.err.println("Graph[[" + graph + "]]");
+	}
+
 	/*
 	 * Here starts the real evaluation of X2G rules!
+	 * There are two passes:
+	 * (1) First calling the parser, doing syntax and some semantic checking for bind variable,
+	 *		 building symbol table and if there are no errors generate the AST.
+	 *	(2) Visiting the tree and evaluating the expressions based on variable binding. Here we go!
+	 *
+	 *	Notes:
+	 *	- The @Override are just for allerting if parser rules changei and so do ParserBasicVisitor.
+	 *
 	 */
-	public Object visitX2g(x2gParser.X2gContext ctx) {
+	@Override public Object visitX2g(x2gParser.X2gContext ctx) {
 		visitChildren(ctx);
 		if (verbose) {
 			System.err.println("Symtab[[" + symtab + "]]");
@@ -43,9 +59,18 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		}
 		return null;
 	}
-	public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) { return visitChildren(ctx); }
-	public Object visitBind_expr_list(x2gParser.Bind_expr_listContext ctx) { return visitChildren(ctx); }
-	public Object visitBind_expr(x2gParser.Bind_exprContext ctx) {
+
+	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitBind_expr_list(x2gParser.Bind_expr_listContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitBind_expr(x2gParser.Bind_exprContext ctx) {
 		visitChildren(ctx);
 		String kw = ctx.getChild(0).getText();
 		String xp = ctx.string_expr.getText();
@@ -54,25 +79,25 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		case "xpath":
 			List<Content> list = xtractor.xtract(xp);
 			/* TODO: Store all current bindings of an xpath result
-			 * A bind consiste of a varname, a type and an sequence/list of content values.
+			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
 			List<String> slist = new ArrayList<String>();
 			for (Content n : list) {
 					switch (n.getCType()) {
-						case Element:
-						case CDATA:
-						case EntityRef:
-						case Text:
-							slist.add(n.getValue());
-							break;
-						case Comment:
-						case DocType:
-						case ProcessingInstruction:
-							slist.add(n.toString());
-							break;
-						default:
-							slist.add(n.toString());
-							break;
+					case Element:
+					case CDATA:
+					case EntityRef:
+					case Text:
+						slist.add(n.getValue());
+						break;
+					case Comment:
+					case DocType:
+					case ProcessingInstruction:
+						slist.add(n.toString());
+						break;
+					default:
+						slist.add(n.toString());
+						break;
 					}
 			}
 			if (verbose) System.err.println("@bind_expr: " + kw + "(" + xp + ") = " + slist);
@@ -86,29 +111,162 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		}
 		return null;
 	}
-	public Object visitBody(x2gParser.BodyContext ctx) { return visitChildren(ctx); }
-	public Object visitBody_action(x2gParser.Body_actionContext ctx) { return visitChildren(ctx); }
-	public Object visitProperty_assignment_list(x2gParser.Property_assignment_listContext ctx) { return visitChildren(ctx); }
-	public Object visitProperty_assignment(x2gParser.Property_assignmentContext ctx) { return visitChildren(ctx); }
-	public Object visitProperty_name_expr(x2gParser.Property_name_exprContext ctx) { return visitChildren(ctx); }
-	public Object visitProperty_unique_stmt(x2gParser.Property_unique_stmtContext ctx) { return visitChildren(ctx); }
-	public Object visitProperty_if_stmt(x2gParser.Property_if_stmtContext ctx) { return visitChildren(ctx); }
-	public Object visitProperty_name_list(x2gParser.Property_name_listContext ctx) { return visitChildren(ctx); }
-	public Object visitProperty_type(x2gParser.Property_typeContext ctx) { return visitChildren(ctx); }
-	public Object visitBoolean_expr(x2gParser.Boolean_exprContext ctx) { return visitChildren(ctx); }
-	public Object visitExpr(x2gParser.ExprContext ctx) { return visitChildren(ctx); }
-	public Object visitEval_expr(x2gParser.Eval_exprContext ctx) { return visitChildren(ctx); }
-	public Object visitLiteral_expr(x2gParser.Literal_exprContext ctx) { return visitChildren(ctx); }
-	public Object visitBoolean_literal(x2gParser.Boolean_literalContext ctx) {
+
+	@Override public Object visitBody(x2gParser.BodyContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitBody_action(x2gParser.Body_actionContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitProperty_assignment_list(x2gParser.Property_assignment_listContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitProperty_name_expr(x2gParser.Property_name_exprContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitProperty_name_list(x2gParser.Property_name_listContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitProperty_type(x2gParser.Property_typeContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+   // boolean_expr: boolean_expr op=(AND|OR) boolean_expr
+	@Override public Boolean visitBoolAndOr(x2gParser.BoolAndOrContext ctx) {
+		if (ctx.op.getType() == x2gParser.OR)
+			return ((Boolean)visit(ctx.boolean_expr(0))) || ((Boolean)visit(ctx.boolean_expr(1)));
+		return ((Boolean)visit(ctx.boolean_expr(0))) && ((Boolean)visit(ctx.boolean_expr(1)));
+	}
+
+   // boolean_expr: NOT '(' boolean_expr ')'
+	@Override public Boolean visitBoolNot(x2gParser.BoolNotContext ctx) {
+		return !((Boolean)visit(ctx.boolean_expr()));
+	}
+
+   // boolean_expr: '(' boolean_expr ')'
+	@Override public Boolean visitBoolParens(x2gParser.BoolParensContext ctx) {
+		return (Boolean)visit(ctx.boolean_expr());
+	}
+
+   // boolean_expr: BOOL
+	@Override public Boolean visitBoolLiteral(x2gParser.BoolLiteralContext ctx) {
 		String kw = ctx.getChild(0).getText();
-		if (verbose) System.err.println("@boolean_literal: " + kw);
+		if (verbose) System.err.println("boolean_expr:BOOL: " + kw);
 		return (kw == "TRUE" || kw == "true") ? true : false;
 	}
-	public Object visitString_expr(x2gParser.String_exprContext ctx) { return visitChildren(ctx); }
-	public Object visitRelop(x2gParser.RelopContext ctx) { return visitChildren(ctx); }
-	public Object visitUnaryop(x2gParser.UnaryopContext ctx) { return visitChildren(ctx); }
-	public Object visitArithop(x2gParser.ArithopContext ctx) { return visitChildren(ctx); }
-	public Object visitProperty_name(x2gParser.Property_nameContext ctx) { return visitChildren(ctx); }
+
+   // boolean_expr: expr op=(LT|GT|LE|GE|EQ|NEQ) expr
+	@Override public Boolean visitBoolRelop(x2gParser.BoolRelopContext ctx) {
+		Object left = visit(ctx.expr(0));
+		Object right = visit(ctx.expr(1));
+		/*
+		 * TODO: test if type of right expr is compatible to left
+		 * Valid types are: Boolean, String, Integer, Float, Date
+		 * */
+		switch (ctx.op.getType()) {
+		case x2gParser.LT:
+				break;
+		}
+		return false;
+	}
+
+	// expr: MINUS expr
+	@Override public Float visitUnaryExpr(x2gParser.UnaryExprContext ctx) {
+		try {
+			Float f = (Float)visit(ctx.expr());
+			if (verbose) System.err.println("expr:MINUS expr: " + -f);
+			return -f;
+		}
+		catch (ClassCastException e) {
+			evalError(e, "MINUS expr");
+		}
+		return null;
+	}
+
+   // expr op=(MULT|DIV) expr
+   // expr op=(ADD|MINUS) expr
+	@Override public Object visitArithExpr(x2gParser.ArithExprContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	// expr: '(' expr ')'
+	@Override public Object visitParensExpr(x2gParser.ParensExprContext ctx) {
+		return visit(ctx.expr());
+	}
+
+	// expr: eval_expr
+	@Override public Object visitEvalExpr(x2gParser.EvalExprContext ctx) {
+		return visit(ctx.eval_expr());
+	}
+
+	// expr: literal_expr
+	@Override public Object visitLiteralExpr(x2gParser.LiteralExprContext ctx) {
+		return visit(ctx.literal_expr());
+	}
+
+	@Override public Object visitEval_expr(x2gParser.Eval_exprContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	// literal_expr: STR
+	@Override public String visitLiteralString(x2gParser.LiteralStringContext ctx) {
+		return ctx.STR().getText();
+	}
+
+	// literal_expr: DATETIME
+	@Override public Date visitLiteralDate(x2gParser.LiteralDateContext ctx) {
+		return Date.valueOf(ctx.DATETIME().getText());
+	}
+
+	// literal_expr: NUMBER
+	@Override public Float visitLiteralNumber(x2gParser.LiteralNumberContext ctx) {
+		return Float.valueOf(ctx.NUMBER().getText());
+	}
+
+	// literal_expr: BOOL
+	@Override public Boolean visitLiteralBool(x2gParser.LiteralBoolContext ctx) {
+		String kw = ctx.getChild(0).getText();
+		if (verbose) System.err.println("literal_expr:BOOL: " + kw);
+		return (kw == "TRUE" || kw == "true") ? true : false;
+	}
+
+	// string_expr: string_expr PLUS string_expr
+	@Override public String visitStringConcat(x2gParser.StringConcatContext ctx) {
+		return ctx.string_expr(0).getText() + ctx.string_expr(1).getText();
+	}
+
+	// string_expr: STR
+	@Override public String visitStringSTR(x2gParser.StringSTRContext ctx) {
+		return ctx.STR().getText();
+	}
 }
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet

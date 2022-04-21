@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.*;
 import java.util.*;
 import java.io.*;
 
+
 public class Main {
 	static final String conflictOptions[] = { "create", "link", "merge", "reject" };
 	static String x2g = "X2G";

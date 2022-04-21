@@ -116,20 +116,20 @@ property_assignment_list
 
 property_assignment
 	: property_name_expr
-	| property_unique_stmt
-	| property_if_stmt
+	| property_unique
+	| property_if
 	;
 
 property_name_expr
-	: property_name '=' expr {
-		if (verbose) notifyErrorListeners("property " + $property_name.text + "=" + $expr.text);
-		if (symtab.resolveOnly($property_name.text) != null)
-			notifyErrorListeners("property " + $property_name.text + " overidden!");
-		symtab.define($property_name.text, VarType.PROPERTY, $expr.text);
+	: ID '=' expr {
+		if (verbose) notifyErrorListeners("property " + $ID.text + "=" + $expr.text);
+		if (symtab.resolveOnly($ID.text) != null)
+			notifyErrorListeners("property " + $ID.text + " overidden!");
+		symtab.define($ID.text, VarType.PROPERTY, $expr.text);
 	  }
 	;
 
-property_unique_stmt
+property_unique
 	: UNIQUE '(' property_name_list ')' {
 		if (verbose) notifyErrorListeners("unique constraint found: " + $property_name_list.text);
 		if (symtab.resolveOnly("__unique") != null)
@@ -142,37 +142,41 @@ property_unique_stmt
 		//		notifyErrorListeners("unique constraint: property " + prop + " unknown!");
 	;
 
-property_if_stmt
+property_if
 	: IF boolean_expr '{' property_assignment_list '}'
 	;
 	
 property_name_list
-	: property_name (',' property_name)*
+	: ID (',' ID)*
 	;
 
-property_type			// TODO: not used
+// TODO: not used at the moment, untyped properties
+property_type
 	: STRING
 	| DATE
 	| NUMERIC
 	| BOOLEAN
+	| SETOF '(' property_type ')'
+	| TUPLEOF '(' property_type ')'
 	;
 
 // SECTION: expressions
 boolean_expr
-	: boolean_expr AND boolean_expr
-	| boolean_expr OR boolean_expr
-	| NOT boolean_expr
-	| '(' boolean_expr ')'
-	| boolean_literal
-	| expr relop expr
+	: boolean_expr op=AND boolean_expr		#boolAndOr
+	| boolean_expr op=OR boolean_expr		#boolAndOr
+	| NOT '(' boolean_expr ')'					#boolNot
+	| '(' boolean_expr ')'						#boolParens
+	| BOOL											#boolLiteral
+	| expr op=(LT|GT|LE|GE|EQ|NEQ) expr		#boolRelop
 	;
 
 expr
-	: unaryop expr
-	| expr arithop expr
-	| '(' expr ')'
-	| eval_expr
-	| literal_expr
+	: MINUS expr							#unaryExpr
+	| expr op=(MULT|DIV) expr			#arithExpr
+	| expr op=(ADD|MINUS) expr			#arithExpr
+	| '(' expr ')'							#parensExpr
+	| eval_expr								#evalExpr
+	| literal_expr							#literalExpr
 	; 
 
 eval_expr
@@ -180,42 +184,23 @@ eval_expr
 		if (symtab.resolve($ID.text) == null)
 			notifyErrorListeners("xml fragment variable $" + $ID.text + " is unbound!");
 	  }
-	| '$' ID '.' property_name {
+	| '$' ID '.' ID {
 		if (symtab.resolve($ID.text) == null)
 			notifyErrorListeners("node or edge variable $" + $ID.text + " is unbound!");
 	  }
 	;
 
 literal_expr
-	: string_literal
-	| date_literal
-	| numeric_literal
-	| boolean_literal
+	: STR				#literalString
+	| DATETIME		#literalDate
+	| NUMBER			#literalNumber
+	| BOOL			#literalBool
 	;
-
-
-string_literal: STR;
-
-date_literal: DATETIME;
-
-numeric_literal: NUMBER;
-
-boolean_literal: (TRUE|FALSE);
 
 string_expr
-	: string_expr '+' string_expr
-	| eval_expr
-	| string_literal
+	: string_expr '+' string_expr		#stringConcat
+	// TODO: | eval_expr								#stringEval
+	| STR										#stringSTR
 	;
-
-// SECTION: Operators
-relop: '<' | '>' | '<=' | '>=' | '=' | '==' | '<>' | '!=';
-
-unaryop: '-' | '!';  // unary MINUS
-
-arithop: '+' | '-' | '*' | DIV | MOD; // binary MINUS
-
-// SECTION: Property names
-property_name:	ID;
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet

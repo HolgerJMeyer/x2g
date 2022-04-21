@@ -5,6 +5,7 @@ lexer grammar x2gLexer;
 }
 
 tokens {
+	BOOL,
 	STR,
 	NEQ
 }
@@ -51,7 +52,7 @@ BOOLEAN:		'BOOLEAN' | 'boolean';
 CREATE:		'CREATE' | 'create';
 DATE:			'DATE' | 'date';
 EDGE:			'EDGE' | 'edge';
-FALSE:		'FALSE' | 'false';
+FALSE:		('FALSE' | 'false')		-> type(BOOL);
 FOR:			'FOR' | 'for';
 FROM:			'FROM' | 'from';
 IF:			'IF'| 'if';
@@ -63,9 +64,11 @@ NOT:			'NOT' | 'not';
 NUMERIC:		'NUMERIC' | 'numeric';
 OR:			'OR' | 'or';
 ORDERBY:		'ORDER' 'BY' | 'order' 'by';
+SETOF:		'SETOF' | 'setof';
 STRING:		'STRING' | 'string';
 TO:			'TO' | 'to';
-TRUE:			'TRUE' | 'true';
+TRUE:			('TRUE' | 'true')			-> type(BOOL);
+TUPLEOF:		'TUPLEOF' | 'tupleof';
 UNIQUE:		'UNIQUE'| 'unique';
 USING:		'USING'| 'using';
 XPATH:		'XPATH'| 'xpath';
@@ -83,7 +86,7 @@ COMMA:		',';
 DOT:			'.';
 PLUS:			'+';
 MINUS:		'-';
-TIMES:		'*';
+MULT:			'*';
 DIV:			'/'|'div'|'DIV';
 MOD:			'%'|'mod'|'MOD';
 //BITOR:		'|';
@@ -98,7 +101,6 @@ BANGNOT:		'!='	-> type(NEQ);
 UNEQ:			'<>'	-> type(NEQ);
 EQ:			'=';
 IDENT:		'==';
-ASSIGN:		':=';
 LPAREN:		'(';
 RPAREN:		')';
 LBRACE:		'{';

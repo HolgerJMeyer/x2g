@@ -8,7 +8,7 @@ CLASSPATH=".:$(COMMONS):$(JDOM):$(JAXEN):$(AJARS):$(CLASSDIR):"
 # ANTLR4 expecting version 4.9.3
 ANTLR = antlr4
 #AFLAGS = -o $(TARGET) -package $(TARGET)
-AFLAGS = -visitor -listener
+AFLAGS = -visitor -no-listener
 ASRCS = $(wildcard *.g4)
 LIBDIR = /usr/share/java/antlr4
 COMMONS = /usr/share/java/apache-commons-cli.jar
@@ -37,7 +37,7 @@ MYSRCS = \
 	XPathTest.java \
 	$(GRAPHSRCS) \
 	$(XMLSRCS)
-LISTENER = x2gParserBaseListener.java x2gParserListener.java
+#LISTENER = x2gParserBaseListener.java x2gParserListener.java
 VISITOR = x2gParserBaseVisitor.java x2gParserVisitor.java
 GENSRCS = $(LISTENER) $(VISITOR) $(ASRCS:.g4=.java)
 GENCLASSES = $(GENSRCS:.java=.class)
