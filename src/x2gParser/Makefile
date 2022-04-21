@@ -62,7 +62,7 @@ x2gParserBaseVisitor.java:	x2gParserVisitor.java
 Evaluator.java:	x2gParserBaseVisitor.java
 x2gParser.java:	x2gLexer.java
 
-run:	runhelp runparse runeval runtest
+run:	runhelp runparse werewolf graphtest
 
 runhelp:
 	export CLASSPATH=$(CLASSPATH) ; java Main -h

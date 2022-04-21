@@ -173,7 +173,7 @@ boolean_expr
 expr
 	: MINUS expr							#unaryExpr
 	| expr op=(MULT|DIV) expr			#arithExpr
-	| expr op=(ADD|MINUS) expr			#arithExpr
+	| expr op=(PLUS|MINUS) expr		#arithExpr
 	| '(' expr ')'							#parensExpr
 	| eval_expr								#evalExpr
 	| literal_expr							#literalExpr
@@ -198,8 +198,8 @@ literal_expr
 	;
 
 string_expr
-	: string_expr '+' string_expr		#stringConcat
-	// TODO: | eval_expr								#stringEval
+	: string_expr PLUS string_expr	#stringConcat
+	// TODO: | eval_expr					#stringEval
 	| STR										#stringSTR
 	;
 
