@@ -7,19 +7,21 @@ import java.util.ArrayList;
 public class SymbolTable {
 	private Scope globals;
 	private Scope current;
+	private int nesting;
 	private ArrayList<Scope> scopes = new ArrayList<Scope>();	
 
 	public SymbolTable() {
 		current = globals = new Scope("GLOBAL");
+		nesting = 0;
 		globals.define("$allnodes", VarType.NODESET);
 		globals.define("$alledges", VarType.EDGESET);
 		scopes.add(globals);
 	}
 
 	/* Attention: new scope defined under current scope, new scope becomes current */
-	public Scope newScope(String name) { scopes.add(current = new Scope(name, current)); return current; }
+	public Scope newScope(String name) { nesting++; scopes.add(current = new Scope(name + "." + nesting, current)); return current; }
 
-	public Scope endScope() { return current = current.getEnclosingScope(); }
+	public Scope endScope() { --nesting; return current = current.getEnclosingScope(); }
 
    public void define(String name, VarType type, Object binding) { current.define(name, type, binding); }
 

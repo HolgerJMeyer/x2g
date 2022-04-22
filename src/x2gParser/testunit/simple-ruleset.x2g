@@ -13,7 +13,7 @@ match xpath("//story") using $s {
 			age = $p.xpath("age"),
 			unique (name, age),
 			// conditional assignment
-			if $p.xpath("appellation/text()") == "Mr" {
+			if ($p.xpath("appellation/text()") == "Mr") {
 				gender = "male" + "narrator"
 			}
 		},

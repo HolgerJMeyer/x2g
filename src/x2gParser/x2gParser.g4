@@ -29,16 +29,13 @@ options {
  * Expression types
  */
 x2g
-	: x2g_rule* {
-		if (verbose) System.err.println("Symtab[[" + symtab + "]]");
-	  }
+	: x2g_rule*
 	;
 
 x2g_rule
 	: MATCH {
-		symtab.newScope("match-" + $MATCH.line);
+		symtab.newScope("match");
 	  } bind_expr_list '{' body '}' {
-		if (verbose) notifyErrorListeners("ending scope: " + symtab.getCurrentScope().toString());
 		symtab.endScope();
 	  }
 	;
@@ -83,7 +80,6 @@ body_action
 	  } '{' property_assignment_list '}' {
 		Scope scope = symtab.getCurrentScope();
 		symtab.define("__binding", VarType.PROPERTY, scope);
-		if (verbose) notifyErrorListeners("ending scope: " + scope.toString());
 		symtab.endScope();
 	  }
 	| CREATE EDGE '$' ID FROM '$' n1=ID TO '$'n2=ID LABEL string_expr {
@@ -101,11 +97,9 @@ body_action
 	  } '{' property_assignment_list '}' {
 		Scope scope = symtab.getCurrentScope();
 		symtab.define("__binding", VarType.PROPERTY, scope);
-		if (verbose) notifyErrorListeners("ending scope: " + scope.toString());
 		symtab.endScope();
 	  }
-	// TODO: body_action
-	//| IF boolean_expr '{' body_action '}'
+	| IF '(' boolean_expr ')' '{' body_action '}'
 	| x2g_rule /* nested match */
 	| /* epsilon */
 	;
@@ -135,15 +129,14 @@ property_unique
 		if (symtab.resolveOnly("__unique") != null)
 			notifyErrorListeners("unique constraint (" + $property_name_list.text + ") redefines earlier one!");
 		symtab.define("__unique", VarType.PROPERTY, $property_name_list.text);
+		for (String prop : $property_name_list.text.split(","))
+			if (symtab.resolveOnly(prop) == null)
+				notifyErrorListeners("unique constraint: property " + prop + " unknown!");
 	  }
-		// TODO:
-		//for (String prop : $property_name_list)
-		//	if (symtab.resolveOnly(prop) == null)
-		//		notifyErrorListeners("unique constraint: property " + prop + " unknown!");
 	;
 
 property_if
-	: IF boolean_expr '{' property_assignment_list '}'
+	: IF '(' boolean_expr ')' '{' property_assignment_list '}'
 	;
 	
 property_name_list
@@ -180,13 +173,13 @@ expr
 	; 
 
 eval_expr
-	: '$' ID ('.' XPATH '(' string_expr ')')? {
-		if (symtab.resolve($ID.text) == null)
-			notifyErrorListeners("xml fragment variable $" + $ID.text + " is unbound!");
+	: '$' v=ID ('.' XPATH '(' string_expr ')')? {
+		if (symtab.resolve($v.text) == null)
+			notifyErrorListeners("xml fragment variable $" + $v.text + " is unbound!");
 	  }
-	| '$' ID '.' ID {
-		if (symtab.resolve($ID.text) == null)
-			notifyErrorListeners("node or edge variable $" + $ID.text + " is unbound!");
+	| '$' v=ID '.' p=ID {
+		if (symtab.resolve($v.text) == null)
+			notifyErrorListeners("node or edge variable $" + $v.text + " is unbound!");
 	  }
 	;
 

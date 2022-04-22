@@ -15,9 +15,10 @@ match xpath("//story") using $s {
 			//person = $p,
 			unique (name, age),
 			// TEST: should raise "unique constraint redefines earlier one"
-			unique (name, age),
+			// TEST: gender not defined before [just after]
+			unique (name, age, gender),
 			// conditional assignment
-			if $p.xpath("appellation/text()") == "Mr" {
+			if ($p.xpath("appellation/text()") == "Mr") {
 				gender = "male" + "narrator"
 			}
 		},

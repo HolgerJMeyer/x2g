@@ -93,7 +93,7 @@ public class Main {
 		// Create symbol table with global scope
 		SymbolTable symtab = new SymbolTable();
 		// Create parser that feeds off of the token buffer
-		x2gParser parser = new x2gParser(tokens, symtab, false);
+		x2gParser parser = new x2gParser(tokens, symtab, verbose);
 		// Remove standard ErrorListener ConsoleErrorListener
 		parser.removeErrorListeners();
 		parser.addErrorListener(new ErrorListener());
