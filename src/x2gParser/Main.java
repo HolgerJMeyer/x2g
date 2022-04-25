@@ -29,7 +29,8 @@ public class Main {
 				if (e != null)
 					System.err.println(x2g + ": exception: " + e);
 				System.err.println(x2g + ": rule stack: " + stack);
-				System.err.println(x2g + ": line " + line + ":" + pos + ": " + msg);
+				//System.err.println(x2g + ": line " + line + ":" + pos + ": " + msg);
+				System.err.println(x2g + ": line " + line + ": " + msg);
 			} else {
 				System.err.println(x2g + ": line " + line + ": " + msg);
 			}

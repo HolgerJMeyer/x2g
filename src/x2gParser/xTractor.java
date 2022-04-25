@@ -72,16 +72,19 @@ public class xTractor {
 
 	public List<Content> xtract(String xp, Map<String, Object> vars) {
 		try {
-			List<Content> list = new ArrayList<Content>();
+			// TODO: AbstractXPathCompiled<T>
+			// http://www.jdom.org/docs/apidocs/org/jdom2/xpath/util/AbstractXPathCompiled.html
+			//List<Content> list = new ArrayList<Content>();
 			if (verbose) System.err.println("xpath compile: " + xp);
 			XPathFactory xpf = XPathFactory.instance();
 			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars);
 			List<Content> nodes = expr.evaluate(doc);
 			if (verbose) System.err.println("xpath evaluate: " + nodes);
-			for (Content n : nodes) {
-				list.add(n);
-			}
-			return list;
+			return nodes;
+			//for (Content n : nodes) {
+			//	list.add(n);
+			//}
+			//return list;
 		} catch (Exception e) {
 			System.err.println("xpath(" + xp + ") evaluation failed: " + e);
 		}
