@@ -70,6 +70,14 @@ body
 	;
 
 body_action
+	: create_node
+	| create_edge
+	| if_stmt
+	| x2g_rule
+	| /* epsilon */
+	;
+
+create_node
 	: CREATE NODE '$' ID LABEL string_expr {
 		if (verbose) notifyErrorListeners("node set variable $" + $ID.text + " labeled " + $string_expr.text);
 		if (symtab.resolve($ID.text) != null)
@@ -82,14 +90,18 @@ body_action
 		symtab.define("__binding", VarType.PROPERTY, scope);
 		symtab.endScope();
 	  }
-	| CREATE EDGE '$' ID FROM '$' n1=ID TO '$'n2=ID LABEL string_expr {
+	;
+
+create_edge
+	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$'n2=ID LABEL string_expr {
 		if (verbose) notifyErrorListeners("edgeset variable $" + $ID.text + " labeled " + $string_expr.text);
-		if (symtab.resolve($ID.text) != null)
-			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+		if (symtab.resolve($n0.text) != null)
+			notifyErrorListeners("binding $" + $n0.text + " hides earlier one!");
 		if (symtab.resolve($n1.text) == null)
 			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
 		if (symtab.resolve($n2.text) == null)
 			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
+		symtab.define($ID.text, VarType.EDGE);
 		symtab.newScope("edge.properties");
 		symtab.define("__label", VarType.PROPERTY, $string_expr.text);
 		symtab.define("__from", VarType.PROPERTY, $n1.text);
@@ -99,9 +111,10 @@ body_action
 		symtab.define("__binding", VarType.PROPERTY, scope);
 		symtab.endScope();
 	  }
-	| IF '(' boolean_expr ')' '{' body_action '}'
-	| x2g_rule /* nested match */
-	| /* epsilon */
+	;
+
+if_stmt
+	: IF '(' boolean_expr ')' '{' body_action '}'
 	;
 
 property_assignment_list
