@@ -125,11 +125,11 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitCreate_edge(x2gParser.Create_edgeContext ctx) {
-		symtab.define(ctx.n0().getText(), VarType.EDGE);
+		symtab.define(ctx.ID(0).getText(), VarType.EDGE);
 		Scope scope = symtab.newScope("edge.properties");
 		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
-		symtab.define("__from", VarType.PROPERTY, ctx.n1().getText());
-		symtab.define("__to", VarType.PROPERTY, ctx.n2().getText());
+		symtab.define("__from", VarType.PROPERTY, ctx.ID(1).getText());
+		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
 		visitChildren(ctx);
 		symtab.define("__binding", VarType.PROPERTY, scope);
 		symtab.endScope();
@@ -137,8 +137,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitIf_stmt(x2gParser.If_stmtContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+		if ((Boolean)visit(ctx.boolean_expr())) {
+			return visit(ctx.body_action());
+		}
+		return null;
 	}
 
 	@Override public Object visitProperty_name_expr(x2gParser.Property_name_exprContext ctx) {
@@ -155,8 +157,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+		if ((Boolean)visit(ctx.boolean_expr())) {
+			return visit(ctx.property_assignment_list());
+		}
+		return null;
 	}
 
 	//@Override public Object visitProperty_type(x2gParser.Property_typeContext ctx) { return visitChildren(ctx); }

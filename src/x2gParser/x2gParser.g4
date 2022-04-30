@@ -94,14 +94,14 @@ create_node
 
 create_edge
 	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$'n2=ID LABEL string_expr {
-		if (verbose) notifyErrorListeners("edgeset variable $" + $ID.text + " labeled " + $string_expr.text);
+		if (verbose) notifyErrorListeners("edgeset variable $" + $n0.text + " labeled " + $string_expr.text);
 		if (symtab.resolve($n0.text) != null)
 			notifyErrorListeners("binding $" + $n0.text + " hides earlier one!");
 		if (symtab.resolve($n1.text) == null)
 			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
 		if (symtab.resolve($n2.text) == null)
 			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
-		symtab.define($ID.text, VarType.EDGE);
+		symtab.define($n0.text, VarType.EDGE);
 		symtab.newScope("edge.properties");
 		symtab.define("__label", VarType.PROPERTY, $string_expr.text);
 		symtab.define("__from", VarType.PROPERTY, $n1.text);
