@@ -192,7 +192,7 @@ literal_expr
 
 string_expr
 	: string_expr PLUS string_expr	#stringConcat
-	// TODO: | eval_expr					#stringEval
+	| eval_expr								#stringEval
 	| STR										#stringSTR
 	;
 

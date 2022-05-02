@@ -263,6 +263,12 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return ctx.string_expr(0).getText() + ctx.string_expr(1).getText();
 	}
 
+	// string_expr: eval_expr
+	@Override public String visitStringEval(x2gParser.StringEvalContext ctx) {
+		// TODO:
+		return (String)visit(ctx.eval_expr());
+	}
+
 	// string_expr: STR
 	@Override public String visitStringSTR(x2gParser.StringSTRContext ctx) {
 		return ctx.STR().getText();
