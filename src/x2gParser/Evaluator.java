@@ -61,13 +61,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
-	}
-
-	@Override public Object visitBind_expr_list(x2gParser.Bind_expr_listContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+		symtab.newScope("match");
+		visitChildren(ctx);
+		symtab.endScope();
+		return null;
 	}
 
 	@Override public Object visitBind_expr(x2gParser.Bind_exprContext ctx) {
@@ -78,6 +75,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		switch (kw) {
 		case "xpath":
 			List<Content> list = xtractor.xtract(xp);
+			symtab.define(ctx.ID().getText(), VarType.XPATH, ctx.string_expr().getText());
 			/* TODO: Store all current bindings of an xpath result
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
@@ -103,59 +101,69 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			if (verbose) System.err.println("@bind_expr: " + kw + "(" + xp + ") = " + slist);
 			break;
 		case "node":
+			symtab.define(ctx.ID().getText(), VarType.NODE, ctx.string_expr().getText());
 			/* TODO: */
+			break;
 		case "edge":
+			symtab.define(ctx.ID().getText(), VarType.EDGE, ctx.string_expr().getText());
 			/* TODO: */
+			break;
 		default:
 			break;
 		}
 		return null;
 	}
 
-	@Override public Object visitBody(x2gParser.BodyContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+	@Override public Object visitCreate_node(x2gParser.Create_nodeContext ctx) {
+		symtab.define(ctx.ID().getText(), VarType.NODE);
+		Scope scope = symtab.newScope("node.properties");
+		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
+		visitChildren(ctx);
+      symtab.define("__binding", VarType.PROPERTY, scope);
+      symtab.endScope();
+		return null;
 	}
 
-	@Override public Object visitBody_action(x2gParser.Body_actionContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+	@Override public Object visitCreate_edge(x2gParser.Create_edgeContext ctx) {
+		symtab.define(ctx.ID(0).getText(), VarType.EDGE);
+		Scope scope = symtab.newScope("edge.properties");
+		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
+		symtab.define("__from", VarType.PROPERTY, ctx.ID(1).getText());
+		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
+		visitChildren(ctx);
+		symtab.define("__binding", VarType.PROPERTY, scope);
+		symtab.endScope();
+		return null;
 	}
 
-	@Override public Object visitProperty_assignment_list(x2gParser.Property_assignment_listContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
-	}
-
-	@Override public Object visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+	@Override public Object visitIf_stmt(x2gParser.If_stmtContext ctx) {
+		if ((Boolean)visit(ctx.boolean_expr())) {
+			return visit(ctx.body_action());
+		}
+		return null;
 	}
 
 	@Override public Object visitProperty_name_expr(x2gParser.Property_name_exprContext ctx) {
 		// TODO:
-		return visitChildren(ctx);
+		visitChildren(ctx);
+		symtab.define(ctx.ID().getText(), VarType.PROPERTY, ctx.expr().getText());
+		return null;
 	}
 
 	@Override public Object visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+		visitChildren(ctx);
+		symtab.define("__unique", VarType.PROPERTY, ctx.property_name_list().getText());
+		return null;
 	}
 
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+		if ((Boolean)visit(ctx.boolean_expr())) {
+			return visit(ctx.property_assignment_list());
+		}
+		return null;
 	}
 
-	@Override public Object visitProperty_name_list(x2gParser.Property_name_listContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
-	}
-
-	@Override public Object visitProperty_type(x2gParser.Property_typeContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
-	}
+	//@Override public Object visitProperty_type(x2gParser.Property_typeContext ctx) { return visitChildren(ctx); }
 
    // boolean_expr: boolean_expr op=(AND|OR) boolean_expr
 	@Override public Boolean visitBoolAndOr(x2gParser.BoolAndOrContext ctx) {

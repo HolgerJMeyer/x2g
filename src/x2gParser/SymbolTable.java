@@ -5,6 +5,7 @@ import java.util.ArrayList;
  * Patterns. The Pragmatic Bookshelf, Releigh, MA, 2010.
  */
 public class SymbolTable {
+	final boolean CLEANUP = false;
 	private Scope globals;
 	private Scope current;
 	private int nesting;
@@ -19,9 +20,22 @@ public class SymbolTable {
 	}
 
 	/* Attention: new scope defined under current scope, new scope becomes current */
-	public Scope newScope(String name) { nesting++; scopes.add(current = new Scope(name + "." + nesting, current)); return current; }
+	public Scope newScope(String name) {
+		nesting++;
+		scopes.add(current = new Scope(name + "." + nesting, current));
+		return current;
+	}
 
-	public Scope endScope() { --nesting; return current = current.getEnclosingScope(); }
+	public Scope endScope() {
+		--nesting;
+		if (CLEANUP) {
+			Scope old = current;
+			current = old.getEnclosingScope();
+			scopes.remove(old);
+			return current;
+		}
+		return current = current.getEnclosingScope();
+	}
 
    public void define(String name, VarType type, Object binding) { current.define(name, type, binding); }
 

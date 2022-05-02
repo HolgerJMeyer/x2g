@@ -100,15 +100,17 @@ public class Main {
 		parser.addErrorListener(new ErrorListener());
 
 		ParseTree tree = parser.x2g();	// begin parsing at init rule
-		if (verbose)
+		if (verbose) {
 			System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
+			System.err.println(x2g + " symbol table after parsing: " + symtab.toString());
+		}
 		
 		if (parseOnly) {
 			return;
 		}
 
 		final gGraph graph = new gGraph(verbose);
-		final Evaluator eval = new Evaluator(symtab, graph, verbose);
+		final Evaluator eval = new Evaluator(new SymbolTable(), graph, verbose);
 
 		// process all xml files from a given folder or specified on command line
 		List<File> filelist = new ArrayList<File>();
