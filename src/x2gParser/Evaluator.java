@@ -274,7 +274,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	// string_expr: eval_expr
 	@Override public String visitStringEval(x2gParser.StringEvalContext ctx) {
 		// TODO:
-		return (String)visit(ctx.eval_expr());
+		return visit(ctx.eval_expr()).toString();
 	}
 
 	// string_expr: STR
