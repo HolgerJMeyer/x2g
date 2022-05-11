@@ -181,16 +181,22 @@ expr
 	| expr op=(MULT|DIV) expr			#arithExpr
 	| expr op=(PLUS|MINUS) expr		#arithExpr
 	| '(' expr ')'							#parensExpr
-	| eval_expr								#evalExpr
+	| xpath_expr							#xpathExpr
+	| prop_expr								#propExpr
 	| literal_expr							#literalExpr
 	; 
 
-eval_expr /* TODO */
+xpath_expr
 	: '$' v=ID ('.' XPATH '(' x=string_expr ')')? {
+		// TODO: optionalen teil .xpath(...) testen!
 		if (symtab.resolve($v.text) == null)
 			notifyErrorListeners("xml fragment variable $" + $v.text + " is unbound!");
 	  }
-	| '$' v=ID '.' p=ID {
+	;
+
+prop_expr
+	: '$' v=ID '.' p=ID {
+		// TODO: optionales .<property>, wenn nicht, dann implizit .__label?
 		if (symtab.resolve($v.text) == null)
 			notifyErrorListeners("node or edge variable $" + $v.text + " is unbound!");
 	  }
@@ -203,9 +209,13 @@ literal_expr
 	| BOOL			#literalBool
 	;
 
+/*
+ * string_expr ausdifferenzieren, string-expr als parameter in xpath() anders als evaluierung string
+ */
 string_expr
 	: string_expr PLUS string_expr	#stringConcat
-	// TODO: | eval_expr					#stringEval
+	| xpath_expr							#stringXpath
+	| prop_expr								#stringProp
 	| STR										#stringSTR
 	;
 

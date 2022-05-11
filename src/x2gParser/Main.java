@@ -55,29 +55,12 @@ public class Main {
 		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
 		org.apache.commons.cli.CommandLine cmd = cmdparser.parse(options, args);
 
-		if (cmd.hasOption("conflict")) {
-			conflict = cmd.getOptionValue("c");
-		}
-
-		if (cmd.hasOption("input-dir")) {
-			inputDir = cmd.getOptionValue("d");
-		}
-
-		if (cmd.hasOption("output-format")) {
-			outputFormat = cmd.getOptionValue("f");
-		}
-
-		if (cmd.hasOption("out-file")) {
-			outFile = cmd.getOptionValue("o");
-		}
-
-		if (cmd.hasOption("verbose")) {
-			verbose = true;
-		}
-
-		if (cmd.hasOption("parse-only")) {
-			parseOnly = true;
-		}
+		if (cmd.hasOption("conflict")) { conflict = cmd.getOptionValue("c"); }
+		if (cmd.hasOption("input-dir")) { inputDir = cmd.getOptionValue("d"); }
+		if (cmd.hasOption("output-format")) { outputFormat = cmd.getOptionValue("f"); }
+		if (cmd.hasOption("out-file")) { outFile = cmd.getOptionValue("o"); }
+		if (cmd.hasOption("verbose")) { verbose = true; }
+		if (cmd.hasOption("parse-only")) { parseOnly = true; }
 
 		if (cmd.hasOption("help")) {
 			org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();

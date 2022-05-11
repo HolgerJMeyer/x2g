@@ -226,20 +226,20 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return visit(ctx.expr());
 	}
 
-	// expr: eval_expr
-	@Override public Object visitEvalExpr(x2gParser.EvalExprContext ctx) {
-		return visit(ctx.eval_expr());
-	}
-
 	// expr: literal_expr
 	@Override public Object visitLiteralExpr(x2gParser.LiteralExprContext ctx) {
 		return visit(ctx.literal_expr());
 	}
 
-	@Override public Object visitEval_expr(x2gParser.Eval_exprContext ctx) {
+	@Override public Object visitXpath_expr(x2gParser.Xpath_exprContext ctx) {
+		// TODO:
+		return visitChildren(ctx);
+	}
+
+	@Override public Object visitProp_expr(x2gParser.Prop_exprContext ctx) {
 		// TODO:
 		String kw = ctx.v.getText();
-		String xp = (String)visit(ctx.string_expr());
+		String xp = ctx.p.getText();
 		return xp;
 	}
 
@@ -268,6 +268,18 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	// string_expr: string_expr PLUS string_expr
 	@Override public String visitStringConcat(x2gParser.StringConcatContext ctx) {
 		return ctx.string_expr(0).getText() + ctx.string_expr(1).getText();
+	}
+
+	// string_expr: xpath_expr
+	@Override public String visitStringXpath(x2gParser.StringXpathContext ctx) {
+		// TODO:
+		return visit(ctx.xpath_expr()).toString();
+	}
+
+	// string_expr: prop_expr
+	@Override public String visitStringProp(x2gParser.StringPropContext ctx) {
+		// TODO:
+		return visit(ctx.prop_expr()).toString();
 	}
 
 	// string_expr: STR
