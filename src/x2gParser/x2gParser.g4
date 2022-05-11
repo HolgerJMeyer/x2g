@@ -185,8 +185,8 @@ expr
 	| literal_expr							#literalExpr
 	; 
 
-eval_expr
-	: '$' v=ID ('.' XPATH '(' string_expr ')')? {
+eval_expr /* TODO */
+	: '$' v=ID ('.' XPATH '(' x=string_expr ')')? {
 		if (symtab.resolve($v.text) == null)
 			notifyErrorListeners("xml fragment variable $" + $v.text + " is unbound!");
 	  }

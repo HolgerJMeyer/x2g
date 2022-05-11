@@ -36,8 +36,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	public void evalError(Exception e, String where) {
 		System.err.println(Main.x2g + ": " + where + ": " + e);
-		System.err.println("Symtab[[" + symtab + "]]");
-		System.err.println("Graph[[" + graph + "]]");
+		if (verbose) {
+			System.err.println("Symtab[[" + symtab + "]]");
+			System.err.println("Graph[[" + graph + "]]");
+		}
 	}
 
 	/*
@@ -51,15 +53,6 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	 *	- The @Override are just for allerting if parser rules changei and so do ParserBasicVisitor.
 	 *
 	 */
-	@Override public Object visitX2g(x2gParser.X2gContext ctx) {
-		visitChildren(ctx);
-		if (verbose) {
-			System.err.println("Symtab[[" + symtab + "]]");
-			System.err.println("Graph[[" + graph + "]]");
-		}
-		return null;
-	}
-
 	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
 		symtab.newScope("match");
 		visitChildren(ctx);
@@ -103,10 +96,14 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		case "node":
 			symtab.define(ctx.ID().getText(), VarType.NODE, ctx.string_expr().getText());
 			/* TODO: */
+			System.err.println("binding of " + kw + "(" + xp + ") not support in this version");
+			if (verbose) System.err.println("@bind_expr: " + kw + "(" + xp + ")");
 			break;
 		case "edge":
 			symtab.define(ctx.ID().getText(), VarType.EDGE, ctx.string_expr().getText());
 			/* TODO: */
+			System.err.println("binding of " + kw + "(" + xp + ") not support in this version");
+			if (verbose) System.err.println("@bind_expr: " + kw + "(" + xp + ")");
 			break;
 		default:
 			break;
@@ -241,7 +238,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	@Override public Object visitEval_expr(x2gParser.Eval_exprContext ctx) {
 		// TODO:
-		return visitChildren(ctx);
+		String kw = ctx.v.getText();
+		String xp = (String)visit(ctx.string_expr());
+		return xp;
 	}
 
 	// literal_expr: STR

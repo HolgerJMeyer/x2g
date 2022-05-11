@@ -137,10 +137,14 @@ public class Main {
 			}
 		}
 		for (File file : filelist) {
-			if (verbose)
+			if (verbose) {
 				System.err.println(x2g + ": processing xml file " + file.getAbsolutePath());
+			}
 			eval.setXtractor(file.getAbsolutePath());
 			eval.visit(tree);
+		}
+		if (verbose) {
+			System.err.println(x2g + ": graph [[" + graph.toString() + "]]");
 		}
 	}
 }
