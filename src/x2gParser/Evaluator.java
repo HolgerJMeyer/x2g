@@ -115,8 +115,8 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.define(ctx.ID().getText(), VarType.NODE);
 		Scope scope = symtab.newScope("node.properties");
 		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
+      symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
 		visitChildren(ctx);
-      symtab.define("__binding", VarType.PROPERTY, scope);
       symtab.endScope();
 		return null;
 	}
@@ -127,8 +127,8 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
 		symtab.define("__from", VarType.PROPERTY, ctx.ID(1).getText());
 		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
+      symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
 		visitChildren(ctx);
-		symtab.define("__binding", VarType.PROPERTY, scope);
 		symtab.endScope();
 		return null;
 	}
@@ -233,14 +233,26 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	@Override public Object visitXpath_expr(x2gParser.Xpath_exprContext ctx) {
 		// TODO:
-		return visitChildren(ctx);
+		visitChildren(ctx);
+		String vid = ctx.v.getText();
+		String xp = ctx.x.getText();
+		Variable v = symtab.resolve(vid);
+		if (v != null) {
+			System.err.println("@xpath_expr: " + v);
+		}
+		return v;
 	}
 
 	@Override public Object visitProp_expr(x2gParser.Prop_exprContext ctx) {
 		// TODO:
-		String kw = ctx.v.getText();
-		String xp = ctx.p.getText();
-		return xp;
+		visitChildren(ctx);
+		String vid = ctx.v.getText();
+		String pid = ctx.p.getText();
+		Variable v = symtab.resolve(vid);
+		if (v != null) {
+			System.err.println("@prop_expr: " + v);
+		}
+		return v;
 	}
 
 	// literal_expr: STR
@@ -261,7 +273,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	// literal_expr: BOOL
 	@Override public Boolean visitLiteralBool(x2gParser.LiteralBoolContext ctx) {
 		String kw = ctx.getChild(0).getText();
-		if (verbose) System.err.println("literal_expr:BOOL: " + kw);
+		if (verbose) System.err.println("@literal_expr:BOOL: " + kw);
 		return (kw == "TRUE" || kw == "true") ? true : false;
 	}
 

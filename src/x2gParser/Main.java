@@ -93,7 +93,8 @@ public class Main {
 		}
 
 		final gGraph graph = new gGraph(verbose);
-		final Evaluator eval = new Evaluator(new SymbolTable(), graph, verbose);
+		final SymbolTable synmtab = new SymbolTable(verbose);
+		final Evaluator eval = new Evaluator(symtab, graph, verbose);
 
 		// process all xml files from a given folder or specified on command line
 		List<File> filelist = new ArrayList<File>();
@@ -127,6 +128,7 @@ public class Main {
 			eval.visit(tree);
 		}
 		if (verbose) {
+			System.err.println(x2g + ": symtab [[" + symtab.toString() + "]]");
 			System.err.println(x2g + ": graph [[" + graph.toString() + "]]");
 		}
 	}

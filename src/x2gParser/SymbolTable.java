@@ -6,12 +6,16 @@ import java.util.ArrayList;
  */
 public class SymbolTable {
 	final boolean CLEANUP = false;
+	private boolean verbose;
 	private Scope globals;
 	private Scope current;
 	private int nesting;
 	private ArrayList<Scope> scopes = new ArrayList<Scope>();	
 
-	public SymbolTable() {
+	public SymbolTable() { this(false); }
+
+	public SymbolTable(boolean verb) {
+		verbose = verb;
 		current = globals = new Scope("GLOBAL");
 		nesting = 0;
 		globals.define("$allnodes", VarType.NODESET);

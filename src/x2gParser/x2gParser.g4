@@ -86,8 +86,6 @@ create_node
 		symtab.newScope("node.properties");
 		symtab.define("__label", VarType.PROPERTY, $string_expr.text);
 	  } '{' property_assignment_list '}' {
-		Scope scope = symtab.getCurrentScope();
-		symtab.define("__binding", VarType.PROPERTY, scope);
 		symtab.endScope();
 	  }
 	;
@@ -107,8 +105,6 @@ create_edge
 		symtab.define("__from", VarType.PROPERTY, $n1.text);
 		symtab.define("__to", VarType.PROPERTY, $n2.text);
 	  } '{' property_assignment_list '}' {
-		Scope scope = symtab.getCurrentScope();
-		symtab.define("__binding", VarType.PROPERTY, scope);
 		symtab.endScope();
 	  }
 	;
