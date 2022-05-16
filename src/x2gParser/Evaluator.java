@@ -115,7 +115,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.define(ctx.ID().getText(), VarType.NODE);
 		Scope scope = symtab.newScope("node.properties");
 		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
-      symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
+      // TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
 		visitChildren(ctx);
       symtab.endScope();
 		return null;
@@ -127,7 +127,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
 		symtab.define("__from", VarType.PROPERTY, ctx.ID(1).getText());
 		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
-      symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
+      // TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
 		visitChildren(ctx);
 		symtab.endScope();
 		return null;
@@ -190,35 +190,63 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	@Override public Boolean visitBoolRelop(x2gParser.BoolRelopContext ctx) {
 		Object left = visit(ctx.expr(0));
 		Object right = visit(ctx.expr(1));
+
+		/* operands have to comparable */
+		switch (ctx.op.getType()) {
+		case x2gParser.EQ:
+			return left == right;
+		case x2gParser.NEQ:
+			return left != right;
+		}
 		/*
 		 * TODO: test if type of right expr is compatible to left
-		 * Valid types are: Boolean, String, Integer, Float, Date
+		 * Valid types are: Boolean, String, Number, Date
 		 * */
+		// TODO: assume both operands are Long/Number
+		Long l = (Long)left;
+		Long r = (Long)right;
 		switch (ctx.op.getType()) {
 		case x2gParser.LT:
-				break;
+			return l < r;
+		case x2gParser.GT:
+			return l > r;
+		case x2gParser.LE:
+			return l <= r;
+		case x2gParser.GE:
+			return l >= r;
 		}
 		return false;
 	}
 
 	// expr: MINUS expr
-	@Override public Float visitUnaryExpr(x2gParser.UnaryExprContext ctx) {
+	@Override public Number visitUnaryExpr(x2gParser.UnaryExprContext ctx) {
 		try {
-			Float f = (Float)visit(ctx.expr());
-			if (verbose) System.err.println("expr:MINUS expr: " + -f);
-			return -f;
+			Long i = (Long)visit(ctx.expr());
+			if (verbose) System.err.println("expr:MINUS expr: " + -i);
+			return -i;
 		}
 		catch (ClassCastException e) {
 			evalError(e, "MINUS expr");
 		}
-		return null;
+		return 0;
 	}
 
    // expr op=(MULT|DIV) expr
    // expr op=(ADD|MINUS) expr
-	@Override public Object visitArithExpr(x2gParser.ArithExprContext ctx) {
-		// TODO:
-		return visitChildren(ctx);
+	@Override public Number visitArithExpr(x2gParser.ArithExprContext ctx) {
+		Long left = (Long)visit(ctx.expr(0));
+		Long right = (Long)visit(ctx.expr(1));
+		switch (ctx.op.getType()) {
+		case x2gParser.MULT:
+			return left * right;
+		case x2gParser.DIV:
+			return left / right;
+		case x2gParser.ADD:
+			return left + right;
+		case x2gParser.MINUS:
+			return left - right;
+		}
+		return 0;
 	}
 
 	// expr: '(' expr ')'
@@ -266,8 +294,8 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	// literal_expr: NUMBER
-	@Override public Float visitLiteralNumber(x2gParser.LiteralNumberContext ctx) {
-		return Float.valueOf(ctx.NUMBER().getText());
+	@Override public Long visitLiteralNumber(x2gParser.LiteralNumberContext ctx) {
+		return Long.valueOf(ctx.NUMBER().getText());
 	}
 
 	// literal_expr: BOOL
@@ -282,16 +310,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return ctx.string_expr(0).getText() + ctx.string_expr(1).getText();
 	}
 
-	// string_expr: xpath_expr
-	@Override public String visitStringXpath(x2gParser.StringXpathContext ctx) {
-		// TODO:
-		return visit(ctx.xpath_expr()).toString();
-	}
-
-	// string_expr: prop_expr
-	@Override public String visitStringProp(x2gParser.StringPropContext ctx) {
-		// TODO:
-		return visit(ctx.prop_expr()).toString();
+	// string_expr: eval_expr
+	@Override public String visitStringEval(x2gParser.StringEvalContext ctx) {
+		return visit(ctx.eval_expr()).toString();
 	}
 
 	// string_expr: STR

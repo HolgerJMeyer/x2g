@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Inspired by Chapter 6 from Terence Parr: Language Implementation Patterns.
@@ -29,8 +30,8 @@ public class Scope {
 	/** 
 	 * Define a new variable in the current scope.
 	 */
-	protected void define(String name, VarType type, Object binding) {
-		Variable variable = new Variable(name, type, binding);
+	protected void define(String name, VarType type, String expr) {
+		Variable variable = new Variable(name, type, expr);
 		define(variable);
 	}
 

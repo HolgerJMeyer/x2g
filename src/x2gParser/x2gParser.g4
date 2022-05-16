@@ -45,24 +45,22 @@ bind_expr_list
 	;
 
 bind_expr
-	: XPATH '(' string_expr ')' USING '$' ID {
-		if (verbose) notifyErrorListeners("xpath variable $" + $ID.text + " bound to " + $string_expr.text);
+	: b=(XPATH|NODE|EDGE) '(' string_expr ')' USING '$' ID {
+		if (verbose) notifyErrorListeners($b.text + " variable $" + $ID.text + " bound to " + $string_expr.text);
 		if (symtab.resolve($ID.text) != null)
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
-		symtab.define($ID.text, VarType.XPATH, $string_expr.text);
+		switch ($b.text) {
+		case "XPATH":
+			symtab.define($ID.text, VarType.XPATH, $string_expr.text);
+			break;
+		case "NODE":
+			symtab.define($ID.text, VarType.NODE, $string_expr.text);
+			break;
+		case "EDGE":
+			symtab.define($ID.text, VarType.EDGE, $string_expr.text);
+			break;
+		}
 	  }
-	| NODE '(' string_expr ')' USING '$' ID {
-		if (verbose) notifyErrorListeners("node variable $" + $ID.text + " bound to " + $string_expr.text);
-		if (symtab.resolve($ID.text) != null)
-			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
-		symtab.define($ID.text, VarType.NODE, $string_expr.text);
-	  }
-	| EDGE '(' string_expr ')' USING '$' ID {
-		if (verbose) notifyErrorListeners("edge variable $" + $ID.text + " bound to " + $string_expr.text);
-		if (symtab.resolve($ID.text) != null)
-			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
-		symtab.define($ID.text, VarType.EDGE, $string_expr.text);
-	  } 
 	;
 
 body
@@ -177,10 +175,15 @@ expr
 	| expr op=(MULT|DIV) expr			#arithExpr
 	| expr op=(PLUS|MINUS) expr		#arithExpr
 	| '(' expr ')'							#parensExpr
-	| xpath_expr							#xpathExpr
-	| prop_expr								#propExpr
+	| eval_expr								#evalExpr
 	| literal_expr							#literalExpr
 	; 
+
+
+eval_expr
+	: xpath_expr
+	| prop_expr
+	;
 
 xpath_expr
 	: '$' v=ID ('.' XPATH '(' x=string_expr ')')? {
@@ -210,8 +213,7 @@ literal_expr
  */
 string_expr
 	: string_expr PLUS string_expr	#stringConcat
-	| xpath_expr							#stringXpath
-	| prop_expr								#stringProp
+	| eval_expr								#stringEval
 	| STR										#stringSTR
 	;
 

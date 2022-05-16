@@ -41,7 +41,7 @@ public class SymbolTable {
 		return current = current.getEnclosingScope();
 	}
 
-   public void define(String name, VarType type, Object binding) { current.define(name, type, binding); }
+   public void define(String name, VarType type, String expr) { current.define(name, type, expr); }
 
    public void define(String name, VarType type) { current.define(name, type); }
 
