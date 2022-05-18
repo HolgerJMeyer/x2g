@@ -45,19 +45,19 @@ bind_expr_list
 	;
 
 bind_expr
-	: b=(XPATH|NODE|EDGE) '(' string_expr ')' USING '$' ID {
-		if (verbose) notifyErrorListeners($b.text + " variable $" + $ID.text + " bound to " + $string_expr.text);
+	: b=(XPATH|NODE|EDGE) '(' e=string_expr ')' USING '$' ID {
+		if (verbose) notifyErrorListeners($b.text + " variable $" + $ID.text + " bound to " + $e.text);
 		if (symtab.resolve($ID.text) != null)
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
 		switch ($b.text) {
 		case "XPATH":
-			symtab.define($ID.text, VarType.XPATH, $string_expr.text);
+			symtab.define($ID.text, VarType.XPATH, $e.text);
 			break;
 		case "NODE":
-			symtab.define($ID.text, VarType.NODE, $string_expr.text);
+			symtab.define($ID.text, VarType.NODE, $e.text);
 			break;
 		case "EDGE":
-			symtab.define($ID.text, VarType.EDGE, $string_expr.text);
+			symtab.define($ID.text, VarType.EDGE, $e.text);
 			break;
 		}
 	  }
@@ -76,21 +76,21 @@ body_action
 	;
 
 create_node
-	: CREATE NODE '$' ID LABEL string_expr {
-		if (verbose) notifyErrorListeners("node set variable $" + $ID.text + " labeled " + $string_expr.text);
+	: CREATE NODE '$' ID LABEL e=string_expr {
+		if (verbose) notifyErrorListeners("node set variable $" + $ID.text + " labeled " + $e.text);
 		if (symtab.resolve($ID.text) != null)
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
 		symtab.define($ID.text, VarType.NODE);
 		symtab.newScope("node.properties");
-		symtab.define("__label", VarType.PROPERTY, $string_expr.text);
-	  } '{' property_assignment_list '}' {
+		symtab.define("__label", VarType.PROPERTY, $e.text);
+	  } '{' property_statement_list '}' {
 		symtab.endScope();
 	  }
 	;
 
 create_edge
-	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$'n2=ID LABEL string_expr {
-		if (verbose) notifyErrorListeners("edgeset variable $" + $n0.text + " labeled " + $string_expr.text);
+	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$'n2=ID LABEL e=string_expr {
+		if (verbose) notifyErrorListeners("edgeset variable $" + $n0.text + " labeled " + $e.text);
 		if (symtab.resolve($n0.text) != null)
 			notifyErrorListeners("binding $" + $n0.text + " hides earlier one!");
 		if (symtab.resolve($n1.text) == null)
@@ -99,10 +99,10 @@ create_edge
 			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
 		symtab.define($n0.text, VarType.EDGE);
 		symtab.newScope("edge.properties");
-		symtab.define("__label", VarType.PROPERTY, $string_expr.text);
+		symtab.define("__label", VarType.PROPERTY, $e.text);
 		symtab.define("__from", VarType.PROPERTY, $n1.text);
 		symtab.define("__to", VarType.PROPERTY, $n2.text);
-	  } '{' property_assignment_list '}' {
+	  } '{' property_statement_list '}' {
 		symtab.endScope();
 	  }
 	;
@@ -111,17 +111,17 @@ if_stmt
 	: IF '(' boolean_expr ')' '{' body_action '}'
 	;
 
-property_assignment_list
-	: property_assignment (',' property_assignment)*
+property_statement_list
+	: property_statement (',' property_statement)*
 	;
 
-property_assignment
-	: property_name_expr
+property_statement
+	: property_assignment
 	| property_unique
 	| property_if
 	;
 
-property_name_expr
+property_assignment
 	: ID '=' expr {
 		if (verbose) notifyErrorListeners("property " + $ID.text + "=" + $expr.text);
 		if (symtab.resolveOnly($ID.text) != null)
@@ -143,7 +143,7 @@ property_unique
 	;
 
 property_if
-	: IF '(' boolean_expr ')' '{' property_assignment_list '}'
+	: IF '(' boolean_expr ')' '{' property_statement_list '}'
 	;
 	
 property_name_list
@@ -186,7 +186,7 @@ eval_expr
 	;
 
 xpath_expr
-	: '$' v=ID ('.' XPATH '(' x=string_expr ')')? {
+	: '$' v=ID ('.' XPATH '(' e=string_expr ')')? {
 		// TODO: optionalen teil .xpath(...) testen!
 		if (symtab.resolve($v.text) == null)
 			notifyErrorListeners("xml fragment variable $" + $v.text + " is unbound!");
@@ -209,7 +209,7 @@ literal_expr
 	;
 
 /*
- * string_expr ausdifferenzieren, string-expr als parameter in xpath() anders als evaluierung string
+ * TODO: string_expr ausdifferenzieren, string-expr als parameter in xpath() anders als evaluierung string
  */
 string_expr
 	: string_expr PLUS string_expr	#stringConcat

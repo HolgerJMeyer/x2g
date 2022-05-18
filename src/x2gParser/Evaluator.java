@@ -61,14 +61,13 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitBind_expr(x2gParser.Bind_exprContext ctx) {
-		visitChildren(ctx);
 		String kw = ctx.getChild(0).getText();
-		String xp = ctx.string_expr.getText();
+		String e = (String)visit(ctx.string_expr());
 
 		switch (kw) {
 		case "xpath":
-			List<Content> list = xtractor.xtract(xp);
-			symtab.define(ctx.ID().getText(), VarType.XPATH, ctx.string_expr().getText());
+			List<Content> list = xtractor.xtract(e);
+			symtab.define(ctx.ID().getText(), VarType.XPATH, e);
 			/* TODO: Store all current bindings of an xpath result
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
@@ -91,19 +90,19 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 						break;
 					}
 			}
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + xp + ") = " + slist);
+			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ") = " + slist);
 			break;
 		case "node":
-			symtab.define(ctx.ID().getText(), VarType.NODE, ctx.string_expr().getText());
+			symtab.define(ctx.ID().getText(), VarType.NODE, e);
 			/* TODO: */
-			System.err.println("binding of " + kw + "(" + xp + ") not support in this version");
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + xp + ")");
+			System.err.println("binding of " + kw + "(" + e + ") not support in this version");
+			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ")");
 			break;
 		case "edge":
-			symtab.define(ctx.ID().getText(), VarType.EDGE, ctx.string_expr().getText());
+			symtab.define(ctx.ID().getText(), VarType.EDGE, e);
 			/* TODO: */
-			System.err.println("binding of " + kw + "(" + xp + ") not support in this version");
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + xp + ")");
+			System.err.println("binding of " + kw + "(" + e + ") not support in this version");
+			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ")");
 			break;
 		default:
 			break;
@@ -114,21 +113,24 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	@Override public Object visitCreate_node(x2gParser.Create_nodeContext ctx) {
 		symtab.define(ctx.ID().getText(), VarType.NODE);
 		Scope scope = symtab.newScope("node.properties");
-		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
+		String e = (String)visit(ctx.string_expr());
+		symtab.define("__label", VarType.PROPERTY, e);
       // TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
-		visitChildren(ctx);
+		visit(ctx.property_statement_list());
       symtab.endScope();
 		return null;
 	}
 
 	@Override public Object visitCreate_edge(x2gParser.Create_edgeContext ctx) {
+		visitChildren(ctx);
 		symtab.define(ctx.ID(0).getText(), VarType.EDGE);
 		Scope scope = symtab.newScope("edge.properties");
-		symtab.define("__label", VarType.PROPERTY, ctx.string_expr().getText());
+		String e = (String)visit(ctx.string_expr());
+		symtab.define("__label", VarType.PROPERTY, e);
 		symtab.define("__from", VarType.PROPERTY, ctx.ID(1).getText());
 		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
       // TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
-		visitChildren(ctx);
+		visit(ctx.property_statement_list());
 		symtab.endScope();
 		return null;
 	}
@@ -140,9 +142,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return null;
 	}
 
-	@Override public Object visitProperty_name_expr(x2gParser.Property_name_exprContext ctx) {
-		// TODO:
-		visitChildren(ctx);
+	@Override public Object visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
+		// TODO: to be evaluated
+		Object e = visit(ctx.expr());
 		symtab.define(ctx.ID().getText(), VarType.PROPERTY, ctx.expr().getText());
 		return null;
 	}
@@ -155,7 +157,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
-			return visit(ctx.property_assignment_list());
+			return visit(ctx.property_statement_list());
 		}
 		return null;
 	}
@@ -260,25 +262,24 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitXpath_expr(x2gParser.Xpath_exprContext ctx) {
-		// TODO:
-		visitChildren(ctx);
 		String vid = ctx.v.getText();
-		String xp = ctx.x.getText();
+		String e = (String)visit(ctx.string_expr());
 		Variable v = symtab.resolve(vid);
+		// TODO:
 		if (v != null) {
-			System.err.println("@xpath_expr: " + v);
+			System.err.println("@xpath_expr: " + v + " <- " + e);
 		}
 		return v;
 	}
 
 	@Override public Object visitProp_expr(x2gParser.Prop_exprContext ctx) {
-		// TODO:
-		visitChildren(ctx);
+		//visitChildren(ctx);
 		String vid = ctx.v.getText();
-		String pid = ctx.p.getText();
+		String p = ctx.p.getText();
 		Variable v = symtab.resolve(vid);
+		// TODO:
 		if (v != null) {
-			System.err.println("@prop_expr: " + v);
+			System.err.println("@prop_expr: " + v + "." + p);
 		}
 		return v;
 	}
