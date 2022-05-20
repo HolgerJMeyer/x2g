@@ -55,10 +55,12 @@ public class Scope {
 	 */
 	protected Variable resolve(String name) {
 		Variable variable = members.get(name);
-		if (variable != null)
+		if (variable != null) {
 			return variable;
-		if (enclosingScope != this)
+		}
+		if (enclosingScope != this) {
 			return enclosingScope.resolve(name);
+		}
 		return null; // not found
 	}
 

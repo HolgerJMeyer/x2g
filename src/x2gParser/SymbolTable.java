@@ -37,11 +37,13 @@ public class SymbolTable {
 
 	public Scope setScope(String name) {
 		//TODO: move to enclosed scope
+		String n = name + "." + ++nesting;
 		for (Scope scope : scopes) {
-				if (scope.getEnclosing() == current && scope.name == name) {
+				if (scope.getEnclosing() == current && scope.name == n) {
 					return current = scope;
 				}
 		}
+		System.err.println("setScope failed for \"" + n + "\"");
 		return current;
 	}
 

@@ -11,7 +11,7 @@ public class Variable {
 	private String expr;
 	private Set<Object> binding;
 	private Object current;
-	private Scope scope;
+	private Scope scope; //TODO:
 
 	protected Variable(String name) {
 		this.name = name;
@@ -49,6 +49,7 @@ public class Variable {
 	protected void setCurrent(Object current) { this.current = current; }
 
 	protected Scope getScope() { return scope; }
+	protected void setScope(Scope scope) { this.scope = scope; }
 
 	public String toString() {
 		if (expr != null && type != null)
@@ -56,7 +57,7 @@ public class Variable {
 		if (type != null)
 			return '<' + getName() + ":" + type + '>';
 		if (binding != null)
-			return '<' + getName() + "->" + binding + '>';
+			return '<' + getName() + "<-" + binding + '>';
 		return getName();
 	}
 }
