@@ -45,13 +45,19 @@ bind_expr_list
 	;
 
 bind_expr
-	: b=(XPATH|NODE|EDGE) '(' e=string_expr ')' USING '$' ID {
+	: b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' ID {
 		if (verbose) notifyErrorListeners($b.text + " variable $" + $ID.text + " bound to " + $e.text);
 		if (symtab.resolve($ID.text) != null)
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
 		switch ($b.text) {
 		case "XPATH":
 			symtab.define($ID.text, VarType.XPATH, $e.text);
+			break;
+		case "JPATH":
+			symtab.define($ID.text, VarType.JPATH, $e.text);
+			break;
+		case "SQL":
+			symtab.define($ID.text, VarType.SQL, $e.text);
 			break;
 		case "NODE":
 			symtab.define($ID.text, VarType.NODE, $e.text);
@@ -181,7 +187,9 @@ expr
 
 
 eval_expr
-	: xpath_expr
+	: xpath_expr	// TODO: merge xpath, jpath, sql since very similar
+	| jpath_expr
+	| sql_expr
 	| prop_expr
 	;
 
@@ -190,6 +198,22 @@ xpath_expr
 		// TODO: optionalen teil .xpath(...) testen!
 		if (symtab.resolve($v.text) == null)
 			notifyErrorListeners("xml fragment variable $" + $v.text + " is unbound!");
+	  }
+	;
+
+jpath_expr
+	: '$' v=ID ('.' JPATH '(' e=string_expr ')')? {
+		// TODO: optionalen teil .xpath(...) testen!
+		if (symtab.resolve($v.text) == null)
+			notifyErrorListeners("json fragment variable $" + $v.text + " is unbound!");
+	  }
+	;
+
+sql_expr
+	: '$' v=ID ('.' SQL '(' e=string_expr ')')? {
+		// TODO: optionalen teil .xpath(...) testen!
+		if (symtab.resolve($v.text) == null)
+			notifyErrorListeners("sql tuple variable $" + $v.text + " is unbound!");
 	  }
 	;
 

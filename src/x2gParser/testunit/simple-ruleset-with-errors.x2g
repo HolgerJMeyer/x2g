@@ -6,6 +6,8 @@ match xpath("//story") using $s {
 		title = $s.xpath("title/text()"),
 		unique (title)
 	},
+	match jpath(".//person[@role='narrator']") using $j { }
+	match sql("select * from table1") using $s { }
 	match xpath(".//person[@role='narrator']") using $p {
 		create node $pn label "person" {
 			// properties with optional type declaration
