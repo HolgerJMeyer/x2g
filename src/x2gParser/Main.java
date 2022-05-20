@@ -13,10 +13,13 @@ public class Main {
 	static final String conflictOptions[] = { "create", "link", "merge", "reject" };
 	static String x2g = "X2G";
 	static boolean verbose = false;
+	static boolean mixed = false;
 	static boolean parseOnly = false;
 	static String conflict = "reject"; // other options: merga, link
 	static String inputDir = null;
 	static String outFile = null;
+	static String inputURL = null;
+	static String inputJDBC = null;
 	static String outputFormat = ".csv";
 
 	/* pretty print Error messages */
@@ -43,13 +46,16 @@ public class Main {
 		org.apache.commons.cli.Options options = new org.apache.commons.cli.Options();
 
 		options.addOption("c", "conflict", true, "conflict resolution options during node creation: create, (create and) link, merge, reject are valid options");
-		options.addOption("d", "input-dir", true, "transform all xml files found in this directory");
+		options.addOption("d", "input-dir", true, "transform all files found in this directory");
 		options.addOption("f", "output-format", true, "output file format: csv, dot, gefx, graphml, and lg are supported options");
 		options.addOption("h", "help", false, "print this help");
+		options.addOption("m", "mixed-mode", false, "allow different input type sources");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
 		options.addOption("o", "out-file", true, "basename of output file(s)");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
+		options.addOption("s", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
+		options.addOption("u", "input-url", true, "read input data from that URL");
 		options.addOption("v", "verbose", false, "being verbose");
 
 		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
@@ -58,7 +64,10 @@ public class Main {
 		if (cmd.hasOption("conflict")) { conflict = cmd.getOptionValue("c"); }
 		if (cmd.hasOption("input-dir")) { inputDir = cmd.getOptionValue("d"); }
 		if (cmd.hasOption("output-format")) { outputFormat = cmd.getOptionValue("f"); }
+		if (cmd.hasOption("jdbc-connection")) { inputJDBC = cmd.getOptionValue("s"); }
+		if (cmd.hasOption("input-url")) { inputURL = cmd.getOptionValue("u"); }
 		if (cmd.hasOption("out-file")) { outFile = cmd.getOptionValue("o"); }
+		if (cmd.hasOption("mixed-mode")) { mixed = true; }
 		if (cmd.hasOption("verbose")) { verbose = true; }
 		if (cmd.hasOption("parse-only")) { parseOnly = true; }
 
