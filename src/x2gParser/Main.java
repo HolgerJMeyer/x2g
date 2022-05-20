@@ -84,7 +84,7 @@ public class Main {
 		// Create buffer of tokens pulled from lexer
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		// Create symbol table with global scope
-		SymbolTable symtab = new SymbolTable();
+		SymbolTable symtab = new SymbolTable(verbose);
 		// Create parser that feeds off of the token buffer
 		x2gParser parser = new x2gParser(tokens, symtab, verbose);
 		// Remove standard ErrorListener ConsoleErrorListener
@@ -102,7 +102,6 @@ public class Main {
 		}
 
 		final gGraph graph = new gGraph(verbose);
-		final SymbolTable synmtab = new SymbolTable(verbose);
 		final Evaluator eval = new Evaluator(symtab, graph, verbose);
 
 		// process all xml files from a given folder or specified on command line

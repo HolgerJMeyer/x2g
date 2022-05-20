@@ -47,8 +47,9 @@ bind_expr_list
 bind_expr
 	: b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' ID {
 		if (verbose) notifyErrorListeners($b.text + " variable $" + $ID.text + " bound to " + $e.text);
-		if (symtab.resolve($ID.text) != null)
+		if (symtab.resolve($ID.text) != null) {
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+		}
 		switch ($b.text) {
 		case "XPATH":
 			symtab.define($ID.text, VarType.XPATH, $e.text);
@@ -84,8 +85,9 @@ body_action
 create_node
 	: CREATE NODE '$' ID LABEL e=string_expr {
 		if (verbose) notifyErrorListeners("node set variable $" + $ID.text + " labeled " + $e.text);
-		if (symtab.resolve($ID.text) != null)
+		if (symtab.resolve($ID.text) != null) {
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+		}
 		symtab.define($ID.text, VarType.NODE);
 		symtab.newScope("node.properties");
 		symtab.define("__label", VarType.PROPERTY, $e.text);
@@ -97,12 +99,15 @@ create_node
 create_edge
 	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$'n2=ID LABEL e=string_expr {
 		if (verbose) notifyErrorListeners("edgeset variable $" + $n0.text + " labeled " + $e.text);
-		if (symtab.resolve($n0.text) != null)
+		if (symtab.resolve($n0.text) != null) {
 			notifyErrorListeners("binding $" + $n0.text + " hides earlier one!");
-		if (symtab.resolve($n1.text) == null)
+		}
+		if (symtab.resolve($n1.text) == null) {
 			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
-		if (symtab.resolve($n2.text) == null)
+		}
+		if (symtab.resolve($n2.text) == null) {
 			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
+		}
 		symtab.define($n0.text, VarType.EDGE);
 		symtab.newScope("edge.properties");
 		symtab.define("__label", VarType.PROPERTY, $e.text);
@@ -130,8 +135,9 @@ property_statement
 property_assignment
 	: ID '=' expr {
 		if (verbose) notifyErrorListeners("property " + $ID.text + "=" + $expr.text);
-		if (symtab.resolveOnly($ID.text) != null)
+		if (symtab.resolveOnly($ID.text) != null) {
 			notifyErrorListeners("property " + $ID.text + " overidden!");
+		}
 		symtab.define($ID.text, VarType.PROPERTY, $expr.text);
 	  }
 	;
@@ -139,12 +145,15 @@ property_assignment
 property_unique
 	: UNIQUE '(' property_name_list ')' {
 		if (verbose) notifyErrorListeners("unique constraint found: " + $property_name_list.text);
-		if (symtab.resolveOnly("__unique") != null)
+		if (symtab.resolveOnly("__unique") != null) {
 			notifyErrorListeners("unique constraint (" + $property_name_list.text + ") redefines earlier one!");
+		}
 		symtab.define("__unique", VarType.PROPERTY, $property_name_list.text);
-		for (String prop : $property_name_list.text.split(","))
-			if (symtab.resolveOnly(prop) == null)
+		for (String prop : $property_name_list.text.split(",")) {
+			if (symtab.resolveOnly(prop) == null) {
 				notifyErrorListeners("unique constraint: property " + prop + " unknown!");
+			}
+		}
 	  }
 	;
 
@@ -187,41 +196,37 @@ expr
 
 
 eval_expr
-	: xpath_expr	// TODO: merge xpath, jpath, sql since very similar
+	: xpath_expr	// TODO: merge xpath, jpath since very similar, or?
 	| jpath_expr
-	| sql_expr
 	| prop_expr
 	;
 
 xpath_expr
 	: '$' v=ID ('.' XPATH '(' e=string_expr ')')? {
 		// TODO: optionalen teil .xpath(...) testen!
-		if (symtab.resolve($v.text) == null)
+		if (symtab.resolve($v.text) == null) {
 			notifyErrorListeners("xml fragment variable $" + $v.text + " is unbound!");
+		}
 	  }
 	;
 
 jpath_expr
 	: '$' v=ID ('.' JPATH '(' e=string_expr ')')? {
-		// TODO: optionalen teil .xpath(...) testen!
-		if (symtab.resolve($v.text) == null)
+		// TODO: optionalen teil .jpath(...) testen!
+		if (symtab.resolve($v.text) == null) {
 			notifyErrorListeners("json fragment variable $" + $v.text + " is unbound!");
-	  }
-	;
-
-sql_expr
-	: '$' v=ID ('.' SQL '(' e=string_expr ')')? {
-		// TODO: optionalen teil .xpath(...) testen!
-		if (symtab.resolve($v.text) == null)
-			notifyErrorListeners("sql tuple variable $" + $v.text + " is unbound!");
+		}
 	  }
 	;
 
 prop_expr
 	: '$' v=ID '.' p=ID {
-		// TODO: optionales .<property>, wenn nicht, dann implizit .__label?
-		if (symtab.resolve($v.text) == null)
-			notifyErrorListeners("node or edge variable $" + $v.text + " is unbound!");
+		// TODO:
+		// $v can be sql, node, or edge variable
+		// optionales .<property>, wenn nicht, dann implizit .__label?
+		if (symtab.resolve($v.text) == null) {
+			notifyErrorListeners("variable $" + $v.text + " is unbound!");
+		}
 	  }
 	;
 

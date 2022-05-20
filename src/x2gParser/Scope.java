@@ -1,6 +1,5 @@
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
@@ -25,13 +24,18 @@ public class Scope {
 		this.enclosingScope = enclosingScope;
 	}
 
-	protected String getScopeName() { return name; }
+	protected String getName() { return name; }
 
 	/** 
 	 * Define a new variable in the current scope.
 	 */
 	protected void define(String name, VarType type, String expr) {
 		Variable variable = new Variable(name, type, expr);
+		define(variable);
+	}
+
+	protected void define(String name, VarType type, Set<Object> binding) {
+		Variable variable = new Variable(name, type, binding);
 		define(variable);
 	}
 
@@ -65,7 +69,7 @@ public class Scope {
 	protected Variable resolveOnly(String name) { return members.get(name); }
 
 	/** Where to look next for variable */
-	protected Scope getEnclosingScope() {
+	protected Scope getEnclosing() {
 		return enclosingScope;
 	}
 

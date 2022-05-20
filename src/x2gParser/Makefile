@@ -34,7 +34,6 @@ MYSRCS = \
 	SymbolTable.java \
 	Variable.java \
 	VarType.java \
-	XPathTest.java \
 	$(GRAPHSRCS) \
 	$(XMLSRCS)
 #LISTENER = x2gParserBaseListener.java x2gParserListener.java

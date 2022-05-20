@@ -1,3 +1,6 @@
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +13,9 @@ public class SymbolTable {
 	private Scope globals;
 	private Scope current;
 	private int nesting;
-	private ArrayList<Scope> scopes = new ArrayList<Scope>();	
+	//TODO: this will keep everything if CLEANUP == false
+	//TODO: in Evaluater just use Symbol table and setting current apropriate, don't rebuild/build again
+	private List<Scope> scopes = new ArrayList<Scope>();	
 
 	public SymbolTable() { this(false); }
 
@@ -18,8 +23,8 @@ public class SymbolTable {
 		verbose = verb;
 		current = globals = new Scope("GLOBAL");
 		nesting = 0;
-		globals.define("$allnodes", VarType.NODESET);
-		globals.define("$alledges", VarType.EDGESET);
+		globals.define("__allnodes", VarType.NODESET, new HashSet<Object>());
+		globals.define("__alledges", VarType.EDGESET, new HashSet<Object>());
 		scopes.add(globals);
 	}
 
@@ -30,18 +35,30 @@ public class SymbolTable {
 		return current;
 	}
 
+	public Scope setScope(String name) {
+		//TODO: move to enclosed scope
+		for (Scope scope : scopes) {
+				if (scope.getEnclosing() == current && scope.name == name) {
+					return current = scope;
+				}
+		}
+		return current;
+	}
+
 	public Scope endScope() {
 		--nesting;
 		if (CLEANUP) {
 			Scope old = current;
-			current = old.getEnclosingScope();
+			current = old.getEnclosing();
 			scopes.remove(old);
 			return current;
 		}
-		return current = current.getEnclosingScope();
+		return current = current.getEnclosing();
 	}
 
    public void define(String name, VarType type, String expr) { current.define(name, type, expr); }
+
+   public void define(String name, VarType type, Set<Object> binding) { current.define(name, type, binding); }
 
    public void define(String name, VarType type) { current.define(name, type); }
 

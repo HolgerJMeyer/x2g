@@ -54,7 +54,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	 *
 	 */
 	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
-		symtab.newScope("match");
+		symtab.setScope("match");
 		visitChildren(ctx);
 		symtab.endScope();
 		return null;
@@ -66,31 +66,43 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 		switch (kw) {
 		case "xpath":
-			List<Content> list = xtractor.xtract(e);
+			List<Content> seq = xtractor.xtract(e);
 			symtab.define(ctx.ID().getText(), VarType.XPATH, e);
 			/* TODO: Store all current bindings of an xpath result
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
-			List<String> slist = new ArrayList<String>();
-			for (Content n : list) {
+			List<String> list = new ArrayList<String>();
+			for (Content n : seq) {
 					switch (n.getCType()) {
 					case Element:
 					case CDATA:
 					case EntityRef:
 					case Text:
-						slist.add(n.getValue());
+						list.add(n.getValue());
 						break;
 					case Comment:
 					case DocType:
 					case ProcessingInstruction:
-						slist.add(n.toString());
+						list.add(n.toString());
 						break;
 					default:
-						slist.add(n.toString());
+						list.add(n.toString());
 						break;
 					}
 			}
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ") = " + slist);
+			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ") = " + list);
+			break;
+		case "jpath":
+			symtab.define(ctx.ID().getText(), VarType.JPATH, e);
+			/* TODO: */
+			System.err.println("binding of " + kw + "(" + e + ") not support in this version");
+			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ")");
+			break;
+		case "sql":
+			symtab.define(ctx.ID().getText(), VarType.SQL, e);
+			/* TODO: */
+			System.err.println("binding of " + kw + "(" + e + ") not support in this version");
+			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ")");
 			break;
 		case "node":
 			symtab.define(ctx.ID().getText(), VarType.NODE, e);
@@ -112,7 +124,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	@Override public Object visitCreate_node(x2gParser.Create_nodeContext ctx) {
 		symtab.define(ctx.ID().getText(), VarType.NODE);
-		Scope scope = symtab.newScope("node.properties");
+		Scope scope = symtab.setScope("node.properties");
 		String e = (String)visit(ctx.string_expr());
 		symtab.define("__label", VarType.PROPERTY, e);
       // TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
@@ -122,9 +134,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitCreate_edge(x2gParser.Create_edgeContext ctx) {
-		visitChildren(ctx);
+		//OOPS: visitChildren(ctx);
 		symtab.define(ctx.ID(0).getText(), VarType.EDGE);
-		Scope scope = symtab.newScope("edge.properties");
+		Scope scope = symtab.setScope("edge.properties");
 		String e = (String)visit(ctx.string_expr());
 		symtab.define("__label", VarType.PROPERTY, e);
 		symtab.define("__from", VarType.PROPERTY, ctx.ID(1).getText());
@@ -150,7 +162,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
-		visitChildren(ctx);
+		//visitChildren(ctx);
 		symtab.define("__unique", VarType.PROPERTY, ctx.property_name_list().getText());
 		return null;
 	}
@@ -166,8 +178,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
    // boolean_expr: boolean_expr op=(AND|OR) boolean_expr
 	@Override public Boolean visitBoolAndOr(x2gParser.BoolAndOrContext ctx) {
-		if (ctx.op.getType() == x2gParser.OR)
+		if (ctx.op.getType() == x2gParser.OR) {
 			return ((Boolean)visit(ctx.boolean_expr(0))) || ((Boolean)visit(ctx.boolean_expr(1)));
+		}
 		return ((Boolean)visit(ctx.boolean_expr(0))) && ((Boolean)visit(ctx.boolean_expr(1)));
 	}
 
@@ -273,7 +286,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitProp_expr(x2gParser.Prop_exprContext ctx) {
-		//visitChildren(ctx);
+		//OOPS: visitChildren(ctx);
 		String vid = ctx.v.getText();
 		String p = ctx.p.getText();
 		Variable v = symtab.resolve(vid);

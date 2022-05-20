@@ -29,6 +29,13 @@ public class Variable {
 		this.current = null;
 	}
 
+	protected Variable(String name, VarType type, Set<Object> binding) {
+		this(name, type);
+		this.expr = null;
+		this.binding = binding;
+		this.current = null;
+	}
+
 	protected String getName() { return name; }
 
 	protected VarType getType() { return type; }
