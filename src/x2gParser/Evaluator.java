@@ -218,6 +218,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		 * Valid types are: Boolean, String, Number, Date
 		 * */
 		// TODO: assume both operands are Long/Number
+		if (verbose) System.err.println("@boolean_expr: expr relop expr: only Long supported for Number");
 		Long l = (Long)left;
 		Long r = (Long)right;
 		switch (ctx.op.getType()) {
@@ -316,7 +317,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	@Override public Boolean visitLiteralBool(x2gParser.LiteralBoolContext ctx) {
 		String kw = ctx.getChild(0).getText();
 		if (verbose) System.err.println("@literal_expr:BOOL: " + kw);
-		return (kw == "TRUE" || kw == "true") ? true : false;
+		return (kw.equals("TRUE") || kw.equals("true")) ? true : false;
 	}
 
 	// string_expr: string_expr PLUS string_expr
