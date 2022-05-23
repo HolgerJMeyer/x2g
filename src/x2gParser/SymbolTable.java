@@ -30,6 +30,7 @@ public class SymbolTable {
 
 	/* Attention: new scope defined under current scope, new scope becomes current */
 	public Scope newScope(String name) {
+		if (verbose) System.err.println("newScope: '" + name + "'");
 		nesting++;
 		scopes.add(current = new Scope(name + "." + nesting, current));
 		return current;
@@ -37,13 +38,14 @@ public class SymbolTable {
 
 	public Scope setScope(String name) {
 		//TODO: move to enclosed scope
+		if (verbose) System.err.println("setScope: '" + name + "', current: " + current);
 		String n = name + "." + ++nesting;
 		for (Scope scope : scopes) {
-				if (scope.getEnclosing() == current && scope.name == n) {
+				if (scope.getEnclosing() == current && scope.name.equals(n)) {
 					return current = scope;
 				}
 		}
-		System.err.println("setScope failed for \"" + n + "\"");
+		System.err.println("setScope failed for '" + n + "'");
 		return current;
 	}
 

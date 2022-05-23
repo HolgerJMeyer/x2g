@@ -198,7 +198,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	@Override public Boolean visitBoolLiteral(x2gParser.BoolLiteralContext ctx) {
 		String kw = ctx.getChild(0).getText();
 		if (verbose) System.err.println("boolean_expr:BOOL: " + kw);
-		return (kw == "TRUE" || kw == "true") ? true : false;
+		return (kw.equals("TRUE") || kw.equals("true")) ? true : false;
 	}
 
    // boolean_expr: expr op=(LT|GT|LE|GE|EQ|NEQ) expr
@@ -209,9 +209,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		/* operands have to comparable */
 		switch (ctx.op.getType()) {
 		case x2gParser.EQ:
-			return left == right;
+			return left.equals(right);
 		case x2gParser.NEQ:
-			return left != right;
+			return !left.equals(right);
 		}
 		/*
 		 * TODO: test if type of right expr is compatible to left
