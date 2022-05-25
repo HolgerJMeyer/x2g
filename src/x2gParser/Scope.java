@@ -29,23 +29,24 @@ public class Scope {
 	/** 
 	 * Define a new variable in the current scope.
 	 */
-	protected void define(String name, VarType type, String expr) {
+	protected Variable define(String name, VarType type, String expr) {
 		Variable variable = new Variable(name, type, expr);
-		define(variable);
+		return define(variable);
 	}
 
-	protected void define(String name, VarType type, Set<Object> binding) {
+	protected Variable define(String name, VarType type, Set<Object> binding) {
 		Variable variable = new Variable(name, type, binding);
-		define(variable);
+		return define(variable);
 	}
 
-	protected void define(String name, VarType type) {
+	protected Variable define(String name, VarType type) {
 		Variable variable = new Variable(name, type);
-		define(variable);
+		return define(variable);
 	}
 
-	private void define(Variable variable) {
+	private Variable define(Variable variable) {
 		members.put(variable.getName(), variable);
+		return variable;
 	}
 
 	/**
@@ -68,7 +69,23 @@ public class Scope {
 	 * Look up the variable name in this scope only.
 	 * Returns null if not found.
 	 */
-	protected Variable resolveOnly(String name) { return members.get(name); }
+	protected Variable resolveCurrent(String name) {
+		return members.get(name);
+	}
+
+	public Variable getOuter(String scopename, VarType type) {
+		if (name.equals(scopename)) {
+			for (Variable v : members.values()) {
+				if (v.getType() == type) {
+					return v;
+				}
+			}
+		}
+		if (enclosingScope != this) {
+			return enclosingScope.getOuter(scopename, type);
+		}
+		return null;
+	}
 
 	/** Where to look next for variable */
 	protected Scope getEnclosing() {

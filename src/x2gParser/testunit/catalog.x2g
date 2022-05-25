@@ -7,9 +7,9 @@ match xpath("//cd") using $c {
 		avail = true,
 		unique (title)
 	},
-	match xpath("./artist") using $a {
+	match $c.xpath("artist") using $a {
 		create node $an label "artist" {
-			name = $a.xpath("./text()"),
+			name = $a.xpath("text()"),
 			unique (name)
 		},
 		create edge $e from $an to $cn label "interpret" {

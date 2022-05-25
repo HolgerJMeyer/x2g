@@ -45,25 +45,30 @@ bind_expr_list
 	;
 
 bind_expr
-	: b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' ID {
+	: ('$' ID)? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' ID {
 		if (verbose) notifyErrorListeners($b.text + " variable $" + $ID.text + " bound to " + $e.text);
 		if (symtab.resolve($ID.text) != null) {
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
 		}
 		switch ($b.text) {
 		case "XPATH":
+		case "xpath":
 			symtab.define($ID.text, VarType.XPATH, $e.text);
 			break;
 		case "JPATH":
+		case "jpath":
 			symtab.define($ID.text, VarType.JPATH, $e.text);
 			break;
 		case "SQL":
+		case "sql":
 			symtab.define($ID.text, VarType.SQL, $e.text);
 			break;
 		case "NODE":
+		case "node":
 			symtab.define($ID.text, VarType.NODE, $e.text);
 			break;
 		case "EDGE":
+		case "edge":
 			symtab.define($ID.text, VarType.EDGE, $e.text);
 			break;
 		}
@@ -135,7 +140,7 @@ property_statement
 property_assignment
 	: ID '=' expr {
 		if (verbose) notifyErrorListeners("property " + $ID.text + "=" + $expr.text);
-		if (symtab.resolveOnly($ID.text) != null) {
+		if (symtab.resolveCurrent($ID.text) != null) {
 			notifyErrorListeners("property " + $ID.text + " overidden!");
 		}
 		symtab.define($ID.text, VarType.PROPERTY, $expr.text);
@@ -145,12 +150,12 @@ property_assignment
 property_unique
 	: UNIQUE '(' property_name_list ')' {
 		if (verbose) notifyErrorListeners("unique constraint found: " + $property_name_list.text);
-		if (symtab.resolveOnly("__unique") != null) {
+		if (symtab.resolveCurrent("__unique") != null) {
 			notifyErrorListeners("unique constraint (" + $property_name_list.text + ") redefines earlier one!");
 		}
 		symtab.define("__unique", VarType.PROPERTY, $property_name_list.text);
 		for (String prop : $property_name_list.text.split(",")) {
-			if (symtab.resolveOnly(prop) == null) {
+			if (symtab.resolveCurrent(prop) == null) {
 				notifyErrorListeners("unique constraint: property " + prop + " unknown!");
 			}
 		}

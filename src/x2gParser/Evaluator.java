@@ -61,11 +61,15 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitBind_expr(x2gParser.Bind_exprContext ctx) {
+		//TODO: defined in the context of enclosing binding/match
 		String kw = ctx.getChild(0).getText();
 		String e = (String)visit(ctx.string_expr());
 
+		//TODO: zusammenfassen mit visitXpath_expr, ...
 		switch (kw) {
+		case "XPATH":
 		case "xpath":
+			//TODO: variable
 			List<Content> seq = xtractor.xtract(e);
 			symtab.define(ctx.ID().getText(), VarType.XPATH, e);
 			/* TODO: Store all current bindings of an xpath result
@@ -127,9 +131,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		Scope scope = symtab.setScope("node.properties");
 		String e = (String)visit(ctx.string_expr());
 		symtab.define("__label", VarType.PROPERTY, e);
-      // TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
+		// TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
 		visit(ctx.property_statement_list());
-      symtab.endScope();
+		symtab.endScope();
 		return null;
 	}
 
@@ -141,7 +145,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.define("__label", VarType.PROPERTY, e);
 		symtab.define("__from", VarType.PROPERTY, ctx.ID(1).getText());
 		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
-      // TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
+		// TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
 		visit(ctx.property_statement_list());
 		symtab.endScope();
 		return null;
@@ -162,8 +166,16 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Object visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
-		//visitChildren(ctx);
-		symtab.define("__unique", VarType.PROPERTY, ctx.property_name_list().getText());
+		String props = ctx.property_name_list().getText();
+		List<String> plist = new ArrayList<String>();
+		Variable v = symtab.define("__unique", VarType.PROPERTY, props);
+		for (String prop : props.split(",")) {
+			if (symtab.resolveCurrent(prop) == null) {
+				System.err.println("unique constraint: property " + prop + " unknown!");
+			}
+			plist.add(prop);
+		}
+		v.setCurrent(plist);
 		return null;
 	}
 
@@ -176,7 +188,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	//@Override public Object visitProperty_type(x2gParser.Property_typeContext ctx) { return visitChildren(ctx); }
 
-   // boolean_expr: boolean_expr op=(AND|OR) boolean_expr
+	// boolean_expr: boolean_expr op=(AND|OR) boolean_expr
 	@Override public Boolean visitBoolAndOr(x2gParser.BoolAndOrContext ctx) {
 		if (ctx.op.getType() == x2gParser.OR) {
 			return ((Boolean)visit(ctx.boolean_expr(0))) || ((Boolean)visit(ctx.boolean_expr(1)));
@@ -184,24 +196,24 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return ((Boolean)visit(ctx.boolean_expr(0))) && ((Boolean)visit(ctx.boolean_expr(1)));
 	}
 
-   // boolean_expr: NOT '(' boolean_expr ')'
+	// boolean_expr: NOT '(' boolean_expr ')'
 	@Override public Boolean visitBoolNot(x2gParser.BoolNotContext ctx) {
 		return !((Boolean)visit(ctx.boolean_expr()));
 	}
 
-   // boolean_expr: '(' boolean_expr ')'
+	// boolean_expr: '(' boolean_expr ')'
 	@Override public Boolean visitBoolParens(x2gParser.BoolParensContext ctx) {
 		return (Boolean)visit(ctx.boolean_expr());
 	}
 
-   // boolean_expr: BOOL
+	// boolean_expr: BOOL
 	@Override public Boolean visitBoolLiteral(x2gParser.BoolLiteralContext ctx) {
 		String kw = ctx.getChild(0).getText();
 		if (verbose) System.err.println("boolean_expr:BOOL: " + kw);
 		return (kw.equals("TRUE") || kw.equals("true")) ? true : false;
 	}
 
-   // boolean_expr: expr op=(LT|GT|LE|GE|EQ|NEQ) expr
+	// boolean_expr: expr op=(LT|GT|LE|GE|EQ|NEQ) expr
 	@Override public Boolean visitBoolRelop(x2gParser.BoolRelopContext ctx) {
 		Object left = visit(ctx.expr(0));
 		Object right = visit(ctx.expr(1));
@@ -247,8 +259,8 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return 0;
 	}
 
-   // expr op=(MULT|DIV) expr
-   // expr op=(ADD|MINUS) expr
+	// expr op=(MULT|DIV) expr
+	// expr op=(ADD|MINUS) expr
 	@Override public Number visitArithExpr(x2gParser.ArithExprContext ctx) {
 		Long left = (Long)visit(ctx.expr(0));
 		Long right = (Long)visit(ctx.expr(1));
@@ -279,9 +291,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		String vid = ctx.v.getText();
 		String e = (String)visit(ctx.string_expr());
 		Variable v = symtab.resolve(vid);
-		// TODO:
+		// TODO: xtract siehe visitBind_expr, zusammenfassen?!
 		if (v != null) {
-			System.err.println("@xpath_expr: " + v + " <- " + e);
+			System.err.println("@xpath_expr: $" + v + "/" + e);
 		}
 		return v;
 	}
@@ -322,6 +334,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	// string_expr: string_expr PLUS string_expr
 	@Override public String visitStringConcat(x2gParser.StringConcatContext ctx) {
+		visitChildren(ctx);
 		return ctx.string_expr(0).getText() + ctx.string_expr(1).getText();
 	}
 

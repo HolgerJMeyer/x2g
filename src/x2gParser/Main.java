@@ -29,9 +29,10 @@ public class Main {
 				List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
 				Collections.reverse(stack);
 
-				if (e != null)
+				if (e != null) {
 					System.err.println(x2g + ": exception: " + e);
-				System.err.println(x2g + ": rule stack: " + stack);
+				}
+				//System.err.println(x2g + ": rule stack: " + stack);
 				//System.err.println(x2g + ": line " + line + ":" + pos + ": " + msg);
 				System.err.println(x2g + ": line " + line + ": " + msg);
 			} else {
@@ -84,7 +85,7 @@ public class Main {
 		// Create buffer of tokens pulled from lexer
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		// Create symbol table with global scope
-		SymbolTable symtab = new SymbolTable(verbose);
+		SymbolTable symtab = new SymbolTable(false);
 		// Create parser that feeds off of the token buffer
 		x2gParser parser = new x2gParser(tokens, symtab, verbose);
 		// Remove standard ErrorListener ConsoleErrorListener

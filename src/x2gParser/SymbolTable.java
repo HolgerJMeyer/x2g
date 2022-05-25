@@ -13,8 +13,6 @@ public class SymbolTable {
 	private Scope globals;
 	private Scope current;
 	private int nesting;
-	//TODO: this will keep everything if CLEANUP == false
-	//TODO: in Evaluater just use Symbol table and setting current apropriate, don't rebuild/build again
 	private List<Scope> scopes = new ArrayList<Scope>();	
 
 	public SymbolTable() { this(false); }
@@ -37,7 +35,6 @@ public class SymbolTable {
 	}
 
 	public Scope setScope(String name) {
-		//TODO: move to enclosed scope
 		if (verbose) System.err.println("setScope: '" + name + "', current: " + current);
 		String n = name + "." + ++nesting;
 		for (Scope scope : scopes) {
@@ -60,17 +57,31 @@ public class SymbolTable {
 		return current = current.getEnclosing();
 	}
 
-   public void define(String name, VarType type, String expr) { current.define(name, type, expr); }
+   public Variable define(String name, VarType type, String expr) {
+		if (verbose) System.err.println("symtab.define('" + name + "', '" + expr + "')");
+		return current.define(name, type, expr);
+	}
 
-   public void define(String name, VarType type, Set<Object> binding) { current.define(name, type, binding); }
+   public Variable define(String name, VarType type, Set<Object> binding) {
+		if (verbose) System.err.println("symtab.define('" + name + "', binding)");
+		return current.define(name, type, binding);
+	}
 
-   public void define(String name, VarType type) { current.define(name, type); }
+   public Variable define(String name, VarType type) {
+		if (verbose) System.err.println("symtab.define('" + name + "')");
+		return current.define(name, type);
+	}
 
-	public Variable resolve(String name) { return current.resolve(name); }
+	public Variable resolve(String name) {
+		if (verbose) System.err.println("symtab.resolve('" + name + "') in scope: " + current);
+		return current.resolve(name);
+	}
 
-	public Variable resolveOnly(String name) { return current.resolveOnly(name); }
+	public Variable resolveCurrent(String name) {
+		return current.resolveCurrent(name);
+	}
 
-	public Scope getCurrentScope() { return current; }
+	public Scope getCurrent() { return current; }
 
 	public String toString() {
 		//return globals.toString();
