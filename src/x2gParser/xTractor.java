@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +26,7 @@ import org.xml.sax.SAXException;
 public class xTractor {
 	private Document doc;
 	private boolean verbose;
+	private File file;
 
 	/**
 	 * Initially parse XML file given by the specified uri and be namespace aware if nsaware is true.
@@ -33,32 +36,35 @@ public class xTractor {
 	 * @return a new XML xTractor instance
 	 * @see xTractor
 	 */
-	public xTractor(String uri, boolean nsaware) {
+	public xTractor(String filename, boolean nsaware) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			// make it namespace aware or not
 			if (nsaware == false) {
 				factory.setNamespaceAware(nsaware); 
 				DocumentBuilder dombuilder = factory.newDocumentBuilder();
-				org.w3c.dom.Document w3cDocument = dombuilder.parse(new File(uri));
+				org.w3c.dom.Document w3cDocument = dombuilder.parse(file = new File(filename));
 
 				DOMBuilder jdomBuilder = new DOMBuilder();
 				doc = jdomBuilder.build(w3cDocument);
 			} else {
 				SAXBuilder sax = new SAXBuilder();
-				doc = sax.build(new File(uri));
+				doc = sax.build(file = new File(filename));
 			}
 			verbose = false;
 		}
+		//catch (ParserConfigurationException | JDOMException | SAXException | URISyntaxException | IOException pe) {
 		catch (ParserConfigurationException | JDOMException | SAXException | IOException pe) {
 			System.err.println("xpath extractor creating DOM: " + pe);
 			verbose = true;
 		}
 	}
 
-	public xTractor(String uri) {
-		this(uri, false);
+	public xTractor(String filename) {
+		this(filename, false);
 	}
+
+	public String getFilename() { return file.getName(); }
 
 	public void beVerbose(boolean verbose) { this.verbose = verbose; }
 	

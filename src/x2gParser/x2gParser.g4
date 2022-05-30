@@ -45,31 +45,26 @@ bind_expr_list
 	;
 
 bind_expr
-	: ('$' ID)? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' ID {
-		if (verbose) notifyErrorListeners($b.text + " variable $" + $ID.text + " bound to " + $e.text);
-		if (symtab.resolve($ID.text) != null) {
-			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
+	: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID {
+		if (verbose) notifyErrorListeners($b.text + " variable $" + $v.text + " bound to " + $e.text);
+		if (symtab.resolve($v.text) != null) {
+			notifyErrorListeners("binding $" + $v.text + " hides earlier one!");
 		}
-		switch ($b.text) {
-		case "XPATH":
-		case "xpath":
-			symtab.define($ID.text, VarType.XPATH, $e.text);
+		switch ($b.type) {
+		case XPATH:
+			symtab.define($v.text, VarType.XPATH, $e.text);
 			break;
-		case "JPATH":
-		case "jpath":
-			symtab.define($ID.text, VarType.JPATH, $e.text);
+		case JPATH:
+			symtab.define($v.text, VarType.JPATH, $e.text);
 			break;
-		case "SQL":
-		case "sql":
-			symtab.define($ID.text, VarType.SQL, $e.text);
+		case SQL:
+			symtab.define($v.text, VarType.SQL, $e.text);
 			break;
-		case "NODE":
-		case "node":
-			symtab.define($ID.text, VarType.NODE, $e.text);
+		case NODE:
+			symtab.define($v.text, VarType.NODE, $e.text);
 			break;
-		case "EDGE":
-		case "edge":
-			symtab.define($ID.text, VarType.EDGE, $e.text);
+		case EDGE:
+			symtab.define($v.text, VarType.EDGE, $e.text);
 			break;
 		}
 	  }
@@ -201,36 +196,28 @@ expr
 
 
 eval_expr
-	: xpath_expr	// TODO: merge xpath, jpath since very similar, or?
-	| jpath_expr
-	| prop_expr
-	;
-
-xpath_expr
-	: '$' v=ID ('.' XPATH '(' e=string_expr ')')? {
-		// TODO: optionalen teil .xpath(...) testen!
+	: '$' v=ID {
+		// TODO:
+		// $v can be path, sql, node, or edge variable
 		if (symtab.resolve($v.text) == null) {
-			notifyErrorListeners("xml fragment variable $" + $v.text + " is unbound!");
+			notifyErrorListeners("variable $" + $v.text + " is unbound!");
 		}
 	  }
-	;
-
-jpath_expr
-	: '$' v=ID ('.' JPATH '(' e=string_expr ')')? {
-		// TODO: optionalen teil .jpath(...) testen!
-		if (symtab.resolve($v.text) == null) {
-			notifyErrorListeners("json fragment variable $" + $v.text + " is unbound!");
-		}
-	  }
-	;
-
-prop_expr
-	: '$' v=ID '.' p=ID {
+	| '$' v=ID '.' p=ID {
 		// TODO:
 		// $v can be sql, node, or edge variable
 		// optionales .<property>, wenn nicht, dann implizit .__label?
 		if (symtab.resolve($v.text) == null) {
 			notifyErrorListeners("variable $" + $v.text + " is unbound!");
+		}
+	  }
+	| '$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')' {
+		Variable v = symtab.resolve($v.text);
+		if (v == null) {
+			notifyErrorListeners($p.text.toLowerCase() + " variable $" + $v.text + " is unbound!");
+		}
+		else if (v.getType() != VarType.XPATH && v.getType() != VarType.JPATH) {
+			notifyErrorListeners("wrong variable type  for $" + $v.text + ", XPATH or JPATH expected!");
 		}
 	  }
 	;

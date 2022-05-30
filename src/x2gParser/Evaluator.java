@@ -42,6 +42,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		}
 	}
 
+	public void evalMessage(String message) {
+		System.err.println(Main.x2g + ": file " + xtractor.getFilename() + ": " + message);
+	}
+
 	/*
 	 * Here starts the real evaluation of X2G rules!
 	 * There are two passes:
@@ -62,16 +66,17 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	@Override public Object visitBind_expr(x2gParser.Bind_exprContext ctx) {
 		//TODO: defined in the context of enclosing binding/match
-		String kw = ctx.getChild(0).getText();
+		String kw = ctx.b.getText();
+		int kwtype = ctx.b.getType();
 		String e = (String)visit(ctx.string_expr());
+		String v = ctx.ID(0).getText();
 
 		//TODO: zusammenfassen mit visitXpath_expr, ...
-		switch (kw) {
-		case "XPATH":
-		case "xpath":
+		switch (kwtype) {
+		case x2gLexer.XPATH:
 			//TODO: variable
 			List<Content> seq = xtractor.xtract(e);
-			symtab.define(ctx.ID().getText(), VarType.XPATH, e);
+			symtab.define(v, VarType.XPATH, e);
 			/* TODO: Store all current bindings of an xpath result
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
@@ -94,31 +99,31 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 						break;
 					}
 			}
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ") = " + list);
+			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ") = " + list);
 			break;
-		case "jpath":
-			symtab.define(ctx.ID().getText(), VarType.JPATH, e);
+		case x2gLexer.JPATH:
+			symtab.define(v, VarType.JPATH, e);
 			/* TODO: */
-			System.err.println("binding of " + kw + "(" + e + ") not support in this version");
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ")");
+			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
+			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
 			break;
-		case "sql":
-			symtab.define(ctx.ID().getText(), VarType.SQL, e);
+		case x2gLexer.SQL:
+			symtab.define(v, VarType.SQL, e);
 			/* TODO: */
-			System.err.println("binding of " + kw + "(" + e + ") not support in this version");
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ")");
+			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
+			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
 			break;
-		case "node":
-			symtab.define(ctx.ID().getText(), VarType.NODE, e);
+		case x2gLexer.NODE:
+			symtab.define(v, VarType.NODE, e);
 			/* TODO: */
-			System.err.println("binding of " + kw + "(" + e + ") not support in this version");
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ")");
+			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
+			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
 			break;
-		case "edge":
-			symtab.define(ctx.ID().getText(), VarType.EDGE, e);
+		case x2gLexer.EDGE:
+			symtab.define(v, VarType.EDGE, e);
 			/* TODO: */
-			System.err.println("binding of " + kw + "(" + e + ") not support in this version");
-			if (verbose) System.err.println("@bind_expr: " + kw + "(" + e + ")");
+			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
+			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
 			break;
 		default:
 			break;
@@ -171,7 +176,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		Variable v = symtab.define("__unique", VarType.PROPERTY, props);
 		for (String prop : props.split(",")) {
 			if (symtab.resolveCurrent(prop) == null) {
-				System.err.println("unique constraint: property " + prop + " unknown!");
+				evalMessage("unique constraint: property " + prop + " unknown!");
 			}
 			plist.add(prop);
 		}
@@ -209,7 +214,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	// boolean_expr: BOOL
 	@Override public Boolean visitBoolLiteral(x2gParser.BoolLiteralContext ctx) {
 		String kw = ctx.getChild(0).getText();
-		if (verbose) System.err.println("boolean_expr:BOOL: " + kw);
+		if (verbose) evalMessage("boolean_expr:BOOL: " + kw);
 		return (kw.equals("TRUE") || kw.equals("true")) ? true : false;
 	}
 
@@ -230,7 +235,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		 * Valid types are: Boolean, String, Number, Date
 		 * */
 		// TODO: assume both operands are Long/Number
-		if (verbose) System.err.println("@boolean_expr: expr relop expr: only Long supported for Number");
+		if (verbose) evalMessage("@boolean_expr: expr relop expr: only Long supported for Number");
 		Long l = (Long)left;
 		Long r = (Long)right;
 		switch (ctx.op.getType()) {
@@ -250,7 +255,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	@Override public Number visitUnaryExpr(x2gParser.UnaryExprContext ctx) {
 		try {
 			Long i = (Long)visit(ctx.expr());
-			if (verbose) System.err.println("expr:MINUS expr: " + -i);
+			if (verbose) evalMessage("expr:MINUS expr: " + -i);
 			return -i;
 		}
 		catch (ClassCastException e) {
@@ -293,7 +298,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		Variable v = symtab.resolve(vid);
 		// TODO: xtract siehe visitBind_expr, zusammenfassen?!
 		if (v != null) {
-			System.err.println("@xpath_expr: $" + v + "/" + e);
+			evalMessage("@xpath_expr: $" + v + "/" + e);
 		}
 		return v;
 	}
@@ -305,7 +310,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		Variable v = symtab.resolve(vid);
 		// TODO:
 		if (v != null) {
-			System.err.println("@prop_expr: " + v + "." + p);
+			evalMessage("@prop_expr: " + v + "." + p);
 		}
 		return v;
 	}
@@ -328,7 +333,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	// literal_expr: BOOL
 	@Override public Boolean visitLiteralBool(x2gParser.LiteralBoolContext ctx) {
 		String kw = ctx.getChild(0).getText();
-		if (verbose) System.err.println("@literal_expr:BOOL: " + kw);
+		if (verbose) evalMessage("@literal_expr:BOOL: " + kw);
 		return (kw.equals("TRUE") || kw.equals("true")) ? true : false;
 	}
 
