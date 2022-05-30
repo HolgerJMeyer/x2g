@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 public class gGraph {
 	private boolean verbose;
-	private final Map<Integer, gNode> nodesById = new HashMap<>();
-	private final Map<String, Set<gNode>> nodesByLabel = new HashMap<>();
+	private final Map<Integer, gNode> nodesById = new HashMap<Integer, gNode>();
+	private final Map<String, Set<gNode>> nodesByLabel = new HashMap<String, Set<gNode>>();
 
 	public gGraph(boolean verbose) { this.verbose = verbose; }
 

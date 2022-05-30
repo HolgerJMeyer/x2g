@@ -59,7 +59,11 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	 */
 	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
 		symtab.setScope("match");
-		visitChildren(ctx);
+		// TODO:	forall bind_expr
+		// TODO:		visit(body)
+		//visitChildren(ctx);
+		visit(ctx.bind_expr_list());
+		visit(ctx.body());
 		symtab.endScope();
 		return null;
 	}
@@ -69,20 +73,30 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		String kw = ctx.b.getText();
 		int kwtype = ctx.b.getType();
 		String e = (String)visit(ctx.string_expr());
-		String v = ctx.ID(0).getText();
+		String c = null;
+		Variable context = null;
+		String v;
+		Map<String, Object> vars = new HashMap<String, Object>();
 
-		//TODO: zusammenfassen mit visitXpath_expr, ...
+		if (ctx.ID(1) != null) { /* bind relative to context var */
+			c = ctx.ID(0).getText();
+			v = ctx.ID(1).getText();
+			context = symtab.resolve(c);
+			vars.put(c, context.getExpr());
+			e = context.getExpr() + "/" + e;
+		}
+		else { /* bin absolute without context var */
+			v = ctx.ID(0).getText();
+		}
+
+		// bind_expr: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID
 		switch (kwtype) {
 		case x2gLexer.XPATH:
-			//TODO: variable
-			List<Content> seq = xtractor.xtract(e);
-			symtab.define(v, VarType.XPATH, e);
-			/* TODO: Store all current bindings of an xpath result
-			 * A bind consists of a varname, a type and an sequence/list of content values.
-			 */
+			List<Content> seq = xtractor.xtract(e, vars);
+			Variable var = symtab.define(v, VarType.XPATH, e);
 			List<String> list = new ArrayList<String>();
 			for (Content n : seq) {
-					switch (n.getCType()) {
+				switch (n.getCType()) {
 					case Element:
 					case CDATA:
 					case EntityRef:
@@ -97,34 +111,42 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 					default:
 						list.add(n.toString());
 						break;
-					}
+				}
 			}
-			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ") = " + list);
+			/* TODO: Store all current bindings of an xpath result
+			 * A bind consists of a varname, a type and an sequence/list of content values.
+			 */
+			if (verbose) evalMessage("@bind_expr: $" + var + " = " + list);
 			break;
+
 		case x2gLexer.JPATH:
 			symtab.define(v, VarType.JPATH, e);
 			/* TODO: */
 			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
 			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
 			break;
+
 		case x2gLexer.SQL:
 			symtab.define(v, VarType.SQL, e);
 			/* TODO: */
 			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
 			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
 			break;
+
 		case x2gLexer.NODE:
 			symtab.define(v, VarType.NODE, e);
 			/* TODO: */
 			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
 			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
 			break;
+
 		case x2gLexer.EDGE:
 			symtab.define(v, VarType.EDGE, e);
 			/* TODO: */
 			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
 			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
 			break;
+
 		default:
 			break;
 		}
@@ -270,16 +292,17 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		Long left = (Long)visit(ctx.expr(0));
 		Long right = (Long)visit(ctx.expr(1));
 		switch (ctx.op.getType()) {
-		case x2gParser.MULT:
-			return left * right;
-		case x2gParser.DIV:
-			return left / right;
-		case x2gParser.ADD:
-			return left + right;
-		case x2gParser.MINUS:
-			return left - right;
+			case x2gParser.MULT:
+				return left * right;
+			case x2gParser.DIV:
+				return left / right;
+			case x2gParser.ADD:
+				return left + right;
+			case x2gParser.MINUS:
+				return left - right;
+			default:
+				return -0;
 		}
-		return 0;
 	}
 
 	// expr: '(' expr ')'
@@ -292,18 +315,43 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return visit(ctx.literal_expr());
 	}
 
-	@Override public Object visitEval_expr(x2gParser.Eval_exprContext ctx) {
-		// TODO: xtract siehe visitBind_expr, zusammenfassen?!
-		// optional testen mit: if (ctx.p() != null) ...
+	// eval_expr
+	//		: '$' v=ID
+	//		| '$' v=ID '.' a=ID
+	//		| '$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')'
+	//		;
+	@Override public String visitEval_expr(x2gParser.Eval_exprContext ctx) {
+		//	'$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')'
+		if (ctx.string_expr() != null) {
+			String p = ctx.p.getText();
+			String e = (String)visit(ctx.string_expr());
+			String vid = ctx.v.getText();
+			Variable v = symtab.resolve(vid);
+			if (v != null) {
+				evalMessage("@eval_expr: $" + v + "/" + e);
+			}
+			// TODO: extract value
+			return "v.path(" + e + ")";
+		}
+		//	'$' v=ID '.' a=ID
+		if (ctx.ID(1) != null) {
+			String vid = ctx.v.getText();
+			String aid = ctx.a.getText();
+			Variable v = symtab.resolve(vid);
+			if (v != null) {
+				evalMessage("@eval_expr: $" + v + "." + aid);
+			}
+			// TODO: extract value
+			return "$" + vid + "." + aid;
+		}
+		//	'$' v=ID
 		String vid = ctx.v.getText();
-		//String p = ctx.p.getText();
-		//String x = ctx.x.getText();
-		String e = (String)visit(ctx.string_expr());
 		Variable v = symtab.resolve(vid);
 		if (v != null) {
-			evalMessage("@eval_expr: $" + v + "/" + e);
+			evalMessage("@eval_expr: $" + v);
 		}
-		return v;
+		// TODO: extract value
+		return "$" + vid;
 	}
 
 	// literal_expr: STR
