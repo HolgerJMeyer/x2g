@@ -46,6 +46,11 @@ bind_expr_list
 
 bind_expr
 	: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID {
+		if ($c != null) {
+			if (symtab.resolve($c.text) == null) {
+				notifyErrorListeners("context variable $" + $c.text + " is undefined!");
+			}
+		}
 		if (verbose) notifyErrorListeners($b.text + " variable $" + $v.text + " bound to " + $e.text);
 		if (symtab.resolve($v.text) != null) {
 			notifyErrorListeners("binding $" + $v.text + " hides earlier one!");
@@ -211,13 +216,13 @@ eval_expr
 			notifyErrorListeners("variable $" + $v.text + " is unbound!");
 		}
 	  }
-	| '$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')' {
+	| '$' v=ID '.' x=(XPATH|JPATH) '(' e=string_expr ')' {
 		Variable v = symtab.resolve($v.text);
 		if (v == null) {
-			notifyErrorListeners($p.text.toLowerCase() + " variable $" + $v.text + " is unbound!");
+			notifyErrorListeners($x.text.toLowerCase() + " variable $" + $v.text + " is unbound!");
 		}
 		else if (v.getType() != VarType.XPATH && v.getType() != VarType.JPATH) {
-			notifyErrorListeners("wrong variable type  for $" + $v.text + ", XPATH or JPATH expected!");
+			notifyErrorListeners("wrong variable type for $" + $v.text + ", XPATH or JPATH expected!");
 		}
 	  }
 	;

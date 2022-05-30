@@ -292,25 +292,16 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return visit(ctx.literal_expr());
 	}
 
-	@Override public Object visitXpath_expr(x2gParser.Xpath_exprContext ctx) {
+	@Override public Object visitEval_expr(x2gParser.Eval_exprContext ctx) {
+		// TODO: xtract siehe visitBind_expr, zusammenfassen?!
+		// optional testen mit: if (ctx.p() != null) ...
 		String vid = ctx.v.getText();
+		//String p = ctx.p.getText();
+		//String x = ctx.x.getText();
 		String e = (String)visit(ctx.string_expr());
 		Variable v = symtab.resolve(vid);
-		// TODO: xtract siehe visitBind_expr, zusammenfassen?!
 		if (v != null) {
-			evalMessage("@xpath_expr: $" + v + "/" + e);
-		}
-		return v;
-	}
-
-	@Override public Object visitProp_expr(x2gParser.Prop_exprContext ctx) {
-		//OOPS: visitChildren(ctx);
-		String vid = ctx.v.getText();
-		String p = ctx.p.getText();
-		Variable v = symtab.resolve(vid);
-		// TODO:
-		if (v != null) {
-			evalMessage("@prop_expr: " + v + "." + p);
+			evalMessage("@eval_expr: $" + v + "/" + e);
 		}
 		return v;
 	}
