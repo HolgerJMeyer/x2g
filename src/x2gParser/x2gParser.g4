@@ -199,7 +199,6 @@ expr
 	| literal_expr							#literalExpr
 	; 
 
-
 eval_expr
 	: '$' v=ID {
 		// TODO:
@@ -208,18 +207,19 @@ eval_expr
 			notifyErrorListeners("variable $" + $v.text + " is unbound!");
 		}
 	  }
-	| '$' v=ID '.' p=ID {
+	| '$' v=ID '.' a=ID {
 		// TODO:
 		// $v can be sql, node, or edge variable
 		// optionales .<property>, wenn nicht, dann implizit .__label?
-		if (symtab.resolve($v.text) == null) {
+		Variable v = symtab.resolve($v.text);
+		if (v == null) {
 			notifyErrorListeners("variable $" + $v.text + " is unbound!");
 		}
 	  }
-	| '$' v=ID '.' x=(XPATH|JPATH) '(' e=string_expr ')' {
+	| '$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')' {
 		Variable v = symtab.resolve($v.text);
 		if (v == null) {
-			notifyErrorListeners($x.text.toLowerCase() + " variable $" + $v.text + " is unbound!");
+			notifyErrorListeners($p.text.toLowerCase() + " variable $" + $v.text + " is unbound!");
 		}
 		else if (v.getType() != VarType.XPATH && v.getType() != VarType.JPATH) {
 			notifyErrorListeners("wrong variable type for $" + $v.text + ", XPATH or JPATH expected!");
