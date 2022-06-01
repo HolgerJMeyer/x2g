@@ -63,7 +63,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		// TODO:		visit(body)
 		//visitChildren(ctx);
 		visit(ctx.bind_expr_list());
-		// forall bindings
+		// forall bindings: for all bindings of this scope
 			visit(ctx.body());
 		symtab.endScope();
 		return null;
