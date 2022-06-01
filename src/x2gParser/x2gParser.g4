@@ -41,7 +41,7 @@ x2g_rule
 	;
 
 bind_expr_list
-	: bind_expr (',' bind_expr)*
+	: bind_expr (',' bind_expr)* #bindExpr
 	;
 
 bind_expr
@@ -76,7 +76,7 @@ bind_expr
 	;
 
 body
-	: body_action (',' body_action)*
+	: body_action (',' body_action)* #bodyAction
 	;
 
 body_action
