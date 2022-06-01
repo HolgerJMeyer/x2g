@@ -62,8 +62,12 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		// TODO:	forall bind_expr
 		// TODO:		visit(body)
 		//visitChildren(ctx);
-		visit(ctx.bind_expr_list());
-		visit(ctx.body());
+		for (x2gParser.Bind_exprContext bctx : ctx.bind_expr()) {
+			visit(ctx.bind_expr_list());
+		}
+		for (x2gParser.Body_actionContext bctx : ctx.body_action()) {
+			visit(ctx.body());
+		}
 		symtab.endScope();
 		return null;
 	}
