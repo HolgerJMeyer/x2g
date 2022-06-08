@@ -1,6 +1,8 @@
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Inspired by Chapter 6 from Terence Parr: Language Implementation Patterns.
@@ -34,7 +36,7 @@ public class Scope {
 		return define(variable);
 	}
 
-	protected Variable define(String name, VarType type, Set<Object> binding) {
+	protected Variable define(String name, VarType type, List<String> binding) {
 		Variable variable = new Variable(name, type, binding);
 		return define(variable);
 	}
@@ -85,6 +87,10 @@ public class Scope {
 			return enclosingScope.getOuter(scopename, type);
 		}
 		return null;
+	}
+
+	public Set<Variable> getVariables() {
+		return new HashSet<Variable>(members.values());
 	}
 
 	/** Where to look next for variable */

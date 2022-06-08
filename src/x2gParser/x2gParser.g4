@@ -35,13 +35,9 @@ x2g
 x2g_rule
 	: MATCH {
 		symtab.newScope("match");
-	  } bind_expr_list '{' body '}' {
+	  } bind_expr (',' bind_expr)* '{' body '}' {
 		symtab.endScope();
 	  }
-	;
-
-bind_expr_list
-	: bind_expr (',' bind_expr)* #bindExpr
 	;
 
 bind_expr
@@ -76,7 +72,7 @@ bind_expr
 	;
 
 body
-	: body_action (',' body_action)* #bodyAction
+	: body_action (',' body_action)* #bodyActionList
 	;
 
 body_action
@@ -124,7 +120,7 @@ create_edge
 	;
 
 if_stmt
-	: IF '(' boolean_expr ')' '{' body_action '}'
+	: IF '(' boolean_expr ')' '{' body '}'
 	;
 
 property_statement_list

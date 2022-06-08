@@ -62,21 +62,17 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		// TODO:	forall bind_expr
 		// TODO:		visit(body)
 		//visitChildren(ctx);
-		visit(ctx.bind_expr_list());
+		//visit(ctx.bind_expr_list());
+		for (x2gParser.Bind_exprContext bctx : ctx.bind_expr()) {
+			visit(bctx);
+		}
 		// forall bindings: for all bindings of this scope
 			visit(ctx.body());
 		symtab.endScope();
 		return null;
 	}
 
-	@Override public Object visitBindExpr(x2gParser.BindExprContext ctx) {
-		for (x2gParser.Bind_exprContext bctx : ctx.bind_expr()) {
-			visit(bctx);
-		}
-		return null;
-	}
-
-	@Override public Object visitBodyAction(x2gParser.BodyActionContext ctx) {
+	@Override public Object visitBodyActionList(x2gParser.BodyActionListContext ctx) {
 		for (x2gParser.Body_actionContext bctx : ctx.body_action()) {
 			visit(bctx);
 		}
@@ -132,6 +128,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
 			if (verbose) evalMessage("@bind_expr: $" + var + " = " + list);
+			var.setBinding(list);
 			break;
 
 		case x2gLexer.JPATH:
@@ -175,6 +172,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.define("__label", VarType.PROPERTY, e);
 		// TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
 		visit(ctx.property_statement_list());
+evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		symtab.endScope();
 		return null;
 	}
@@ -189,13 +187,14 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
 		// TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
 		visit(ctx.property_statement_list());
+evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		symtab.endScope();
 		return null;
 	}
 
 	@Override public Object visitIf_stmt(x2gParser.If_stmtContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
-			return visit(ctx.body_action());
+			return visit(ctx.body());
 		}
 		return null;
 	}
@@ -217,13 +216,14 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			}
 			plist.add(prop);
 		}
-		v.setCurrent(plist);
+		v.setBinding(plist);
 		return null;
 	}
 
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
-			return visit(ctx.property_statement_list());
+			visit(ctx.property_statement_list());
+evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		}
 		return null;
 	}

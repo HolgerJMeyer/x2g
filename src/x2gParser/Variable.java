@@ -2,22 +2,20 @@
  * Inpired by Chapter 6 from Terence Parr: Language Implementation
  * Patterns. The Pragmatic Bookshelf, Releigh, MA, 2010.
  */
-import java.util.Set;
+import java.util.List;
 
 
 public class Variable {
 	private String name;
 	private VarType type;
 	private String expr;
-	private Set<Object> binding;
-	private Object current;
-
-	protected Variable(String name) {
-		this.name = name;
-	}
+	//TODO: private List<Object> binding;
+	private List<String> binding;
+	//private Object current;
+	private String current;
 
 	protected Variable(String name, VarType type) {
-		this(name);
+		this.name = name;
 		this.type = type;
 	}
 
@@ -28,7 +26,7 @@ public class Variable {
 		this.current = null;
 	}
 
-	protected Variable(String name, VarType type, Set<Object> binding) {
+	protected Variable(String name, VarType type, List<String> binding) {
 		this(name, type);
 		this.expr = null;
 		this.binding = binding;
@@ -41,20 +39,25 @@ public class Variable {
 
 	protected String getExpr() { return expr; }
 
-	protected Set<Object> getBinding() { return binding; }
-	protected void setBinding(Set<Object> binding) { this.binding = binding; }
+	protected List<String> getBinding() { return binding; }
 
-	protected Object getCurrent() { return current; }
-	protected void setCurrent(Object current) { this.current = current; }
+	protected void setBinding(List<String> binding) { this.binding = binding; }
+
+	protected String getCurrent() { return current; }
+
+	protected void setCurrent(String current) { this.current = current; }
 
 	public String toString() {
-		if (expr != null && type != null)
-			return '<' + getName() + ":" + type + "=" + expr + '>';
-		if (type != null)
-			return '<' + getName() + ":" + type + '>';
-		if (binding != null)
-			return '<' + getName() + "<-" + binding + '>';
-		return getName();
+		if (binding != null && current != null) {
+			return '<' + type.toString() + ':' + name + "<-" + binding + "(curr=" + current + ")>";
+		}
+		if (binding != null) {
+			return '<' + type.toString() + ':' + name + "<-" + binding + '>';
+		}
+		if (expr != null) {
+			return '<' + type.toString() + ":" + name + "=" + expr + '>';
+		}
+		return '<' + type.toString() + ":" + name + '>';
 	}
 }
 
