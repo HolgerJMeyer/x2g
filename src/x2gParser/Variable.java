@@ -2,17 +2,15 @@
  * Inpired by Chapter 6 from Terence Parr: Language Implementation
  * Patterns. The Pragmatic Bookshelf, Releigh, MA, 2010.
  */
-import java.util.List;
+import java.util.Set;
 
 
 public class Variable {
 	private String name;
 	private VarType type;
 	private String expr;
-	//TODO: private List<Object> binding;
-	private List<String> binding;
-	//private Object current;
-	private String current;
+	private Set<Object> binding;
+	private Object current;
 
 	protected Variable(String name, VarType type) {
 		this.name = name;
@@ -26,7 +24,7 @@ public class Variable {
 		this.current = null;
 	}
 
-	protected Variable(String name, VarType type, List<String> binding) {
+	protected Variable(String name, VarType type, Set<Object> binding) {
 		this(name, type);
 		this.expr = null;
 		this.binding = binding;
@@ -39,13 +37,13 @@ public class Variable {
 
 	protected String getExpr() { return expr; }
 
-	protected List<String> getBinding() { return binding; }
+	protected Set<Object> getBinding() { return binding; }
 
-	protected void setBinding(List<String> binding) { this.binding = binding; }
+	protected void setBinding(Set<Object> binding) { this.binding = binding; }
 
-	protected String getCurrent() { return current; }
+	protected Object getCurrent() { return current; }
 
-	protected void setCurrent(String current) { this.current = current; }
+	protected void setCurrent(Object current) { this.current = current; }
 
 	public String toString() {
 		if (binding != null && current != null) {

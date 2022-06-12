@@ -85,11 +85,11 @@ body_action
 
 create_node
 	: CREATE NODE '$' ID LABEL e=string_expr {
-		if (verbose) notifyErrorListeners("node set variable $" + $ID.text + " labeled " + $e.text);
+		if (verbose) notifyErrorListeners("nodeset variable $" + $ID.text + " labeled " + $e.text);
 		if (symtab.resolve($ID.text) != null) {
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
 		}
-		symtab.define($ID.text, VarType.NODE);
+		symtab.define($ID.text, VarType.NODESET);
 		symtab.newScope("node.properties");
 		symtab.define("__label", VarType.PROPERTY, $e.text);
 	  } '{' property_statement_list '}' {
@@ -98,16 +98,21 @@ create_node
 	;
 
 create_edge
-	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$'n2=ID LABEL e=string_expr {
+	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$' n2=ID LABEL e=string_expr {
+		/* TODO:  FROM $ID TO $ID  -> FROM eval_expr TO eval_expr */
+		/* FROM node_ref TO node_ref */
 		if (verbose) notifyErrorListeners("edgeset variable $" + $n0.text + " labeled " + $e.text);
 		if (symtab.resolve($n0.text) != null) {
 			notifyErrorListeners("binding $" + $n0.text + " hides earlier one!");
 		}
-		if (symtab.resolve($n1.text) == null) {
-			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
+		
+		Variable from = symtab.resolve($n1.text);
+		if (from == null || from.getType() != VarType.NODESET) {
+			notifyErrorListeners("nodeset variable $" + $n1.text + " undefined!");
 		}
-		if (symtab.resolve($n2.text) == null) {
-			notifyErrorListeners("nodeset variable  " + $n1.text + " undefined!");
+		Variable to = symtab.resolve($n2.text);
+		if (to == null || to.getType() != VarType.NODESET) {
+			notifyErrorListeners("nodeset variable $" + $n2.text + " undefined!");
 		}
 		symtab.define($n0.text, VarType.EDGE);
 		symtab.newScope("edge.properties");
@@ -116,6 +121,15 @@ create_edge
 		symtab.define("__to", VarType.PROPERTY, $n2.text);
 	  } '{' property_statement_list '}' {
 		symtab.endScope();
+	  }
+	;
+
+node_ref
+	: '$' ID {
+		Variable node = symtab.resolve($ID.text);
+		if (node == null || node.getType() != VarType.NODESET) {
+			notifyErrorListeners("nodeset variable $" + $ID.text + " undefined!");
+		}
 	  }
 	;
 

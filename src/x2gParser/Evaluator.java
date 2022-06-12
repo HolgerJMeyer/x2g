@@ -105,30 +105,30 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		case x2gLexer.XPATH:
 			List<Content> seq = xtractor.xtract(e, vars);
 			Variable var = symtab.define(v, VarType.XPATH, e);
-			List<String> list = new ArrayList<String>();
+			Set<Object> set = new HashSet<Object>();
 			for (Content n : seq) {
 				switch (n.getCType()) {
 					case Element:
 					case CDATA:
 					case EntityRef:
 					case Text:
-						list.add(n.getValue());
+						set.add(n.getValue());
 						break;
 					case Comment:
 					case DocType:
 					case ProcessingInstruction:
-						list.add(n.toString());
+						set.add(n.toString());
 						break;
 					default:
-						list.add(n.toString());
+						set.add(n.toString());
 						break;
 				}
 			}
 			/* TODO: Store all current bindings of an xpath result
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
-			if (verbose) evalMessage("@bind_expr: $" + var + " = " + list);
-			var.setBinding(list);
+			if (verbose) evalMessage("@bind_expr: $" + var + " = " + set);
+			var.setBinding(set);
 			break;
 
 		case x2gLexer.JPATH:
@@ -172,7 +172,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.define("__label", VarType.PROPERTY, e);
 		// TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
 		visit(ctx.property_statement_list());
-evalMessage("current scope: " + symtab.getCurrent().getVariables());
+		for (Variable v : symtab.getCurrent().getVariables()) {
+			evalMessage("current var: " + v);
+		}
 		symtab.endScope();
 		return null;
 	}
@@ -187,7 +189,9 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
 		// TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
 		visit(ctx.property_statement_list());
-evalMessage("current scope: " + symtab.getCurrent().getVariables());
+		for (Variable v : symtab.getCurrent().getVariables()) {
+			evalMessage("current var: " + v);
+		}
 		symtab.endScope();
 		return null;
 	}
@@ -202,21 +206,22 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 	@Override public Object visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
 		// TODO: to be evaluated
 		Object e = visit(ctx.expr());
-		symtab.define(ctx.ID().getText(), VarType.PROPERTY, ctx.expr().getText());
+		//symtab.define(ctx.ID().getText(), VarType.PROPERTY, ctx.expr().getText());
+		symtab.define(ctx.ID().getText(), VarType.PROPERTY, e.toString());
 		return null;
 	}
 
 	@Override public Object visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
 		String props = ctx.property_name_list().getText();
-		List<String> plist = new ArrayList<String>();
+		Set<Object> pset = new HashSet<Object>();
 		Variable v = symtab.define("__unique", VarType.PROPERTY, props);
 		for (String prop : props.split(",")) {
 			if (symtab.resolveCurrent(prop) == null) {
 				evalMessage("unique constraint: property " + prop + " unknown!");
 			}
-			plist.add(prop);
+			pset.add(prop);
 		}
-		v.setBinding(plist);
+		v.setBinding(pset);
 		return null;
 	}
 
@@ -346,7 +351,7 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 				evalMessage("@eval_expr: $" + v + "/" + e);
 			}
 			// TODO: extract value
-			return "v.path(" + e + ")";
+			return "$" + v.getName() + ".path(" + e + ")";
 		}
 		//	'$' v=ID '.' a=ID
 		if (ctx.ID(1) != null) {

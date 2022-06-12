@@ -1,6 +1,5 @@
 import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -36,7 +35,7 @@ public class Scope {
 		return define(variable);
 	}
 
-	protected Variable define(String name, VarType type, List<String> binding) {
+	protected Variable define(String name, VarType type, Set<Object> binding) {
 		Variable variable = new Variable(name, type, binding);
 		return define(variable);
 	}
