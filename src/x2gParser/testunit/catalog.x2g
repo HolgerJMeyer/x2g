@@ -10,6 +10,7 @@ match xpath("//cd") using $c {
 	match $c.xpath("artist") using $a {
 		create node $an label "artist" {
 			name = $a.xpath("text()"),
+			artist = $cn.src,
 			unique (name)
 		},
 		create edge $e from $an to $cn label "interpret" {

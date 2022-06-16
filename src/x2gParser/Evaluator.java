@@ -340,7 +340,7 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 	//		| '$' v=ID '.' a=ID
 	//		| '$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')'
 	//		;
-	@Override public String visitEval_expr(x2gParser.Eval_exprContext ctx) {
+	@Override public String visitVar_ref(x2gParser.Var_refContext ctx) {
 		//	'$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')'
 		if (ctx.string_expr() != null) {
 			String p = ctx.p.getText();
@@ -402,9 +402,9 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		return ctx.string_expr(0).getText() + ctx.string_expr(1).getText();
 	}
 
-	// string_expr: eval_expr
-	@Override public String visitStringEval(x2gParser.StringEvalContext ctx) {
-		return visit(ctx.eval_expr()).toString();
+	// string_expr: var_ref
+	@Override public String visitStringVar(x2gParser.StringVarContext ctx) {
+		return visit(ctx.var_ref()).toString();
 	}
 
 	// string_expr: STR

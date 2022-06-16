@@ -205,25 +205,27 @@ expr
 	| expr op=(MULT|DIV) expr			#arithExpr
 	| expr op=(PLUS|MINUS) expr		#arithExpr
 	| '(' expr ')'							#parensExpr
-	| eval_expr								#evalExpr
+	| var_ref								#varRef
 	| literal_expr							#literalExpr
 	; 
 
-eval_expr
-	: '$' v=ID {
+var_ref
+	: '$' v=ID ('.' a=ID)? {
 		// TODO:
-		// $v can be path, sql, node, or edge variable
-		if (symtab.resolve($v.text) == null) {
-			notifyErrorListeners("variable $" + $v.text + " is unbound!");
-		}
-	  }
-	| '$' v=ID '.' a=ID {
-		// TODO:
-		// $v can be sql, node, or edge variable
+		// CASE v
+		// v can be path, sql, node, or edge variable
+		// CASE v.a
+		// v can be sql, node, or edge variable
 		// optionales .<property>, wenn nicht, dann implizit .__label?
 		Variable v = symtab.resolve($v.text);
 		if (v == null) {
 			notifyErrorListeners("variable $" + $v.text + " is unbound!");
+		}
+		if ($a != null) {
+			Variable a = symtab.resolve($a.text);
+			if (a == null) {
+				notifyErrorListeners("attribute/property " + $a.text + " is undefined!");
+			}
 		}
 	  }
 	| '$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')' {
@@ -249,7 +251,7 @@ literal_expr
  */
 string_expr
 	: string_expr PLUS string_expr	#stringConcat
-	| eval_expr								#stringEval
+	| var_ref								#stringVar
 	| STR										#stringSTR
 	;
 
