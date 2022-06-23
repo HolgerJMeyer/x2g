@@ -35,7 +35,7 @@ x2g
 x2g_rule
 	: MATCH {
 		symtab.newScope("match");
-	  } bind_expr (',' bind_expr)* '{' body '}' {
+	  } bind_expr '{' body '}' {
 		symtab.endScope();
 	  }
 	;

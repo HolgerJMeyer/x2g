@@ -31,23 +31,23 @@ public class Scope {
 	 * Define a new variable in the current scope.
 	 */
 	protected Variable define(String name, VarType type, String expr) {
-		Variable variable = new Variable(name, type, expr);
-		return define(variable);
+		Variable v = new Variable(name, type, expr);
+		return define(v);
 	}
 
 	protected Variable define(String name, VarType type, Set<Object> binding) {
-		Variable variable = new Variable(name, type, binding);
-		return define(variable);
+		Variable v = new Variable(name, type, binding);
+		return define(v);
 	}
 
 	protected Variable define(String name, VarType type) {
-		Variable variable = new Variable(name, type);
-		return define(variable);
+		Variable v = new Variable(name, type);
+		return define(v);
 	}
 
-	private Variable define(Variable variable) {
-		members.put(variable.getName(), variable);
-		return variable;
+	private Variable define(Variable v) {
+		members.put(v.getName(), v);
+		return v;
 	}
 
 	/**
@@ -56,9 +56,9 @@ public class Scope {
 	 * Returns null if not found in any applicable scope.
 	 */
 	protected Variable resolve(String name) {
-		Variable variable = members.get(name);
-		if (variable != null) {
-			return variable;
+		Variable v = members.get(name);
+		if (v != null) {
+			return v;
 		}
 		if (enclosingScope != this) {
 			return enclosingScope.resolve(name);
@@ -90,6 +90,17 @@ public class Scope {
 
 	public Set<Variable> getVariables() {
 		return new HashSet<Variable>(members.values());
+	}
+
+	public Set<Variable> getVariablesByType(VarType type) {
+		Set<Variable> s = new HashSet<Variable>();
+
+		for (Variable v : members.values()) {
+			if (v.getType() == type) {
+				s.add(v);
+			}
+		}	
+		return s;
 	}
 
 	/** Where to look next for variable */

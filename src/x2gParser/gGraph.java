@@ -2,12 +2,14 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
-
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class gGraph {
 	private boolean verbose;
 	private final Map<Integer, gNode> nodesById = new HashMap<Integer, gNode>();
 	private final Map<String, Set<gNode>> nodesByLabel = new HashMap<String, Set<gNode>>();
+	private final Map<String, Set<gEdge>> edgesByLabel = new HashMap<String, Set<gEdge>>();
 
 	public gGraph(boolean verbose) { this.verbose = verbose; }
 
@@ -97,31 +99,52 @@ public class gGraph {
 			System.err.println("createNode: new node created");
 		n = new gNode(label, properties);
 		nodesById.put(n.getId(), n);
-		Set<gNode> nl = nodesByLabel.get(label);
-		if (nl == null) {
-			nl = new HashSet<gNode>();
-			nodesByLabel.put(label, nl);
+		Set<gNode> nset = nodesByLabel.get(label);
+		if (nset == null) {
+			nset = new HashSet<gNode>();
+			nodesByLabel.put(label, nset);
 		}
-		nl.add(n);
+		nset.add(n);
 		return n;
+	}
+
+	public gEdge createEdge(String label, gNode src, gNode dst, gProperties properties) {
+		// TODO: create edge only if not exists an edge from src to dst
+		// Are we using multigraphs, i.e. are there more than one edge from src to dst?
+		// Cases:
+		// (0) no multigraph, edge from src to dst exists
+		// (1) edge with same label exists
+		// (2) edge with different label exists
+		// (3) no edge from src to dst exists
+		// Case (0)
+		for (gEdge e : src.outgoingEdges(dst).collect(Collectors.toList())) {
+			return e;
+		}
+		// Case (1 & 2)
+		// TODO
+		// Case (3)
+		final gEdge e = new gEdge(label, src, dst, properties);
+
+		src.outgoingEdges.add(e);
+		dst.incomingEdges.add(e);
+		Set<gEdge> eset = edgesByLabel.get(label);
+		if (eset == null) {
+			eset = new HashSet<gEdge>();
+			edgesByLabel.put(label, eset);
+		}
+		eset.add(e);
+		if (verbose) System.err.println("createEdge returns: " + e.toString());
+		return e;
 	}
 
 	public gEdge createEdge(String label, int srcId, int dstId, gProperties properties) {
 		final gNode src = getNode(srcId);
 		final gNode dst = getNode(dstId);
-		final gEdge e = new gEdge(label, src, dst, properties);
-		
-		src.outgoingEdges.add(e);
-		dst.incomingEdges.add(e);
-		return e;
-	}
 
-	public gEdge createEdge(String label, gNode src, gNode dst, gProperties properties) {
-		final gEdge e = new gEdge(label, src, dst, properties);
-
-		src.outgoingEdges.add(e);
-		dst.incomingEdges.add(e);
-		return e;
+		if (src != null && dst != null) {
+			return createEdge(label, src, dst, properties);
+		}
+		return null;
 	}
 
 	public gEdge createEdge(String label, gNode src, gNode dst) {
@@ -133,23 +156,20 @@ public class gGraph {
 	public gNode getNode(int id) { return nodesById.get(id); }
 
 	public gNode getNode(String label, Map<String, Object> properties) {
-		if (verbose)
-			System.err.println("getNode(" + label + ", " + properties);
+		//if (verbose) System.err.println("getNode(" + label + ", " + properties);
 		if (getNodes(label) != null) {
-			if (verbose)
-				System.err.println("getNode: label exists");
+			//if (verbose) System.err.println("getNode: label exists");
 			for (gNode n : getNodes(label)) {
 				if (n.getProperties().equals(properties)) {
 					return n;
 				}
 			}
 		}
-		if (verbose)
-			System.err.println("getNode: returns null");
+		//if (verbose) System.err.println("getNode: returns null");
 		return null;
 	}
 
-	public String toString() { return nodesById.toString(); }
+	public String toString() { return nodesByLabel.toString() + edgesByLabel.toString(); }
 }
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet

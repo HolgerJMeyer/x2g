@@ -40,6 +40,12 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			System.err.println("Symtab[[" + symtab + "]]");
 			System.err.println("Graph[[" + graph + "]]");
 		}
+		//System.exit(-1);
+	}
+
+	public void evalExit(String message) {
+		System.err.println(Main.x2g + ": file " + xtractor.getFilename() + ": " + message);
+		System.exit(-1);
 	}
 
 	public void evalMessage(String message) {
@@ -61,13 +67,13 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		symtab.setScope("match");
 		// TODO:	forall bind_expr
 		// TODO:		visit(body)
-		//visitChildren(ctx);
 		//visit(ctx.bind_expr_list());
-		for (x2gParser.Bind_exprContext bctx : ctx.bind_expr()) {
-			visit(bctx);
-		}
+		Variable bindvar = visitBind_expr(ctx.bind_expr());
 		// forall bindings: for all bindings of this scope
+		for (Object s : bindvar.getBinding()) {
+			bindvar.setCurrent(s);
 			visit(ctx.body());
+		}
 		symtab.endScope();
 		return null;
 	}
@@ -79,13 +85,14 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return null;
 	}
 
-	@Override public Object visitBind_expr(x2gParser.Bind_exprContext ctx) {
+	@Override public Variable visitBind_expr(x2gParser.Bind_exprContext ctx) {
 		//TODO: defined in the context of enclosing binding/match
 		String kw = ctx.b.getText();
 		int kwtype = ctx.b.getType();
 		String e = (String)visit(ctx.string_expr());
 		String c = null;
 		Variable context = null;
+		Variable bindvar = null;
 		String v;
 		Map<String, Object> vars = new HashMap<String, Object>();
 
@@ -94,7 +101,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			v = ctx.ID(1).getText();
 			context = symtab.resolve(c);
 			vars.put(c, context.getExpr());
-			e = context.getExpr() + "/" + e;
+			e = context.getExpr() + '/' + e;
 		}
 		else { /* bin absolute without context var */
 			v = ctx.ID(0).getText();
@@ -104,7 +111,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		switch (kwtype) {
 		case x2gLexer.XPATH:
 			List<Content> seq = xtractor.xtract(e, vars);
-			Variable var = symtab.define(v, VarType.XPATH, e);
+			bindvar = symtab.define(v, VarType.XPATH, e);
 			Set<Object> set = new HashSet<Object>();
 			for (Content n : seq) {
 				switch (n.getCType()) {
@@ -127,73 +134,102 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			/* TODO: Store all current bindings of an xpath result
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
-			if (verbose) evalMessage("@bind_expr: $" + var + " = " + set);
-			var.setBinding(set);
+			if (verbose) evalMessage("@bind_expr: $" + v + " = " + set);
+			bindvar.setBinding(set);
+			// TODO:
+			// xpvar.setCurrent(set[0]);
 			break;
 
 		case x2gLexer.JPATH:
-			symtab.define(v, VarType.JPATH, e);
+			bindvar = symtab.define(v, VarType.JPATH, e);
 			/* TODO: */
-			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
-			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
+			evalMessage("binding of " + kw + '(' + e + ") not support in this version");
+			if (verbose) evalMessage("@bind_expr: " + kw + '(' + e + ')');
 			break;
 
 		case x2gLexer.SQL:
-			symtab.define(v, VarType.SQL, e);
+			bindvar = symtab.define(v, VarType.SQL, e);
 			/* TODO: */
-			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
-			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
+			evalMessage("binding of " + kw + '(' + e + ") not support in this version");
+			if (verbose) evalMessage("@bind_expr: " + kw + '(' + e + ')');
 			break;
 
 		case x2gLexer.NODE:
-			symtab.define(v, VarType.NODE, e);
+			bindvar = symtab.define(v, VarType.NODE, e);
 			/* TODO: */
-			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
-			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
+			evalMessage("binding of " + kw + '(' + e + ") not support in this version");
+			if (verbose) evalMessage("@bind_expr: " + kw + '(' + e + ')');
 			break;
 
 		case x2gLexer.EDGE:
-			symtab.define(v, VarType.EDGE, e);
+			bindvar = symtab.define(v, VarType.EDGE, e);
 			/* TODO: */
-			evalMessage("binding of " + kw + "(" + e + ") not support in this version");
-			if (verbose) evalMessage("@bind_expr: " + kw + "(" + e + ")");
+			evalMessage("binding of " + kw + '(' + e + ") not support in this version");
+			if (verbose) evalMessage("@bind_expr: " + kw + '(' + e + ')');
 			break;
 
 		default:
 			break;
 		}
-		return null;
+		return bindvar;
 	}
 
-	@Override public Object visitCreate_node(x2gParser.Create_nodeContext ctx) {
-		symtab.define(ctx.ID().getText(), VarType.NODE);
+	@Override public gNode visitCreate_node(x2gParser.Create_nodeContext ctx) {
+		Variable nvar = symtab.define(ctx.ID().getText(), VarType.NODE);
 		Scope scope = symtab.setScope("node.properties");
-		String e = (String)visit(ctx.string_expr());
-		symtab.define("__label", VarType.PROPERTY, e);
-		// TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gNode>());
+		String label = (String)visit(ctx.string_expr());
+		symtab.define("__label", VarType.PROPERTY, label);
 		visit(ctx.property_statement_list());
-		for (Variable v : symtab.getCurrent().getVariables()) {
-			evalMessage("current var: " + v);
+		Map<String, Object> props = new HashMap<String, Object>();
+		for (Variable v : symtab.getCurrent().getVariablesByType(VarType.PROPERTY)) {
+			props.put(v.getName(), v.getExpr());
 		}
 		symtab.endScope();
-		return null;
+		gNode node = graph.createNode(label, new gProperties(props));
+		// add to current nodevar binding!
+		if (nvar.getBinding() == null) {
+			nvar.setBinding(new HashSet<Object>());
+		}
+		nvar.getBinding().add(node);
+		nvar.setCurrent(node);
+		return node;
 	}
 
-	@Override public Object visitCreate_edge(x2gParser.Create_edgeContext ctx) {
-		//OOPS: visitChildren(ctx);
-		symtab.define(ctx.ID(0).getText(), VarType.EDGE);
+	@Override public gEdge visitCreate_edge(x2gParser.Create_edgeContext ctx) {
+		Variable evar = symtab.define(ctx.ID(0).getText(), VarType.EDGE);
 		Scope scope = symtab.setScope("edge.properties");
-		String e = (String)visit(ctx.string_expr());
-		symtab.define("__label", VarType.PROPERTY, e);
-		symtab.define("__from", VarType.PROPERTY, ctx.ID(1).getText());
-		symtab.define("__to", VarType.PROPERTY, ctx.ID(2).getText());
-		// TODO: symtab.define("__binding", VarType.PROPERTY, new ArrayList<gEdge>());
+		String label = (String)visit(ctx.string_expr());
+		String from = ctx.ID(1).getText();
+		String to = ctx.ID(2).getText();
+		symtab.define("__label", VarType.PROPERTY, label);
+		// TODO: properties have on String values, should be Object with Type
+		symtab.define("__from", VarType.PROPERTY, '$' + from);
+		symtab.define("__to", VarType.PROPERTY, '$' + to);
+		Variable fromVar = symtab.resolve(from);
+		Variable toVar = symtab.resolve(to);
+		/* This is already checked by parser, should not happen! */
+		if (fromVar == null) {
+			evalExit("node variable '" + fromVar + "' for edge creation undefined!");
+		}
+		if (toVar == null) {
+			evalExit("node variable '" + toVar + "' for edge creation undefined!");
+		}
+		gNode fromNode = (gNode)fromVar.getCurrent();
+		gNode toNode = (gNode)toVar.getCurrent();
 		visit(ctx.property_statement_list());
-		for (Variable v : symtab.getCurrent().getVariables()) {
-			evalMessage("current var: " + v);
+		Map<String, Object> props = new HashMap<String, Object>();
+		for (Variable v : symtab.getCurrent().getVariablesByType(VarType.PROPERTY)) {
+			props.put(v.getName(), v.getExpr());
 		}
 		symtab.endScope();
-		return null;
+		gEdge edge = graph.createEdge(label, fromNode, toNode, new gProperties(props));
+		// add to current edgevar binding!
+		if (evar.getBinding() == null) {
+			evar.setBinding(new HashSet<Object>());
+		}
+		evar.getBinding().add(edge);
+		evar.setCurrent(edge);
+		return edge;
 	}
 
 	@Override public Object visitIf_stmt(x2gParser.If_stmtContext ctx) {
@@ -348,10 +384,10 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 			String vid = ctx.v.getText();
 			Variable v = symtab.resolve(vid);
 			if (v != null) {
-				evalMessage("@eval_expr: $" + v + "/" + e);
+				evalMessage("@eval_expr: $" + v + '/' + e);
 			}
 			// TODO: extract value
-			return "$" + v.getName() + ".path(" + e + ")";
+			return '$' + v.getName() + ".path(" + e + ')';
 		}
 		//	'$' v=ID '.' a=ID
 		if (ctx.ID(1) != null) {
@@ -359,10 +395,10 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 			String aid = ctx.a.getText();
 			Variable v = symtab.resolve(vid);
 			if (v != null) {
-				evalMessage("@eval_expr: $" + v + "." + aid);
+				evalMessage("@eval_expr: $" + v + '.' + aid);
 			}
 			// TODO: extract value
-			return "$" + vid + "." + aid;
+			return '$' + vid + '.' + aid;
 		}
 		//	'$' v=ID
 		String vid = ctx.v.getText();
@@ -371,7 +407,7 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 			evalMessage("@eval_expr: $" + v);
 		}
 		// TODO: extract value
-		return "$" + vid;
+		return '$' + vid;
 	}
 
 	// literal_expr: STR

@@ -31,6 +31,10 @@ public class gNode extends gElement {
 		return outgoingEdges.stream().filter(e -> e.label.equals(edgeLabel));
 	}
 
+	public Stream<gEdge> outgoingEdges(gNode dst) {
+		return outgoingEdges.stream().filter(e -> e.getDst() == dst);
+	}
+
 	@Override
 	public boolean equals(final Object other) {
 		if (this == other)

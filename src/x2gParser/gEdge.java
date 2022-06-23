@@ -20,7 +20,14 @@ public class gEdge extends gElement {
 
 	public gNode getDst() { return dst; }
 
-	public String toString() { return "todo gEdge"; }
+	public String toString() {
+		return "Edge = {" +
+				"label=\"" + label + '"' +
+				", src=" + src.getId() +
+				", dst=" + dst.getId() +
+				", properties=" + properties +
+				'}';
+	}
 }
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet
