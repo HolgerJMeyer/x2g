@@ -65,9 +65,6 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	 */
 	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
 		symtab.setScope("match");
-		// TODO:	forall bind_expr
-		// TODO:		visit(body)
-		//visit(ctx.bind_expr_list());
 		Variable bindvar = visitBind_expr(ctx.bind_expr());
 		// forall bindings: for all bindings of this scope
 		for (Object s : bindvar.getBinding()) {
@@ -93,15 +90,13 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		String c = null;
 		Variable context = null;
 		Variable bindvar = null;
-		String v;
+		String v = null;
 		Map<String, Object> vars = new HashMap<String, Object>();
 
 		if (ctx.ID(1) != null) { /* bind relative to context var */
 			c = ctx.ID(0).getText();
 			v = ctx.ID(1).getText();
 			context = symtab.resolve(c);
-			vars.put(c, context.getExpr());
-			e = context.getExpr() + '/' + e;
 		}
 		else { /* bin absolute without context var */
 			v = ctx.ID(0).getText();
@@ -110,34 +105,23 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		// bind_expr: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID
 		switch (kwtype) {
 		case x2gLexer.XPATH:
-			List<Content> seq = xtractor.xtract(e, vars);
+			List<Content> seq;
+			if (context != null) {
+				seq = xtractor.xtract(context.getCurrent(), e, vars);
+			}
+			else {
+				seq = xtractor.xtract(e, vars);
+			}
 			bindvar = symtab.define(v, VarType.XPATH, e);
 			Set<Object> set = new HashSet<Object>();
 			for (Content n : seq) {
-				switch (n.getCType()) {
-					case Element:
-					case CDATA:
-					case EntityRef:
-					case Text:
-						set.add(n.getValue());
-						break;
-					case Comment:
-					case DocType:
-					case ProcessingInstruction:
-						set.add(n.toString());
-						break;
-					default:
-						set.add(n.toString());
-						break;
-				}
+				set.add(n);
 			}
 			/* TODO: Store all current bindings of an xpath result
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
 			if (verbose) evalMessage("@bind_expr: $" + v + " = " + set);
 			bindvar.setBinding(set);
-			// TODO:
-			// xpvar.setCurrent(set[0]);
 			break;
 
 		case x2gLexer.JPATH:
@@ -371,7 +355,7 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		return visit(ctx.literal_expr());
 	}
 
-	// eval_expr
+	// var_ref
 	//		: '$' v=ID
 	//		| '$' v=ID '.' a=ID
 	//		| '$' v=ID '.' p=(XPATH|JPATH) '(' e=string_expr ')'
@@ -383,11 +367,35 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 			String e = (String)visit(ctx.string_expr());
 			String vid = ctx.v.getText();
 			Variable v = symtab.resolve(vid);
-			if (v != null) {
-				evalMessage("@eval_expr: $" + v + '/' + e);
+			Map<String, Object> vars = new HashMap<String, Object>();
+			if (verbose) {
+				evalMessage("@var_ref: $" + v.getName() + ".path(" + e + ')');
 			}
-			// TODO: extract value
-			return '$' + v.getName() + ".path(" + e + ')';
+			if (v != null && (p.equals("xpath") || p.equals("XPATH"))) {
+				List<Content> seq = xtractor.xtract(v.getCurrent(), e, vars);
+				if (seq.size() == 1) {
+					Content node = seq.get(0);
+					switch (node.getCType()) {
+						case Element:
+						case CDATA:
+						case EntityRef:
+						case Text:
+							return node.getValue();
+						case Comment:
+						case DocType:
+						case ProcessingInstruction:
+						default:
+							break;
+					}
+					return node.toString();
+				}
+				else {
+					evalMessage("xpath expression (" + e + ") evaluates to a node set, single node expected!");
+				}
+				return seq.toString();
+			}
+			// TODO: JPATH
+			return '$' + vid + ".jpath(" + e + ')';
 		}
 		//	'$' v=ID '.' a=ID
 		if (ctx.ID(1) != null) {
@@ -395,7 +403,7 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 			String aid = ctx.a.getText();
 			Variable v = symtab.resolve(vid);
 			if (v != null) {
-				evalMessage("@eval_expr: $" + v + '.' + aid);
+				evalMessage("@var_ref: $" + v + '.' + aid);
 			}
 			// TODO: extract value
 			return '$' + vid + '.' + aid;
@@ -404,10 +412,10 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		String vid = ctx.v.getText();
 		Variable v = symtab.resolve(vid);
 		if (v != null) {
-			evalMessage("@eval_expr: $" + v);
+			evalMessage("@var_ref: $" + v);
 		}
 		// TODO: extract value
-		return '$' + vid;
+		return v.getCurrent().toString();
 	}
 
 	// literal_expr: STR
@@ -440,7 +448,7 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 
 	// string_expr: var_ref
 	@Override public String visitStringVar(x2gParser.StringVarContext ctx) {
-		return visit(ctx.var_ref()).toString();
+		return visitVar_ref(ctx.var_ref());
 	}
 
 	// string_expr: STR

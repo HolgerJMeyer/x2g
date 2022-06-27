@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 
 public class xTractor {
 	private Document doc;
-	private boolean verbose;
+	private boolean verbose = true;
 	private File file;
 
 	/**
@@ -51,7 +51,6 @@ public class xTractor {
 				SAXBuilder sax = new SAXBuilder();
 				doc = sax.build(file = new File(filename));
 			}
-			verbose = false;
 		}
 		//catch (ParserConfigurationException | JDOMException | SAXException | URISyntaxException | IOException pe) {
 		catch (ParserConfigurationException | JDOMException | SAXException | IOException pe) {
@@ -77,20 +76,18 @@ public class xTractor {
 	}
 
 	public List<Content> xtract(String xp, Map<String, Object> vars) {
+		return xtract(doc, xp, vars);
+	}
+
+	public List<Content> xtract(Object context, String xp, Map<String, Object> vars) {
+		System.err.println("xtract("+ context + "," + xp + ")");
 		try {
-			// TODO: AbstractXPathCompiled<T>
-			// http://www.jdom.org/docs/apidocs/org/jdom2/xpath/util/AbstractXPathCompiled.html
-			//List<Content> list = new ArrayList<Content>();
 			if (verbose) System.err.println("xpath compile: " + xp);
 			XPathFactory xpf = XPathFactory.instance();
 			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars);
-			List<Content> nodes = expr.evaluate(doc);
+			List<Content> nodes = expr.evaluate(context);
 			if (verbose) System.err.println("xpath evaluate: " + nodes);
 			return nodes;
-			//for (Content n : nodes) {
-			//	list.add(n);
-			//}
-			//return list;
 		} catch (Exception e) {
 			System.err.println("xpath(" + xp + ") evaluation failed: " + e);
 		}
