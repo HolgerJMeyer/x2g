@@ -163,12 +163,15 @@ property_unique
 		if (symtab.resolveCurrent("__unique") != null) {
 			notifyErrorListeners("unique constraint (" + $property_name_list.text + ") redefines earlier one!");
 		}
-		symtab.define("__unique", VarType.PROPERTY, $property_name_list.text);
-		for (String prop : $property_name_list.text.split(",")) {
+		String[] keyprops = $property_name_list.text.split(",");
+		Set<Object> propset = new HashSet<Object>();
+		for (String prop : keyprops) {
+			propset.add(prop);
 			if (symtab.resolveCurrent(prop) == null) {
 				notifyErrorListeners("unique constraint: property " + prop + " unknown!");
 			}
 		}
+		symtab.define("__unique", VarType.PROPERTY, propset);
 	  }
 	;
 

@@ -231,18 +231,18 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return null;
 	}
 
-	@Override public Object visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
-		String props = ctx.property_name_list().getText();
-		Set<Object> pset = new HashSet<Object>();
-		Variable v = symtab.define("__unique", VarType.PROPERTY, props);
-		for (String prop : props.split(",")) {
+	@Override public Variable visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
+		String[] keyprops = ctx.property_name_list.getText().split(",");
+		Set<Object> propset = new HashSet<Object>();
+		for (String prop : keyprops) {
+			propset.add(prop);
 			if (symtab.resolveCurrent(prop) == null) {
 				evalMessage("unique constraint: property " + prop + " unknown!");
 			}
-			pset.add(prop);
 		}
-		v.setBinding(pset);
-		return null;
+		Variable v = symtab.define("__unique", VarType.PROPERTY, propset);
+		v.setBinding(propset);
+		return v;
 	}
 
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
