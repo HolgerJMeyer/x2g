@@ -186,9 +186,6 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		String from = ctx.ID(1).getText();
 		String to = ctx.ID(2).getText();
 		symtab.define("__label", VarType.PROPERTY, label);
-		// TODO: properties have on String values, should be Object with Type
-		symtab.define("__from", VarType.PROPERTY, '$' + from);
-		symtab.define("__to", VarType.PROPERTY, '$' + to);
 		Variable fromVar = symtab.resolve(from);
 		Variable toVar = symtab.resolve(to);
 		/* This is already checked by parser, should not happen! */
@@ -223,12 +220,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return null;
 	}
 
-	@Override public Object visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
-		// TODO: to be evaluated
+	@Override public Variable visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
 		Object e = visit(ctx.expr());
-		//symtab.define(ctx.ID().getText(), VarType.PROPERTY, ctx.expr().getText());
-		symtab.define(ctx.ID().getText(), VarType.PROPERTY, e.toString());
-		return null;
+		Variable v = symtab.define(ctx.ID().getText(), VarType.PROPERTY, e.toString());
+		return v;
 	}
 
 	@Override public Variable visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
@@ -248,7 +243,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
 			visit(ctx.property_statement_list());
-evalMessage("current scope: " + symtab.getCurrent().getVariables());
+			//evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		}
 		return null;
 	}
@@ -403,9 +398,14 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 			String aid = ctx.a.getText();
 			Variable v = symtab.resolve(vid);
 			if (v != null) {
-				evalMessage("@var_ref: $" + v + '.' + aid);
+				// extract attribute/property value from variable
+				if (verbose) evalMessage("@var_ref: $" + vid + '.' + aid);
+				if (v.getCurrent() instanceof gNode) {
+					gNode n = (gNode)v.getCurrent();
+					return n.getProperty(aid).toString();
+				}
 			}
-			// TODO: extract value
+			evalMessage("@var_ref: $" + vid + " is undefined!");
 			return '$' + vid + '.' + aid;
 		}
 		//	'$' v=ID
@@ -414,7 +414,6 @@ evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		if (v != null) {
 			evalMessage("@var_ref: $" + v);
 		}
-		// TODO: extract value
 		return v.getCurrent().toString();
 	}
 

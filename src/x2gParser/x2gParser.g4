@@ -117,8 +117,6 @@ create_edge
 		symtab.define($n0.text, VarType.EDGE);
 		symtab.newScope("edge.properties");
 		symtab.define("__label", VarType.PROPERTY, $e.text);
-		symtab.define("__from", VarType.PROPERTY, $n1.text);
-		symtab.define("__to", VarType.PROPERTY, $n2.text);
 	  } '{' property_statement_list '}' {
 		symtab.endScope();
 	  }
@@ -214,12 +212,11 @@ expr
 
 var_ref
 	: '$' v=ID ('.' a=ID)? {
-		// TODO:
 		// CASE v
-		// v can be path, sql, node, or edge variable
+		//		v can be path, sql, node, or edge variable
 		// CASE v.a
-		// v can be sql, node, or edge variable
-		// optionales .<property>, wenn nicht, dann implizit .__label?
+		//		v can be sql, node, or edge variable
+		// TODO: optionales .<property>, wenn nicht, dann implizit .__label?
 		Variable v = symtab.resolve($v.text);
 		if (v == null) {
 			notifyErrorListeners("variable $" + $v.text + " is unbound!");
@@ -227,6 +224,7 @@ var_ref
 		if ($a != null) {
 			Variable a = symtab.resolve($a.text);
 			if (a == null) {
+				// TODO: improved error checking, property may be defined
 				notifyErrorListeners("attribute/property " + $a.text + " is undefined!");
 			}
 		}

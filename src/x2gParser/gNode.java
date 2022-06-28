@@ -20,7 +20,7 @@ public class gNode extends gElement {
 	public String getLabel() { return label; }
 
 	public Map<String, Object> getProps() { return properties; }
-
+	
 	public int getId() { return id; }
 
 	public Stream<gEdge> incomingEdges(String edgeLabel) {

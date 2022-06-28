@@ -3,7 +3,6 @@ import java.util.HashMap;
 
 public abstract class gElement {
 	final String label;
-	//protected Map<String, Object> properties;
 	gProperties properties;
 
 	gElement(String label, gProperties properties) {
@@ -15,7 +14,9 @@ public abstract class gElement {
 
 	gProperties getProperties() { return properties; }
 
-	void setProperties(gProperties props) { this.properties = props; }
+	void setProperties(gProperties props) { properties = props; }
+
+	public Object getProperty(String key) { return properties.get(key); }
 
 	public String toString() { return "todo GrapElement"; }
 }

@@ -50,6 +50,7 @@ public class Main {
 		options.addOption("d", "input-dir", true, "transform all files found in this directory");
 		options.addOption("f", "output-format", true, "output file format: csv, dot, gefx, graphml, and lg are supported options");
 		options.addOption("h", "help", false, "print this help");
+		options.addOption("i", "integrate-mode", false, "mixed input formats (xml, json, sql, csv) are used");
 		options.addOption("m", "mixed-mode", false, "allow different input type sources");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
 		options.addOption("o", "out-file", true, "basename of output file(s)");

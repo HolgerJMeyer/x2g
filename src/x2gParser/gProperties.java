@@ -19,6 +19,10 @@ public class gProperties extends HashMap<String, Object> {
 		return (Map<String, Object>)this;
 	}
 
+	public Object getProperty(String key) {
+		return get(key);
+	}
+
 	public gProperties getSubset(Set<String> keys) {
 		return new gProperties(this);
 	}
