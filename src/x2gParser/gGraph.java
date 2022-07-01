@@ -6,14 +6,27 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class gGraph {
-	private boolean verbose;
+	private boolean verbose = false;
+	private boolean multi = false;
 	private final Map<Integer, gNode> nodesById = new HashMap<Integer, gNode>();
 	private final Map<String, Set<gNode>> nodesByLabel = new HashMap<String, Set<gNode>>();
 	private final Map<String, Set<gEdge>> edgesByLabel = new HashMap<String, Set<gEdge>>();
 
-	public gGraph(boolean verbose) { this.verbose = verbose; }
+	public gGraph(boolean verbose) {
+		this.verbose = verbose;
+	}
 
-	public gGraph() { this(false); }
+	public gGraph() {
+		this(false);
+	}
+
+	public boolean isMulti() {
+		return multi;
+	}
+
+	public void setMulti(boolean multi) {
+		this.multi = multi;
+	}
 
 	/**
 	 * Conditionally create a node by label and properties.
@@ -39,8 +52,9 @@ public class gGraph {
 
 		if (n != null) {
 			// (1) there is an existing node with same label and property values
-			if (verbose)
+			if (verbose) {
 				System.err.println("createNode: node with same label and properties exists");
+			}
 			return n;
 		}
 
@@ -53,8 +67,9 @@ public class gGraph {
 			Set<String> ukeys = (Set<String>)propsA.get("__unique");
 			// (2) if there is a __unique set of properties
 			if (ukeys != null) {
-				if (verbose)
+				if (verbose) {
 					System.err.println("createNode: unique keys (" + ukeys + ") are checked");
+				}
 				boolean allequal = true;
 				for (String key : ukeys) {
 					Object o1 = propsA.get(key);
@@ -73,30 +88,34 @@ public class gGraph {
 							System.err.println("createNode could not merge: property values for '" + key + "' differ: '" + propsA.get(key) + "' vs. '" + propsB.get(key) + "'");
 						}
 					}
-					if (verbose)
+					if (verbose) {
 						System.err.println("createNode: non-unique keys are merged");
+					}
 					return node;
 				}
 			}
 
 			// (3) if propsB are a subset of propsA
 			if (propsB.subsetOf(propsA)) {
-				if (verbose)
+				if (verbose) {
 					System.err.println("createNode: new properties are a subset");
+				}
 				return node;
 			}
 			
 			// (4) if propsA are a subset of propsB
 			if (propsA.subsetOf(propsB)) {
-				if (verbose)
+				if (verbose) {
 					System.err.println("createNode: new properties are a superset");
+				}
 				node.setProperties(propsB);
 				return node;
 			}
 		}
 		// (5)
-		if (verbose)
+		if (verbose) {
 			System.err.println("createNode: new node created");
+		}
 		n = new gNode(label, properties);
 		nodesById.put(n.getId(), n);
 		Set<gNode> nset = nodesByLabel.get(label);
@@ -114,7 +133,7 @@ public class gGraph {
 		// Cases:
 		// (0) no multigraph, edge from src to dst exists
 		// (1) edge with same label exists
-		// (2) edge with different label exists
+		// (2) edge with different label exists and multi-graph
 		// (3) no edge from src to dst exists
 		// Case (0)
 		for (gEdge e : src.outgoingEdges(dst).collect(Collectors.toList())) {
@@ -133,7 +152,9 @@ public class gGraph {
 			edgesByLabel.put(label, eset);
 		}
 		eset.add(e);
-		if (verbose) System.err.println("createEdge returns: " + e.toString());
+		if (verbose) {
+			System.err.println("createEdge returns: " + e.toString());
+		}
 		return e;
 	}
 
@@ -151,25 +172,45 @@ public class gGraph {
 		return createEdge(label, src, dst, null);
 	}
 
-	public Set<gNode> getNodes(String label) { return nodesByLabel.get(label); }
+	public Set<gNode> getNodes(String label) {
+		return nodesByLabel.get(label);
+	}
 
-	public gNode getNode(int id) { return nodesById.get(id); }
+	public Set<gEdge> getEdges(String label) {
+		return edgesByLabel.get(label);
+	}
+
+	public gNode getNode(int id) {
+		return nodesById.get(id);
+	}
 
 	public gNode getNode(String label, Map<String, Object> properties) {
-		//if (verbose) System.err.println("getNode(" + label + ", " + properties);
+		if (verbose) {
+			System.err.println("getNode(" + label + ", " + properties);
+		}
 		if (getNodes(label) != null) {
-			//if (verbose) System.err.println("getNode: label exists");
+			if (verbose) {
+				System.err.println("getNode: label exists");
+			}
 			for (gNode n : getNodes(label)) {
 				if (n.getProperties().equals(properties)) {
 					return n;
 				}
 			}
 		}
-		//if (verbose) System.err.println("getNode: returns null");
+		if (verbose) {
+			System.err.println("getNode: returns null");
+		}
 		return null;
 	}
 
-	public String toString() { return nodesByLabel.toString() + edgesByLabel.toString(); }
+	public Set<String> getNodeLabels() { return nodesByLabel.keySet(); }
+
+	public Set<String> getEdgeLabels() { return edgesByLabel.keySet(); }
+
+	public String toString() {
+		return nodesByLabel.toString() + edgesByLabel.toString();
+	}
 }
 
 // vim: ff=unix ts=3 sw=3 sts=3 noet

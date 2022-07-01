@@ -7,7 +7,6 @@ import java.util.HashSet;
  * Inspired by Chapter 6 from Terence Parr: Language Implementation Patterns.
  * The Pragmatic Bookshelf, Releigh, MA, 2010.
  */
-
 public class Scope {
 	protected String name;
 	protected Scope enclosingScope;

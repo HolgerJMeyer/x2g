@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 
 public class xTractor {
 	private Document doc;
-	private boolean verbose = true;
+	private boolean verbose = false;
 	private File file;
 
 	/**
@@ -55,7 +55,6 @@ public class xTractor {
 		//catch (ParserConfigurationException | JDOMException | SAXException | URISyntaxException | IOException pe) {
 		catch (ParserConfigurationException | JDOMException | SAXException | IOException pe) {
 			System.err.println("xpath extractor creating DOM: " + pe);
-			verbose = true;
 		}
 	}
 
@@ -65,9 +64,9 @@ public class xTractor {
 
 	public String getFilename() { return file.getName(); }
 
-	public void beVerbose(boolean verbose) { this.verbose = verbose; }
+	public void setVerbose(boolean verbose) { this.verbose = verbose; }
 	
-	public void beVerbose() { beVerbose(true); }
+	public void beVerbose() { setVerbose(true); }
 
 	public boolean isVerbose() { return verbose; }
 
@@ -80,13 +79,19 @@ public class xTractor {
 	}
 
 	public List<Content> xtract(Object context, String xp, Map<String, Object> vars) {
-		System.err.println("xtract("+ context + "," + xp + ")");
+		if (verbose) {
+			System.err.println("xtract("+ context + "," + xp + ")");
+		}
 		try {
-			if (verbose) System.err.println("xpath compile: " + xp);
+			if (verbose) {
+				System.err.println("xpath compile: " + xp);
+			}
 			XPathFactory xpf = XPathFactory.instance();
 			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars);
 			List<Content> nodes = expr.evaluate(context);
-			if (verbose) System.err.println("xpath evaluate: " + nodes);
+			if (verbose) {
+				System.err.println("xpath evaluate: " + nodes);
+			}
 			return nodes;
 		} catch (Exception e) {
 			System.err.println("xpath(" + xp + ") evaluation failed: " + e);

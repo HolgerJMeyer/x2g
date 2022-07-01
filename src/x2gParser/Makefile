@@ -25,7 +25,8 @@ GRAPHSRCS = \
 	gGraph.java \
 	gNode.java \
 	gProperties.java \
-	gTest.java
+	gTest.java \
+	csvExport.java 
 XMLSRCS = \
 	xTractor.java
 MYSRCS = \
@@ -80,7 +81,7 @@ xpathtest:
 	export CLASSPATH=$(CLASSPATH) ; java -ea xTractor testunit/catalog.xml "//cd"
 
 cdcatalog:
-	export CLASSPATH=$(CLASSPATH) ; java Main -v testunit/catalog.xml <testunit/catalog.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main testunit/catalog.xml <testunit/catalog.x2g
 
 grun:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui <$$g ; done

@@ -15,6 +15,7 @@ public class Main {
 	static boolean verbose = false;
 	static boolean mixed = false;
 	static boolean parseOnly = false;
+	static boolean multiGraph = false;
 	static String conflict = "reject"; // other options: merga, link
 	static String inputDir = null;
 	static String outFile = null;
@@ -59,6 +60,7 @@ public class Main {
 		options.addOption("s", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
 		options.addOption("u", "input-url", true, "read input data from that URL");
 		options.addOption("v", "verbose", false, "being verbose");
+		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 
 		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
 		org.apache.commons.cli.CommandLine cmd = cmdparser.parse(options, args);
@@ -72,6 +74,7 @@ public class Main {
 		if (cmd.hasOption("mixed-mode")) { mixed = true; }
 		if (cmd.hasOption("verbose")) { verbose = true; }
 		if (cmd.hasOption("parse-only")) { parseOnly = true; }
+		if (cmd.hasOption("multi-graph")) { multiGraph = true; }
 
 		if (cmd.hasOption("help")) {
 			org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
@@ -141,6 +144,8 @@ public class Main {
 			System.err.println(x2g + ": symtab [[" + symtab.toString() + "]]");
 			System.err.println(x2g + ": graph [[" + graph.toString() + "]]");
 		}
+		csvExport ex = new csvExport();
+		ex.export(graph);
 	}
 }
 

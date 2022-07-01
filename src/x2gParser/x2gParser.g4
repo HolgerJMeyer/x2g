@@ -47,7 +47,9 @@ bind_expr
 				notifyErrorListeners("context variable $" + $c.text + " is undefined!");
 			}
 		}
-		if (verbose) notifyErrorListeners($b.text + " variable $" + $v.text + " bound to " + $e.text);
+		if (verbose) {
+			notifyErrorListeners($b.text + " variable $" + $v.text + " bound to " + $e.text);
+		}
 		if (symtab.resolve($v.text) != null) {
 			notifyErrorListeners("binding $" + $v.text + " hides earlier one!");
 		}
@@ -62,10 +64,10 @@ bind_expr
 			symtab.define($v.text, VarType.SQL, $e.text);
 			break;
 		case NODE:
-			symtab.define($v.text, VarType.NODE, $e.text);
+			symtab.define($v.text, VarType.NODESET, $e.text);
 			break;
 		case EDGE:
-			symtab.define($v.text, VarType.EDGE, $e.text);
+			symtab.define($v.text, VarType.EDGESET, $e.text);
 			break;
 		}
 	  }
@@ -85,12 +87,15 @@ body_action
 
 create_node
 	: CREATE NODE '$' ID LABEL e=string_expr {
-		if (verbose) notifyErrorListeners("nodeset variable $" + $ID.text + " labeled " + $e.text);
+		if (verbose) {
+			notifyErrorListeners("nodeset variable $" + $ID.text + " labeled " + $e.text);
+		}
 		if (symtab.resolve($ID.text) != null) {
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
 		}
-		symtab.define($ID.text, VarType.NODESET);
-		symtab.newScope("node.properties");
+		Variable node = symtab.define($ID.text, VarType.NODESET);
+		Scope propscope = symtab.newScope("node.properties");
+		node.setPropScope(propscope);
 		symtab.define("__label", VarType.PROPERTY, $e.text);
 	  } '{' property_statement_list '}' {
 		symtab.endScope();
@@ -101,7 +106,9 @@ create_edge
 	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$' n2=ID LABEL e=string_expr {
 		/* TODO:  FROM $ID TO $ID  -> FROM eval_expr TO eval_expr */
 		/* FROM node_ref TO node_ref */
-		if (verbose) notifyErrorListeners("edgeset variable $" + $n0.text + " labeled " + $e.text);
+		if (verbose) {
+			notifyErrorListeners("edgeset variable $" + $n0.text + " labeled " + $e.text);
+		}
 		if (symtab.resolve($n0.text) != null) {
 			notifyErrorListeners("binding $" + $n0.text + " hides earlier one!");
 		}
@@ -114,8 +121,9 @@ create_edge
 		if (to == null || to.getType() != VarType.NODESET) {
 			notifyErrorListeners("nodeset variable $" + $n2.text + " undefined!");
 		}
-		symtab.define($n0.text, VarType.EDGE);
-		symtab.newScope("edge.properties");
+		Variable edge = symtab.define($n0.text, VarType.EDGESET);
+		Scope propscope = symtab.newScope("edge.properties");
+		edge.setPropScope(propscope);
 		symtab.define("__label", VarType.PROPERTY, $e.text);
 	  } '{' property_statement_list '}' {
 		symtab.endScope();
@@ -147,7 +155,9 @@ property_statement
 
 property_assignment
 	: ID '=' expr {
-		if (verbose) notifyErrorListeners("property " + $ID.text + "=" + $expr.text);
+		if (verbose) {
+			notifyErrorListeners("property " + $ID.text + "=" + $expr.text);
+		}
 		if (symtab.resolveCurrent($ID.text) != null) {
 			notifyErrorListeners("property " + $ID.text + " overidden!");
 		}
@@ -157,7 +167,9 @@ property_assignment
 
 property_unique
 	: UNIQUE '(' property_name_list ')' {
-		if (verbose) notifyErrorListeners("unique constraint found: " + $property_name_list.text);
+		if (verbose) {
+			notifyErrorListeners("unique constraint found: " + $property_name_list.text);
+		}
 		if (symtab.resolveCurrent("__unique") != null) {
 			notifyErrorListeners("unique constraint (" + $property_name_list.text + ") redefines earlier one!");
 		}
@@ -222,9 +234,14 @@ var_ref
 			notifyErrorListeners("variable $" + $v.text + " is unbound!");
 		}
 		if ($a != null) {
-			Variable a = symtab.resolve($a.text);
+			Variable a;
+			if (v.getType() == VarType.NODESET || v.getType() == VarType.EDGESET || v.getType() == VarType.SQL) {
+				a = v.getPropScope().resolve($a.text);
+			}
+			else {
+				a = symtab.resolve($a.text);
+			}
 			if (a == null) {
-				// TODO: improved error checking, property may be defined
 				notifyErrorListeners("attribute/property " + $a.text + " is undefined!");
 			}
 		}

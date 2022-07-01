@@ -103,6 +103,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		}
 
 		// bind_expr: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID
+		bindvar = symtab.resolve(v);
+		if (bindvar == null) {
+			evalMessage("variable $" + v + " binding is undefined!");
+		}
 		switch (kwtype) {
 		case x2gLexer.XPATH:
 			List<Content> seq;
@@ -112,7 +116,6 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			else {
 				seq = xtractor.xtract(e, vars);
 			}
-			bindvar = symtab.define(v, VarType.XPATH, e);
 			Set<Object> set = new HashSet<Object>();
 			for (Content n : seq) {
 				set.add(n);
@@ -120,36 +123,42 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			/* TODO: Store all current bindings of an xpath result
 			 * A bind consists of a varname, a type and an sequence/list of content values.
 			 */
-			if (verbose) evalMessage("@bind_expr: $" + v + " = " + set);
+			if (verbose) {
+				evalMessage("@bind_expr: $" + v + " = " + set);
+			}
 			bindvar.setBinding(set);
 			break;
 
 		case x2gLexer.JPATH:
-			bindvar = symtab.define(v, VarType.JPATH, e);
 			/* TODO: */
 			evalMessage("binding of " + kw + '(' + e + ") not support in this version");
-			if (verbose) evalMessage("@bind_expr: " + kw + '(' + e + ')');
+			if (verbose) {
+				evalMessage("@bind_expr: " + kw + '(' + e + ')');
+			}
 			break;
 
 		case x2gLexer.SQL:
-			bindvar = symtab.define(v, VarType.SQL, e);
 			/* TODO: */
 			evalMessage("binding of " + kw + '(' + e + ") not support in this version");
-			if (verbose) evalMessage("@bind_expr: " + kw + '(' + e + ')');
+			if (verbose) {
+				evalMessage("@bind_expr: " + kw + '(' + e + ')');
+			}
 			break;
 
 		case x2gLexer.NODE:
-			bindvar = symtab.define(v, VarType.NODE, e);
 			/* TODO: */
 			evalMessage("binding of " + kw + '(' + e + ") not support in this version");
-			if (verbose) evalMessage("@bind_expr: " + kw + '(' + e + ')');
+			if (verbose) {
+				evalMessage("@bind_expr: " + kw + '(' + e + ')');
+			}
 			break;
 
 		case x2gLexer.EDGE:
-			bindvar = symtab.define(v, VarType.EDGE, e);
 			/* TODO: */
 			evalMessage("binding of " + kw + '(' + e + ") not support in this version");
-			if (verbose) evalMessage("@bind_expr: " + kw + '(' + e + ')');
+			if (verbose) {
+				evalMessage("@bind_expr: " + kw + '(' + e + ')');
+			}
 			break;
 
 		default:
@@ -159,14 +168,23 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public gNode visitCreate_node(x2gParser.Create_nodeContext ctx) {
-		Variable nvar = symtab.define(ctx.ID().getText(), VarType.NODE);
+		String vname = ctx.ID().getText();
+		Variable nvar = symtab.resolve(vname);
+		if (nvar == null) {
+			evalMessage("node variable $" + vname + " is undefined!");
+		}
 		Scope scope = symtab.setScope("node.properties");
 		String label = (String)visit(ctx.string_expr());
-		symtab.define("__label", VarType.PROPERTY, label);
 		visit(ctx.property_statement_list());
 		Map<String, Object> props = new HashMap<String, Object>();
 		for (Variable v : symtab.getCurrent().getVariablesByType(VarType.PROPERTY)) {
-			props.put(v.getName(), v.getExpr());
+			// TODO: getExpr() -> getValue()
+			if (v.getName().equals("__unique")) {
+				props.put(v.getName(), v.getBinding());
+			}
+			else {
+				props.put(v.getName(), v.getExpr());
+			}
 		}
 		symtab.endScope();
 		gNode node = graph.createNode(label, new gProperties(props));
@@ -180,12 +198,15 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public gEdge visitCreate_edge(x2gParser.Create_edgeContext ctx) {
-		Variable evar = symtab.define(ctx.ID(0).getText(), VarType.EDGE);
+		String vname = ctx.ID(0).getText();
+		Variable evar = symtab.resolve(vname);
+		if (evar == null) {
+			evalMessage("node variable $" + vname + " is undefined!");
+		}
 		Scope scope = symtab.setScope("edge.properties");
 		String label = (String)visit(ctx.string_expr());
 		String from = ctx.ID(1).getText();
 		String to = ctx.ID(2).getText();
-		symtab.define("__label", VarType.PROPERTY, label);
 		Variable fromVar = symtab.resolve(from);
 		Variable toVar = symtab.resolve(to);
 		/* This is already checked by parser, should not happen! */
@@ -222,33 +243,21 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	@Override public Variable visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
 		Object e = visit(ctx.expr());
-		Variable v = symtab.define(ctx.ID().getText(), VarType.PROPERTY, e.toString());
+		Variable v = symtab.resolve(ctx.ID().getText());
+		v.setExpr(e.toString());
 		return v;
 	}
 
 	@Override public Variable visitProperty_unique(x2gParser.Property_uniqueContext ctx) {
-		String[] keyprops = ctx.property_name_list.getText().split(",");
-		Set<Object> propset = new HashSet<Object>();
-		for (String prop : keyprops) {
-			propset.add(prop);
-			if (symtab.resolveCurrent(prop) == null) {
-				evalMessage("unique constraint: property " + prop + " unknown!");
-			}
-		}
-		Variable v = symtab.define("__unique", VarType.PROPERTY, propset);
-		v.setBinding(propset);
-		return v;
+		return symtab.resolve("__unique");
 	}
 
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
 			visit(ctx.property_statement_list());
-			//evalMessage("current scope: " + symtab.getCurrent().getVariables());
 		}
 		return null;
 	}
-
-	//@Override public Object visitProperty_type(x2gParser.Property_typeContext ctx) { return visitChildren(ctx); }
 
 	// boolean_expr: boolean_expr op=(AND|OR) boolean_expr
 	@Override public Boolean visitBoolAndOr(x2gParser.BoolAndOrContext ctx) {
@@ -271,7 +280,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	// boolean_expr: BOOL
 	@Override public Boolean visitBoolLiteral(x2gParser.BoolLiteralContext ctx) {
 		String kw = ctx.getChild(0).getText();
-		if (verbose) evalMessage("boolean_expr:BOOL: " + kw);
+		if (verbose) {
+			evalMessage("boolean_expr:BOOL: " + kw);
+		}
 		return (kw.equals("TRUE") || kw.equals("true")) ? true : false;
 	}
 
@@ -292,7 +303,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		 * Valid types are: Boolean, String, Number, Date
 		 * */
 		// TODO: assume both operands are Long/Number
-		if (verbose) evalMessage("@boolean_expr: expr relop expr: only Long supported for Number");
+		if (verbose) {
+			evalMessage("@boolean_expr: expr relop expr: only Long supported for Number");
+		}
 		Long l = (Long)left;
 		Long r = (Long)right;
 		switch (ctx.op.getType()) {
@@ -312,7 +325,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	@Override public Number visitUnaryExpr(x2gParser.UnaryExprContext ctx) {
 		try {
 			Long i = (Long)visit(ctx.expr());
-			if (verbose) evalMessage("expr:MINUS expr: " + -i);
+			if (verbose) {
+				evalMessage("expr:MINUS expr: " + -i);
+			}
 			return -i;
 		}
 		catch (ClassCastException e) {
@@ -399,7 +414,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			Variable v = symtab.resolve(vid);
 			if (v != null) {
 				// extract attribute/property value from variable
-				if (verbose) evalMessage("@var_ref: $" + vid + '.' + aid);
+				if (verbose) {
+					evalMessage("@var_ref: $" + vid + '.' + aid);
+				}
 				if (v.getCurrent() instanceof gNode) {
 					gNode n = (gNode)v.getCurrent();
 					return n.getProperty(aid).toString();
@@ -435,7 +452,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	// literal_expr: BOOL
 	@Override public Boolean visitLiteralBool(x2gParser.LiteralBoolContext ctx) {
 		String kw = ctx.getChild(0).getText();
-		if (verbose) evalMessage("@literal_expr:BOOL: " + kw);
+		if (verbose) {
+			evalMessage("@literal_expr:BOOL: " + kw);
+		}
 		return (kw.equals("TRUE") || kw.equals("true")) ? true : false;
 	}
 

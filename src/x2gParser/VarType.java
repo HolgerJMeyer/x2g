@@ -1,10 +1,8 @@
 public enum VarType {
 	BOOLEAN,
 	DATE,
-	EDGE,
 	EDGESET,
 	JPATH,
-	NODE,
 	NODESET,
 	NUMERIC,
 	PROPERTY,
