@@ -32,7 +32,7 @@ public class gGraph {
 	 * Conditionally create a node by label and properties.
 	 * Basis for deciding to create or not a new node. Two nodes (an existing node and the label
 	 * and properties of a "potential new node") are equal if the labels and all properties
-	 * have the same values for the same property name.  Additionaly, if there is a special "__unique"
+	 * have the same values for the same property name.  Additionally, if there is a special "__unique"
 	 * property, the value is a list property names which should be used for checking instead of
 	 * all properties. This leads to following cases:
 	 * (1) Let A be the set of properties of the existing node and B the set of properties

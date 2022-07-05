@@ -378,9 +378,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			String vid = ctx.v.getText();
 			Variable v = symtab.resolve(vid);
 			Map<String, Object> vars = new HashMap<String, Object>();
-			//if (verbose) {
+			if (verbose) {
 				evalMessage("@var_ref: $" + v.getName() + ".path(" + e + ')');
-			//}
+			}
 			if (v != null && (p.equals("xpath") || p.equals("XPATH"))) {
 				List<Content> seq = xtractor.xtract(v.getCurrent(), e, vars);
 				if (seq.size() == 1) {
