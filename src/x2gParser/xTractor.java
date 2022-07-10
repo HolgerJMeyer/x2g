@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -17,9 +18,11 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathFactory;
 import org.jdom2.xpath.XPathExpression;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.namespace.NamespaceContext;
 import org.xml.sax.SAXException;
 
 
@@ -50,6 +53,7 @@ public class xTractor {
 			} else {
 				SAXBuilder sax = new SAXBuilder();
 				doc = sax.build(file = new File(filename));
+				System.err.println("namespaces: " + doc.getNamespacesInScope());
 			}
 		}
 		//catch (ParserConfigurationException | JDOMException | SAXException | URISyntaxException | IOException pe) {

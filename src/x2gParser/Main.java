@@ -16,6 +16,7 @@ public class Main {
 	static boolean mixed = false;
 	static boolean parseOnly = false;
 	static boolean multiGraph = false;
+	static boolean nameSpaces = false;
 	static String conflict = "reject"; // other options: merga, link
 	static String inputDir = null;
 	static String outFile = null;
@@ -75,6 +76,7 @@ public class Main {
 		if (cmd.hasOption("verbose")) { verbose = true; }
 		if (cmd.hasOption("parse-only")) { parseOnly = true; }
 		if (cmd.hasOption("multi-graph")) { multiGraph = true; }
+		if (cmd.hasOption("namespace")) { nameSpaces = true; }
 
 		if (cmd.hasOption("help")) {
 			org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
@@ -137,7 +139,7 @@ public class Main {
 			if (verbose) {
 				System.err.println(x2g + ": processing xml file " + file.getAbsolutePath());
 			}
-			eval.setXtractor(file.getAbsolutePath());
+			eval.setXtractor(file.getAbsolutePath(), nameSpaces);
 			eval.visit(tree);
 		}
 		if (verbose) {

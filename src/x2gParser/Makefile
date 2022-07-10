@@ -72,7 +72,7 @@ runparse:
 	export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset.x2g
 
 werewolf:
-	export CLASSPATH=$(CLASSPATH) ; java Main -v -d isebel/werewolf <testunit/simple-ruleset.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -v -n -d isebel/werewolf <testunit/simple-ruleset.x2g
 
 graphtest:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
