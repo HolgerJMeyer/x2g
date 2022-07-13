@@ -402,7 +402,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 					return node.toString();
 				}
 				else {
-					evalMessage("xpath expression (" + e + ") evaluates to a node set, single node expected!");
+					evalMessage("xpath expression (" + e + ") must evaluate to a single node but returns node set.  Please use match clause!");
 				}
 				return seq.toString();
 			}

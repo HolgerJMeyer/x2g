@@ -57,7 +57,9 @@ public class xTractor {
 				SAXBuilder sax = new SAXBuilder();
 				doc = sax.build(file = new File(filename));
 				namespaces = doc.getRootElement().getNamespacesInScope();
-				System.err.println("namespaces: " + namespaces);
+				if (verbose) {
+					System.err.println("xTractor:namespaces: " + namespaces);
+				}
 			}
 		}
 		//catch (ParserConfigurationException | JDOMException | SAXException | URISyntaxException | IOException pe) {
@@ -88,21 +90,21 @@ public class xTractor {
 
 	public List<Content> xtract(Object context, String xp, Map<String, Object> vars) {
 		if (verbose) {
-			System.err.println("xtract("+ context + "," + xp + ")");
+			System.err.println("xTractor:xtract("+ context + "," + xp + ")");
 		}
 		try {
 			if (verbose) {
-				System.err.println("xpath compile: " + xp);
+				System.err.println("xTractor:xpath compile: " + xp);
 			}
 			XPathFactory xpf = XPathFactory.instance();
 			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars, namespaces);
 			List<Content> nodes = expr.evaluate(context);
 			if (verbose) {
-				System.err.println("xpath evaluate: " + nodes);
+				System.err.println("xTractor:xpath evaluate: " + nodes);
 			}
 			return nodes;
 		} catch (Exception e) {
-			System.err.println("xpath(" + xp + ") evaluation failed: " + e);
+			System.err.println("xTractor:xpath(" + xp + ") evaluation failed: " + e);
 		}
 		return null;
 	}

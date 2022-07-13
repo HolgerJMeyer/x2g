@@ -53,7 +53,7 @@ public class gGraph {
 		if (n != null) {
 			// (1) there is an existing node with same label and property values
 			if (verbose) {
-				System.err.println("createNode: node with same label and properties exists");
+				System.err.println("gGraph:createNode: node with same label and properties exists");
 			}
 			return n;
 		}
@@ -68,7 +68,7 @@ public class gGraph {
 			// (2) if there is a __unique set of properties
 			if (ukeys != null) {
 				if (verbose) {
-					System.err.println("createNode: unique keys (" + ukeys + ") are checked");
+					System.err.println("gGraph:createNode: unique keys (" + ukeys + ") are checked");
 				}
 				boolean allequal = true;
 				for (String key : ukeys) {
@@ -85,11 +85,11 @@ public class gGraph {
 						if (propsA.get(key) == null) {
 							propsA.put(key, propsB.get(key));
 						} else if (!propsA.get(key).equals(propsB.get(key))) {
-							System.err.println("createNode could not merge: property values for '" + key + "' differ: '" + propsA.get(key) + "' vs. '" + propsB.get(key) + "'");
+							System.err.println("gGraph:createNode could not merge: property values for '" + key + "' differ: '" + propsA.get(key) + "' vs. '" + propsB.get(key) + "'");
 						}
 					}
 					if (verbose) {
-						System.err.println("createNode: non-unique keys are merged");
+						System.err.println("gGraph:createNode: non-unique keys are merged");
 					}
 					return node;
 				}
@@ -98,7 +98,7 @@ public class gGraph {
 			// (3) if propsB are a subset of propsA
 			if (propsB.subsetOf(propsA)) {
 				if (verbose) {
-					System.err.println("createNode: new properties are a subset");
+					System.err.println("gGraph:createNode: new properties are a subset");
 				}
 				return node;
 			}
@@ -106,7 +106,7 @@ public class gGraph {
 			// (4) if propsA are a subset of propsB
 			if (propsA.subsetOf(propsB)) {
 				if (verbose) {
-					System.err.println("createNode: new properties are a superset");
+					System.err.println("gGraph:createNode: new properties are a superset");
 				}
 				node.setProperties(propsB);
 				return node;
@@ -114,7 +114,7 @@ public class gGraph {
 		}
 		// (5)
 		if (verbose) {
-			System.err.println("createNode: new node created");
+			System.err.println("gGraph:createNode: new node created");
 		}
 		n = new gNode(label, properties);
 		nodesById.put(n.getId(), n);
@@ -153,7 +153,7 @@ public class gGraph {
 		}
 		eset.add(e);
 		if (verbose) {
-			System.err.println("createEdge returns: " + e.toString());
+			System.err.println("gGraph:createEdge returns: " + e.toString());
 		}
 		return e;
 	}
@@ -186,11 +186,11 @@ public class gGraph {
 
 	public gNode getNode(String label, Map<String, Object> properties) {
 		if (verbose) {
-			System.err.println("getNode(" + label + ", " + properties);
+			System.err.println("gGraph:getNode(" + label + ", " + properties);
 		}
 		if (getNodes(label) != null) {
 			if (verbose) {
-				System.err.println("getNode: label exists");
+				System.err.println("gGraph:getNode: label exists");
 			}
 			for (gNode n : getNodes(label)) {
 				if (n.getProperties().equals(properties)) {
@@ -199,7 +199,7 @@ public class gGraph {
 			}
 		}
 		if (verbose) {
-			System.err.println("getNode: returns null");
+			System.err.println("gGraph:getNode: returns null");
 		}
 		return null;
 	}

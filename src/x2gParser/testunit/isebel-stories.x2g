@@ -4,7 +4,8 @@ match xpath("//isebel:story") using $s {
 		// properties
 		content = $s.xpath("isebel:content/text()"),
 		title = $s.xpath("isebel:title/text()"),
-		unique (title)
+		id = $s.xpath("dc:identifier/text()"),
+		unique (id)
 	},
 	match xpath(".//isebel:person[@role='narrator']") using $p {
 		create node $pn label "person" {
