@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.jdom2.Document;
-import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
 import org.jdom2.Content;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.input.SAXBuilder;
@@ -28,6 +30,7 @@ import org.xml.sax.SAXException;
 
 public class xTractor {
 	private Document doc;
+	private List<Namespace> namespaces = null;
 	private boolean verbose = false;
 	private File file;
 
@@ -53,7 +56,8 @@ public class xTractor {
 			} else {
 				SAXBuilder sax = new SAXBuilder();
 				doc = sax.build(file = new File(filename));
-				System.err.println("namespaces: " + doc.getNamespacesInScope());
+				namespaces = doc.getRootElement().getNamespacesInScope();
+				System.err.println("namespaces: " + namespaces);
 			}
 		}
 		//catch (ParserConfigurationException | JDOMException | SAXException | URISyntaxException | IOException pe) {
@@ -91,7 +95,7 @@ public class xTractor {
 				System.err.println("xpath compile: " + xp);
 			}
 			XPathFactory xpf = XPathFactory.instance();
-			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars);
+			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars, namespaces);
 			List<Content> nodes = expr.evaluate(context);
 			if (verbose) {
 				System.err.println("xpath evaluate: " + nodes);

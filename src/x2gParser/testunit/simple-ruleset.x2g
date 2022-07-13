@@ -1,19 +1,19 @@
 // nested match example, the second match is evaluated within the context of the first
-match xpath("//story") using $s {
+match xpath("//isebel:story") using $s {
 	create node $sn label "story" {
 		// properties
-		content = $s.xpath("content/text()"),
-		title = $s.xpath("title/text()"),
+		content = $s.xpath("isebel:content/text()"),
+		title = $s.xpath("isebel:title/text()"),
 		unique (title)
 	},
-	match xpath(".//person[@role='narrator']") using $p {
+	match xpath(".//isebel:person[@role='narrator']") using $p {
 		create node $pn label "person" {
 			// properties with optional type declaration
-			name = $p.xpath("name/text()"),
-			age = $p.xpath("age"),
+			name = $p.xpath("isebel:name/text()"),
+			age = $p.xpath("isebel:age"),
 			unique (name, age),
 			// conditional assignment
-			if ($p.xpath("appellation/text()") == "Mr") {
+			if ($p.xpath("isebel:appellation/text()") == "Mr") {
 				gender = "male" + "narrator"
 			}
 		},
