@@ -29,7 +29,7 @@ options {
  * Expression types
  */
 x2g
-	: x2g_rule*
+	: x2g_rule+
 	;
 
 x2g_rule
@@ -82,7 +82,6 @@ body_action
 	| create_edge
 	| if_stmt
 	| x2g_rule
-	| /* epsilon */
 	;
 
 create_node

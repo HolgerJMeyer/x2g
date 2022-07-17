@@ -2,12 +2,12 @@
 match xpath("//isebel:story") using $s {
 	create node $sn label "story" {
 		// properties
-		content = $s.xpath("isebel:content/text()"),
-		title = $s.xpath("isebel:title/text()"),
+		//content = $s.xpath("isebel:contents/isebel:content/text()"),
+		title = $s.xpath("dc:title/text()"),
 		id = $s.xpath("dc:identifier/text()"),
 		unique (id)
 	},
-	match xpath(".//isebel:person[@role='narrator']") using $p {
+	match xpath(".//isebel:person[isebel:role/text()='narrator']") using $p {
 		create node $pn label "person" {
 			// properties with optional type declaration
 			name = $p.xpath("isebel:name/text()"),
@@ -22,7 +22,6 @@ match xpath("//isebel:story") using $s {
 			alt = "story-teller"
 			/* no more properties given */
 		}
-		// should warn about $p hiding earlier binding
 	}
 }
 

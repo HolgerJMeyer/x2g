@@ -20,12 +20,14 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	private final SymbolTable symtab;
 	private final gGraph graph;
 	private final boolean verbose;
+	private boolean warning;
 	private xTractor xtractor;
 
 	public Evaluator(SymbolTable symtab, gGraph graph, boolean verbose) {
 		this.symtab = symtab;
 		this.graph = graph;
 		this.verbose = verbose;
+		this.warning = true;
 	}
 
 	public Evaluator(SymbolTable symtab, gGraph graph) { this(symtab, graph, false); }
@@ -35,6 +37,12 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	public void setXtractor(String filename, boolean nsaware) { xtractor = new xTractor(filename, nsaware); }
 
 	public gGraph getGraph() { return graph; }
+
+	public void setWarning(boolean warning) {
+		this.warning = warning;
+	}
+
+	public void setWarning() { setWarning(true); }
 
 	public void evalError(Exception e, String where) {
 		System.err.println(Main.x2g + ": " + where + ": " + e);
@@ -79,9 +87,13 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	@Override public Object visitBodyActionList(x2gParser.BodyActionListContext ctx) {
 		for (x2gParser.Body_actionContext bctx : ctx.body_action()) {
-			visit(bctx);
+			visitBody_action(bctx);
 		}
 		return null;
+	}
+
+	@Override public Object visitBody_action(x2gParser.Body_actionContext ctx) {
+		return visitChildren(ctx);
 	}
 
 	@Override public Variable visitBind_expr(x2gParser.Bind_exprContext ctx) {
@@ -127,6 +139,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			 */
 			if (verbose) {
 				evalMessage("@bind_expr: $" + v + " = " + set);
+			}
+			if (warning && set.size() == 0) {
+				evalMessage("Warning: matching $" + v + " (" + e + ") yields empty set!");
 			}
 			bindvar.setBinding(set);
 			break;
@@ -402,7 +417,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 					return node.toString();
 				}
 				else {
-					evalMessage("xpath expression (" + e + ") must evaluate to a single node but returns node set.  Please use match clause!");
+					evalMessage("xpath expression (" + e + ") evaluates to a nodeset of size " + seq.size() + ", but single node expected!");
 				}
 				return seq.toString();
 			}

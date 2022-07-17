@@ -28,6 +28,9 @@ import javax.xml.namespace.NamespaceContext;
 import org.xml.sax.SAXException;
 
 
+/**
+ * XML extracting using JDOM2
+ */
 public class xTractor {
 	private Document doc;
 	private List<Namespace> namespaces = null;
@@ -50,12 +53,14 @@ public class xTractor {
 				factory.setNamespaceAware(nsaware); 
 				DocumentBuilder dombuilder = factory.newDocumentBuilder();
 				org.w3c.dom.Document w3cDocument = dombuilder.parse(file = new File(filename));
-
 				DOMBuilder jdomBuilder = new DOMBuilder();
 				doc = jdomBuilder.build(w3cDocument);
+				// Should return an empty list
+				namespaces = doc.getRootElement().getNamespacesInScope();
 			} else {
 				SAXBuilder sax = new SAXBuilder();
 				doc = sax.build(file = new File(filename));
+				// Extract namespace declarations
 				namespaces = doc.getRootElement().getNamespacesInScope();
 				if (verbose) {
 					System.err.println("xTractor:namespaces: " + namespaces);

@@ -72,7 +72,10 @@ runparse:
 	@export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset.x2g
 
 werewolf:
-	@export CLASSPATH=$(CLASSPATH) ; java Main -n -d isebel/werewolf <testunit/isebel-stories.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -vn -d isebel/werewolf <testunit/isebel-stories.x2g
+
+werewolf1:
+	export CLASSPATH=$(CLASSPATH) ; java Main -vn -d isebel/werewolf001 <testunit/isebel-stories.x2g
 
 graphtest:
 	@export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
@@ -81,7 +84,7 @@ xpathtest:
 	@export CLASSPATH=$(CLASSPATH) ; java -ea xTractor testunit/catalog.xml "//cd"
 
 cdcatalog:
-	@export CLASSPATH=$(CLASSPATH) ; java Main testunit/catalog.xml <testunit/catalog.x2g
+	@export CLASSPATH=$(CLASSPATH) ; java Main -v testunit/catalog.xml <testunit/catalog.x2g
 
 grun:
 	@export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui <$$g ; done
