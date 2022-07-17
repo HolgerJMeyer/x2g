@@ -62,6 +62,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		System.err.println(Main.x2g + ": file " + xtractor.getFilename() + ": " + message);
 	}
 
+	public void evalWarning(String message) {
+		evalMessage("Warning: " + message);
+	}
+
 	/*
 	 * Here starts the real evaluation of X2G rules!
 	 * There are two passes:
@@ -141,7 +145,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 				evalMessage("@bind_expr: $" + v + " = " + set);
 			}
 			if (warning && set.size() == 0) {
-				evalMessage("Warning: matching $" + v + " (" + e + ") yields empty set!");
+				evalWarning("matching $" + v + " (" + e + ") yields empty nodeset!");
 			}
 			bindvar.setBinding(set);
 			break;
@@ -416,8 +420,11 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 					}
 					return node.toString();
 				}
+				else if (seq.size() == 0) {
+					evalWarning("xpath expression (" + e + ") evaluates to an empty nodeset!");
+				}
 				else {
-					evalMessage("xpath expression (" + e + ") evaluates to a nodeset of size " + seq.size() + ", but single node expected!");
+					evalWarning("xpath expression (" + e + ") evaluates to a nodeset of size " + seq.size() + ", but single node expected!");
 				}
 				return seq.toString();
 			}

@@ -72,7 +72,7 @@ runparse:
 	@export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset.x2g
 
 werewolf:
-	export CLASSPATH=$(CLASSPATH) ; java Main -vn -d isebel/werewolf <testunit/isebel-stories.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -n -d isebel/werewolf <testunit/isebel-stories.x2g
 
 werewolf1:
 	export CLASSPATH=$(CLASSPATH) ; java Main -vn -d isebel/werewolf001 <testunit/isebel-stories.x2g
