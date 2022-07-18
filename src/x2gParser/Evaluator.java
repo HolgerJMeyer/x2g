@@ -250,12 +250,14 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return edge;
 	}
 
-	/* TODO: IF */
 	@Override public Object visitIf_stmt(x2gParser.If_stmtContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
-			return visit(ctx.body());
+			return visit(ctx.body(0));
 		}
-		return null;
+		else { /* TODO: if optional else */
+			return visit(ctx.body(1));
+		}
+		//return null;
 	}
 
 	@Override public Variable visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
@@ -269,12 +271,14 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return symtab.resolve("__unique");
 	}
 
-	/* TODO: IF */
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
-			visit(ctx.property_statement_list());
+			return visit(ctx.property_statement_list(0));
 		}
-		return null;
+		else { /* TODO: if optional else */
+			return visit(ctx.property_statement_list(1));
+		}
+		//return null;
 	}
 
 	// boolean_expr: boolean_expr op=(AND|OR) boolean_expr

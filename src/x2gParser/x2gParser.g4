@@ -138,9 +138,8 @@ node_ref
 	  }
 	;
 
-/* TODO: optional ELSE */
 if_stmt
-	: IF '(' boolean_expr ')' '{' body '}'
+	: IF '(' boolean_expr ')' '{' body '}' (ELSE '{' body '}')*
 	;
 
 property_statement_list
@@ -186,7 +185,7 @@ property_unique
 	;
 
 property_if
-	: IF '(' boolean_expr ')' '{' property_statement_list '}'
+	: IF '(' boolean_expr ')' '{' property_statement_list '}' (ELSE '{' property_statement_list '}')*
 	;
 	
 property_name_list
