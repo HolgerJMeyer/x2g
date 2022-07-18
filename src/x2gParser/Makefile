@@ -14,6 +14,7 @@ LIBDIR = /usr/share/java/antlr4
 COMMONS = /usr/share/java/apache-commons-cli.jar
 #JDOM = /usr/share/java/jdom2/jdom2.jar
 JDOM = ./jdom2/jdom-2.0.6.1.jar
+#JAXEN = /usr/share/java/jaxen.jar
 JAXEN = ./jdom2/lib/jaxen-1.2.0.jar
 AJARS = "$(LIBDIR)/antlr4.jar:$(LIBDIR)/antlr4-runtime.jar"
 # X2G
@@ -72,10 +73,10 @@ runparse:
 	@export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset.x2g
 
 werewolf:
-	export CLASSPATH=$(CLASSPATH) ; java Main -n -d isebel/werewolf <testunit/isebel-stories.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -wn -d isebel/werewolf <testunit/isebel-stories.x2g
 
 werewolf1:
-	export CLASSPATH=$(CLASSPATH) ; java Main -vn -d isebel/werewolf001 <testunit/isebel-stories.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -wn -d isebel/werewolf001 <testunit/isebel-stories.x2g
 
 graphtest:
 	@export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done

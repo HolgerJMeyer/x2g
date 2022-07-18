@@ -20,29 +20,25 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	private final SymbolTable symtab;
 	private final gGraph graph;
 	private final boolean verbose;
-	private boolean warning;
+	private final boolean warnings;
 	private xTractor xtractor;
 
-	public Evaluator(SymbolTable symtab, gGraph graph, boolean verbose) {
+	public Evaluator(SymbolTable symtab, gGraph graph, boolean warnings, boolean verbose) {
 		this.symtab = symtab;
 		this.graph = graph;
+		this.warnings = warnings;
 		this.verbose = verbose;
-		this.warning = true;
 	}
 
-	public Evaluator(SymbolTable symtab, gGraph graph) { this(symtab, graph, false); }
+	public Evaluator(SymbolTable symtab, gGraph graph, boolean warnings) { this(symtab, graph, warnings, false); }
+
+	public Evaluator(SymbolTable symtab, gGraph graph) { this(symtab, graph, false, false); }
 
 	public void setXtractor(String filename) { xtractor = new xTractor(filename, true); }
 
 	public void setXtractor(String filename, boolean nsaware) { xtractor = new xTractor(filename, nsaware); }
 
 	public gGraph getGraph() { return graph; }
-
-	public void setWarning(boolean warning) {
-		this.warning = warning;
-	}
-
-	public void setWarning() { setWarning(true); }
 
 	public void evalError(Exception e, String where) {
 		System.err.println(Main.x2g + ": " + where + ": " + e);
@@ -101,7 +97,6 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	@Override public Variable visitBind_expr(x2gParser.Bind_exprContext ctx) {
-		//TODO: defined in the context of enclosing binding/match
 		String kw = ctx.b.getText();
 		int kwtype = ctx.b.getType();
 		String e = (String)visit(ctx.string_expr());
@@ -144,7 +139,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			if (verbose) {
 				evalMessage("@bind_expr: $" + v + " = " + set);
 			}
-			if (warning && set.size() == 0) {
+			if (warnings && set.size() == 0) {
 				evalWarning("matching $" + v + " (" + e + ") yields empty nodeset!");
 			}
 			bindvar.setBinding(set);
@@ -255,6 +250,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return edge;
 	}
 
+	/* TODO: IF */
 	@Override public Object visitIf_stmt(x2gParser.If_stmtContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
 			return visit(ctx.body());
@@ -273,6 +269,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		return symtab.resolve("__unique");
 	}
 
+	/* TODO: IF */
 	@Override public Object visitProperty_if(x2gParser.Property_ifContext ctx) {
 		if ((Boolean)visit(ctx.boolean_expr())) {
 			visit(ctx.property_statement_list());
@@ -420,7 +417,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 					}
 					return node.toString();
 				}
-				else if (seq.size() == 0) {
+				else if (warnings && seq.size() == 0) {
 					evalWarning("xpath expression (" + e + ") evaluates to an empty nodeset!");
 				}
 				else {

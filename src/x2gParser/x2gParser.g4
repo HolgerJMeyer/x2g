@@ -138,6 +138,7 @@ node_ref
 	  }
 	;
 
+/* TODO: optional ELSE */
 if_stmt
 	: IF '(' boolean_expr ')' '{' body '}'
 	;

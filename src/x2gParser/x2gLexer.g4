@@ -47,11 +47,12 @@ WS:				[ \t\r\n]+				->	skip;
 
 // SECTION: reserved words
 ADD:			'ADD' | 'add';
-AND:			'AND' | 'and';
+AND:			'AND' | 'and' | '&&';
 BOOLEAN:		'BOOLEAN' | 'boolean';
 CREATE:		'CREATE' | 'create';
 DATE:			'DATE' | 'date';
 EDGE:			'EDGE' | 'edge';
+ELSE:			'ELSE' | 'else';
 FALSE:		('FALSE' | 'false')		-> type(BOOL);
 FOR:			'FOR' | 'for';
 FROM:			'FROM' | 'from';
@@ -63,7 +64,7 @@ MATCH:		'MATCH'| 'match';
 NODE:			'NODE' | 'node';
 NOT:			'NOT' | 'not';
 NUMERIC:		'NUMERIC' | 'numeric';
-OR:			'OR' | 'or';
+OR:			'OR' | 'or' | '||';
 ORDERBY:		'ORDER' 'BY' | 'order' 'by';
 SETOF:		'SETOF' | 'setof';
 SQL:			'SQL' | 'sql';

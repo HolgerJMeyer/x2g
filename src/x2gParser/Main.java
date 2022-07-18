@@ -13,6 +13,7 @@ public class Main {
 	static final String conflictOptions[] = { "create", "link", "merge", "reject" };
 	static String x2g = "X2G";
 	static boolean verbose = false;
+	static boolean warnings = false;
 	static boolean mixed = false;
 	static boolean parseOnly = false;
 	static boolean multiGraph = false;
@@ -61,6 +62,7 @@ public class Main {
 		options.addOption("s", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
 		options.addOption("u", "input-url", true, "read input data from that URL");
 		options.addOption("v", "verbose", false, "being verbose");
+		options.addOption("w", "warnings", false, "issue warnings about e.g. xpath empty results");
 		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 
 		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
@@ -74,6 +76,7 @@ public class Main {
 		if (cmd.hasOption("out-file")) { outFile = cmd.getOptionValue("o"); }
 		if (cmd.hasOption("mixed-mode")) { mixed = true; }
 		if (cmd.hasOption("verbose")) { verbose = true; }
+		if (cmd.hasOption("warnings")) { warnings = true; }
 		if (cmd.hasOption("parse-only")) { parseOnly = true; }
 		if (cmd.hasOption("multi-graph")) { multiGraph = true; }
 		if (cmd.hasOption("namespace")) { nameSpaces = true; }
@@ -109,7 +112,7 @@ public class Main {
 		}
 
 		final gGraph graph = new gGraph(verbose);
-		final Evaluator eval = new Evaluator(symtab, graph, verbose);
+		final Evaluator eval = new Evaluator(symtab, graph, warnings, verbose);
 
 		// process all xml files from a given folder or specified on command line
 		List<File> filelist = new ArrayList<File>();
