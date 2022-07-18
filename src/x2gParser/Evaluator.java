@@ -254,10 +254,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		if ((Boolean)visit(ctx.boolean_expr())) {
 			return visit(ctx.body(0));
 		}
-		else { /* TODO: if optional else */
+		else if (ctx.body(1) != null) {
 			return visit(ctx.body(1));
 		}
-		//return null;
+		return null;
 	}
 
 	@Override public Variable visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
@@ -275,10 +275,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		if ((Boolean)visit(ctx.boolean_expr())) {
 			return visit(ctx.property_statement_list(0));
 		}
-		else { /* TODO: if optional else */
+		else if (ctx.property_statement_list(1) != null) {
 			return visit(ctx.property_statement_list(1));
 		}
-		//return null;
+		return null;
 	}
 
 	// boolean_expr: boolean_expr op=(AND|OR) boolean_expr
