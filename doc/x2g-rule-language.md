@@ -1,7 +1,8 @@
 # X2G rule language
 
 The document describe the first draft of the X2G rule language for mapping XML documents to Property Graphs.  Main concepts of the rule language are:
-* extracting XML fragments by XPath expression,
+* extracting XML fragments by XPath expression, JSON fragments by JSON path, and relational data by SQL queries
+* extracted data is bound to variables
 * generating nodes and edges from literals and the evaluation of variable bindings,
 * nested evaluation of statements in the context of other statements and variable bindings.
 Rules have a head matching some XPath expressions or node or edge labels.  The body can contain local match rules or node and edge generation statements.
@@ -14,17 +15,26 @@ There is no exception handling by design.  If for example an XPath expression di
 
 The general syntax is
 
-`match xpath(<xpath-expr>) using <var-binding> { <body> }`
+`match <optional-var-ref> xpath(<xpath-expr>) using <var-binding> { <body> }`
 
 The body of the `match` statement is evaluate for each xml fragment matched by the XPath expression `<xpath-expr>`.  The `using` clause allows for binding a variable to each of the matches.  Within the body the current binding can be access through the bound variable`<var-binding>` or by relative XPath expressions, alternativly.  A relative XPath starts usually with `'.'` as in the second `match` statement in the example below.
 
 `<body>` can be one more several other `match`, `node` and `edge` generating or conditional statements.
 
-There is a second variant of the `match` statement not using xpath expressions but matching all nodes with a certain label:
+There other variants of the `match` statement not using xpath expressions, but e.g. matching all nodes with a certain label:
 
 `match node(<string-expr>) using <var-binding> { <body> }`
 
-By this statement it is possible to go through a certain set of existing node, e.g. for generating further edges.  Further, one can combine several match expressions in one statement in this way:
+By this statement it is possible to go through a certain set of existing node, e.g. for generating further edges.
+
+These are the variants of the match expressions:
+* `xpath(<xpath-expr>)`
+* `jpath(<jpath-expr>)`
+* `sql(<sql-expr>)`
+* `node(<string-expr>)`
+* `edge(<string-expr>)`
+
+Further, one can combine several match expressions in one statement in this way:
 
 `match <match-expression>, <match-expression>, ... { <body> }`
 
@@ -41,12 +51,15 @@ match xpath("//story") using $s {
 		title = xpath("./title/text()"),
 		unique (title)
 	}
-	match xpath(".//person[@role='narrator']") using $p {
+	match $s.xpath(".//person[@role='narrator']") using $p {
 		create node $pn label "person" {
 			// properties
-			name = xpath("$p/name/text()"),
-			if xpath("$p/appellation/text()") == "Mr" {
+			name = $p.xpath("name/text()"),
+			if ($p.xpath("appellation/text()") == "Mr") {
 				gender = "male"
+			}
+			else {
+				gender = "female"
 			}
 		}
 		create edge $e from $sn to $pn label "narrator" { /* no properties given */ }
