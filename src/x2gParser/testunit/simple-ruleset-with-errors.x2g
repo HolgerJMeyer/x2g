@@ -1,0 +1,40 @@
+// nested match example, the second match is evaluated within the context of the first
+match xpath("//story") using $s {
+	create node $sn label "story" {
+		// properties
+		content = $s.xpath("content/text()"),
+		title = $s.xpath("title/text()"),
+		unique (title)
+	},
+	match jpath(".//person[@role='narrator']") using $j { }
+	match sql("select * from table1") using $s { }
+	match xpath(".//person[@role='narrator']") using $p {
+		create node $pn label "person" {
+			// properties with optional type declaration
+			name = $p.xpath("name/text()"),
+			// TEST: should complain about unbound $x
+			age = $x.xpath("age"),
+			//person = $p,
+			unique (name, age),
+			// TEST: should raise "unique constraint redefines earlier one"
+			// TEST: gender not defined before [just after]
+			unique (name, age, gender),
+			// conditional assignment
+			if ($p.xpath("appellation/text()") == "Mr") {
+				gender = "male" + "narrator"
+			}
+		},
+		// TEST: should raise "variable definition hides earlier one"
+		create node $p label "person" {
+			name = $p.xpath("name/text()")
+		},
+		create edge $e from $sn to $pn label "narrator" {
+			alt = "story-teller"
+			/* no more properties given */
+		}
+		// should warn about $p hiding earlier binding
+	}
+}
+
+// vim: spell spelllang=en
+// vim: ff=unix ts=3 sw=3 sts=3 noet

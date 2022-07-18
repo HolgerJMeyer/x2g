@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<catalog>
+	<cd id='1'>
+		<artist>Sufjan Stevens</artist>
+		<title>Illinois</title>
+		<src>http://www.sufjan.com/</src>
+	</cd>
+	<cd id='2'>
+		<artist>Stoat</artist>
+		<title>Future come and get me</title>
+		<src>http://www.stoatmusic.com/</src>
+	</cd>
+	<cd id='3'>
+		<artist>The White Stripes</artist>
+		<title>Get behind me satan</title>
+		<src>http://www.whitestripes.com/</src>
+	</cd>
+	<cd id='4'>
+		<artist>Led Zeppelin</artist>
+		<title>The Song Remains the Same</title>
+		<src>http://www.led-zeppelin.com/</src>
+	</cd>
+	<cd id='5'>
+		<artist>Led Zeppelin</artist>
+		<title>IV (Four Symbols)</title>
+		<src>http://www.led-zeppelin.com/</src>
+	</cd>
+</catalog>
+
+<!--
+vim: spell spelllang=en
+vim: ff=unix ts=3 sw=3 sts=3 noet
+-->

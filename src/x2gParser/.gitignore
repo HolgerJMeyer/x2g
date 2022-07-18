@@ -1,7 +1,13 @@
 x2g
+tpdsl
+isebel
+jdom2
 *.class
 *.tokens
+*.interp
 x2gParser.java
 x2gParserBaseListener.java
+x2gParserBaseVisitor.java
 x2gParserListener.java
+x2gParserVisitor.java
 x2gLexer.java
