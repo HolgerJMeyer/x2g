@@ -5,6 +5,7 @@ jdom2
 *.class
 *.tokens
 *.interp
+*.csv
 x2gParser.java
 x2gParserBaseListener.java
 x2gParserBaseVisitor.java
