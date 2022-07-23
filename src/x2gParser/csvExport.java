@@ -14,6 +14,8 @@ import java.io.StringWriter;
 public class csvExport {
 	private boolean verbose = false;
 
+	public enum PropertyRepr { ASSIGN, COMMA, COLON, JSON }
+
 	public csvExport(boolean verbose) {
 		this.verbose = verbose;
 	}
@@ -22,11 +24,36 @@ public class csvExport {
 
 	public void export(gGraph graph, String basename) { export(graph, basename, false); }
 
+	protected void exportProperties(CSVPrinter printer, gElement e, boolean special, PropertyRepr repr) {
+		List<String> skeys = new ArrayList<>(e.getProperties().keySet());
+		Collections.sort(skeys);
+		try {
+			for (String k : skeys) {
+				if (!k.startsWith("__") || special) {
+					switch (repr) {
+						case COLON:
+							printer.print(k + ':' + e.getProperties().get(k));
+							break;
+						default:
+							printer.print(k);
+							printer.print(e.getProperties().get(k));
+							break;
+					}
+				}
+			}
+			printer.println();
+		} catch (IOException ex) {
+			/* TODO: more specific */
+			ex.printStackTrace();
+		}
+	}
+
 	/**
 	 * TODO:
 	 *		- simplify, gElement instead of gNode and gEdge
 	 *		- better interface list of properties
 	 *		- how to handle different property sets per node or edge type/label
+	 *		- how to export attribute value pairs? a=v, a,v, a:v, [a:v,...] ...
 	 */
 	public void export(gGraph graph, String basename, boolean special) {
 		try (CSVPrinter printer = new CSVPrinter(new FileWriter(basename + "-nodes.csv"), CSVFormat.DEFAULT)) {
@@ -35,15 +62,7 @@ public class csvExport {
 				for (gNode n : graph.getNodes(label)) {
 					printer.print(n.getId());
 					printer.print(label);
-					List<String> skeys = new ArrayList<>(n.getProperties().keySet());
-					Collections.sort(skeys);
-					for (String k : skeys) {
-						if (!k.startsWith("__") || special) {
-							printer.print(k);
-							printer.print(n.getProperties().get(k));
-						}
-					}
-					printer.println();
+					exportProperties(printer, n, special, PropertyRepr.COMMA);
 				}
 			}
 		} catch (IOException ex) {
@@ -57,15 +76,7 @@ public class csvExport {
 					printer.print(e.getSrc().getId());
 					printer.print(e.getDst().getId());
 					printer.print(label);
-					List<String> skeys = new ArrayList<>(e.getProperties().keySet());
-					Collections.sort(skeys);
-					for (String k : skeys) {
-						if (!k.startsWith("__") || special) {
-							printer.print(k);
-							printer.print(e.getProperties().get(k));
-						}
-					}
-					printer.println();
+					exportProperties(printer, e, special, PropertyRepr.COMMA);
 				}
 			}
 		} catch (IOException ex) {
