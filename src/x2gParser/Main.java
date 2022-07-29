@@ -12,6 +12,7 @@ import java.io.*;
 public class Main {
 	static final String conflictOptions[] = { "create", "link", "merge", "reject" };
 	static String x2g = "X2G";
+	static boolean special = false;
 	static boolean verbose = false;
 	static boolean warnings = false;
 	static boolean mixed = false;
@@ -20,10 +21,11 @@ public class Main {
 	static boolean nameSpaces = false;
 	static String conflict = "reject"; // other options: merga, link
 	static String inputDir = null;
+	static String rulesFile = null;
 	static String outFile = null;
 	static String inputURL = null;
 	static String inputJDBC = null;
-	static String outputFormat = ".csv";
+	static String outputFormat = "csv";
 
 	/* pretty print Error messages */
 	public static class ErrorListener extends BaseErrorListener {
@@ -54,16 +56,17 @@ public class Main {
 		options.addOption("f", "output-format", true, "output file format: csv, dot, gefx, graphml, and lg are supported options");
 		options.addOption("h", "help", false, "print this help");
 		options.addOption("i", "integrate-mode", false, "mixed input formats (xml, json, sql, csv) are used");
+		options.addOption("j", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
 		options.addOption("m", "mixed-mode", false, "allow different input type sources");
+		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
-		options.addOption("o", "out-file", true, "basename of output file(s)");
+		options.addOption("o", "output-file", true, "basename of output file(s), default \"null\"*");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
-		options.addOption("s", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
+		options.addOption("s", "special-props", false, "export special properties starting with\"__\" (dfefault: not)");
 		options.addOption("u", "input-url", true, "read input data from that URL");
 		options.addOption("v", "verbose", false, "being verbose");
 		options.addOption("w", "warnings", false, "issue warnings about e.g. xpath empty results");
-		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 
 		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
 		org.apache.commons.cli.CommandLine cmd = cmdparser.parse(options, args);
@@ -72,9 +75,11 @@ public class Main {
 		if (cmd.hasOption("input-dir")) { inputDir = cmd.getOptionValue("d"); }
 		if (cmd.hasOption("output-format")) { outputFormat = cmd.getOptionValue("f"); }
 		if (cmd.hasOption("jdbc-connection")) { inputJDBC = cmd.getOptionValue("s"); }
+		if (cmd.hasOption("output-file")) { outFile = cmd.getOptionValue("o"); }
 		if (cmd.hasOption("input-url")) { inputURL = cmd.getOptionValue("u"); }
-		if (cmd.hasOption("out-file")) { outFile = cmd.getOptionValue("o"); }
+		if (cmd.hasOption("rules")) { rulesFile = cmd.getOptionValue("r"); }
 		if (cmd.hasOption("mixed-mode")) { mixed = true; }
+		if (cmd.hasOption("special")) { special = true; }
 		if (cmd.hasOption("verbose")) { verbose = true; }
 		if (cmd.hasOption("warnings")) { warnings = true; }
 		if (cmd.hasOption("parse-only")) { parseOnly = true; }
@@ -83,12 +88,18 @@ public class Main {
 
 		if (cmd.hasOption("help")) {
 			org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
-			formatter.printHelp("x2g [options] [xml-file ...]", options);
+			formatter.printHelp("x2g [options] [input-file ...]", options);
 			return;
 		}
 
-		// CharStream from Stadard Input
-		CharStream input = CharStreams.fromStream(System.in);
+		// set rules file input, default: CharStream from Stadard Input
+		CharStream input;
+		if (rulesFile != null) {
+			input = CharStreams.fromFileName(rulesFile);
+		}
+		else {
+			input = CharStreams.fromStream(System.in);
+		}
 		// Lexer feeds off of input CharStream
 		x2gLexer lexer = new x2gLexer(input);
 		// Create buffer of tokens pulled from lexer
@@ -138,6 +149,10 @@ public class Main {
 				}
 			}
 		}
+		if (filelist.size() == 0) {
+			System.err.println(x2g + ": no input files specified for processing!");
+			System.exit(-1);
+		}
 		for (File file : filelist) {
 			if (verbose) {
 				System.err.println(x2g + ": processing xml file " + file.getAbsolutePath());
@@ -149,8 +164,14 @@ public class Main {
 			System.err.println(x2g + ": symtab [[" + symtab.toString() + "]]");
 			System.err.println(x2g + ": graph [[" + graph.toString() + "]]");
 		}
-		csvExport ex = new csvExport();
-		ex.export(graph);
+		switch (outputFormat) {
+			case "csv":
+				csvExport ex = new csvExport();
+				ex.export(graph, outFile, special);
+				break;
+			default:
+				break;
+		}
 	}
 }
 

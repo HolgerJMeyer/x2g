@@ -11,7 +11,7 @@ ANTLR = antlr4
 AFLAGS = -visitor -no-listener
 ASRCS = $(wildcard *.g4)
 LIBDIR = /usr/share/java/antlr4
-COMMONS = /usr/share/java/apache-commons-cli.jar
+COMMONS = /usr/share/java/apache-commons-cli.jar:/usr/share/java/apache-commons-csv.jar
 #JDOM = /usr/share/java/jdom2/jdom2.jar
 JDOM = ./jdom2/jdom-2.0.6.1.jar
 #JAXEN = /usr/share/java/jaxen.jar
@@ -85,7 +85,7 @@ xpathtest:
 	@export CLASSPATH=$(CLASSPATH) ; java -ea xTractor testunit/catalog.xml "//cd"
 
 cdcatalog:
-	@export CLASSPATH=$(CLASSPATH) ; java Main -v testunit/catalog.xml <testunit/catalog.x2g
+	@export CLASSPATH=$(CLASSPATH) ; java Main -s -f csv -o catalog testunit/catalog.xml <testunit/catalog.x2g
 
 grun:
 	@export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui <$$g ; done
