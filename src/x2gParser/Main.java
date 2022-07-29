@@ -21,6 +21,7 @@ public class Main {
 	static boolean nameSpaces = false;
 	static String conflict = "reject"; // other options: merga, link
 	static String inputDir = null;
+	static String rulesFile = null;
 	static String outFile = null;
 	static String inputURL = null;
 	static String inputJDBC = null;
@@ -57,15 +58,15 @@ public class Main {
 		options.addOption("i", "integrate-mode", false, "mixed input formats (xml, json, sql, csv) are used");
 		options.addOption("j", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
 		options.addOption("m", "mixed-mode", false, "allow different input type sources");
+		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
-		options.addOption("o", "output-file", true, "basename of output file(s)");
+		options.addOption("o", "output-file", true, "basename of output file(s), default \"null\"*");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
 		options.addOption("s", "special-props", false, "export special properties starting with\"__\" (dfefault: not)");
 		options.addOption("u", "input-url", true, "read input data from that URL");
 		options.addOption("v", "verbose", false, "being verbose");
 		options.addOption("w", "warnings", false, "issue warnings about e.g. xpath empty results");
-		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 
 		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
 		org.apache.commons.cli.CommandLine cmd = cmdparser.parse(options, args);
@@ -74,8 +75,9 @@ public class Main {
 		if (cmd.hasOption("input-dir")) { inputDir = cmd.getOptionValue("d"); }
 		if (cmd.hasOption("output-format")) { outputFormat = cmd.getOptionValue("f"); }
 		if (cmd.hasOption("jdbc-connection")) { inputJDBC = cmd.getOptionValue("s"); }
-		if (cmd.hasOption("input-url")) { inputURL = cmd.getOptionValue("u"); }
 		if (cmd.hasOption("output-file")) { outFile = cmd.getOptionValue("o"); }
+		if (cmd.hasOption("input-url")) { inputURL = cmd.getOptionValue("u"); }
+		if (cmd.hasOption("rules")) { rulesFile = cmd.getOptionValue("r"); }
 		if (cmd.hasOption("mixed-mode")) { mixed = true; }
 		if (cmd.hasOption("special")) { special = true; }
 		if (cmd.hasOption("verbose")) { verbose = true; }
@@ -86,12 +88,18 @@ public class Main {
 
 		if (cmd.hasOption("help")) {
 			org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
-			formatter.printHelp("x2g [options] [xml-file ...]", options);
+			formatter.printHelp("x2g [options] [input-file ...]", options);
 			return;
 		}
 
-		// CharStream from Stadard Input
-		CharStream input = CharStreams.fromStream(System.in);
+		// set rules file input, default: CharStream from Stadard Input
+		CharStream input;
+		if (rulesFile != null) {
+			input = CharStreams.fromFileName(rulesFile);
+		}
+		else {
+			input = CharStreams.fromStream(System.in);
+		}
 		// Lexer feeds off of input CharStream
 		x2gLexer lexer = new x2gLexer(input);
 		// Create buffer of tokens pulled from lexer
@@ -140,6 +148,10 @@ public class Main {
 					System.err.println(x2g + ": " + file.getAbsolutePath() + " is not a regular xml file");
 				}
 			}
+		}
+		if (filelist.size() == 0) {
+			System.err.println(x2g + ": no input files specified for processing!");
+			System.exit(-1);
 		}
 		for (File file : filelist) {
 			if (verbose) {
