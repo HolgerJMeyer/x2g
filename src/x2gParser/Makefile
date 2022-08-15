@@ -66,11 +66,11 @@ x2gParser.java:	x2gLexer.java
 run:	runhelp runparse werewolf graphtest
 
 runhelp:
-	@export CLASSPATH=$(CLASSPATH) ; java Main -h
+	export CLASSPATH=$(CLASSPATH) ; java Main -h
 
 runparse:
-	@export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset-with-errors.x2g
-	@export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset-with-errors.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset.x2g
 
 werewolf:
 	export CLASSPATH=$(CLASSPATH) ; java Main -wn -d isebel/werewolf <testunit/isebel-stories.x2g
@@ -79,16 +79,16 @@ werewolf1:
 	export CLASSPATH=$(CLASSPATH) ; java Main -wn -d isebel/werewolf001 <testunit/isebel-stories.x2g
 
 graphtest:
-	@export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
 
 xpathtest:
-	@export CLASSPATH=$(CLASSPATH) ; java -ea xTractor testunit/catalog.xml "//cd"
+	export CLASSPATH=$(CLASSPATH) ; java -ea xTractor testunit/catalog.xml "//cd"
 
 cdcatalog:
-	@export CLASSPATH=$(CLASSPATH) ; java Main -s -f csv -o catalog testunit/catalog.xml <testunit/catalog.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -s -f csv -o catalog testunit/catalog.xml <testunit/catalog.x2g
 
 grun:
-	@export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui <$$g ; done
+	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java org.antlr.v4.gui.TestRig x2g x2g -token -tree -gui <$$g ; done
 
 clean:
 	-rm -rf $(GENSRCS) $(TOKENS) $(CLASSES) *.class
