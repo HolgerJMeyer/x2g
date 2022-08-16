@@ -111,14 +111,15 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			v = ctx.ID(1).getText();
 			context = symtab.resolve(c);
 		}
-		else { /* bin absolute without context var */
+		else { /* bind absolute without context var */
 			v = ctx.ID(0).getText();
 		}
 
 		// bind_expr: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID
 		bindvar = symtab.resolve(v);
 		if (bindvar == null) {
-			evalMessage("variable $" + v + " binding is undefined!");
+			evalMessage("variable binding $" + v + " undefined!");
+			evalMessage("symtab=[[" + symtab.toString() + "]]");
 		}
 		switch (kwtype) {
 		case x2gLexer.XPATH:
