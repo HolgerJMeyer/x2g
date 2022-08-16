@@ -7,6 +7,7 @@ match xpath("//isebel:story") using $s {
 		id = $s.xpath("dc:identifier/text()"),
 		unique (id)
 	},
+
 	match xpath(".//isebel:person[isebel:role/text()='narrator']") using $p {
 		create node $pn label "person" {
 			// properties with optional type declaration
@@ -23,7 +24,16 @@ match xpath("//isebel:story") using $s {
 		},
 		create edge $e from $sn to $pn label "narrator" {
 			alt = "story-teller"
-			/* no more properties given */
+			// no more properties given
+		}
+	},
+
+	match xpath(".//isebel:keyword") using $k {
+		create node $kn label "keyword" {
+			value = $k.xpath("text()")
+		},
+		create edge $e from $sn to $kn label "content" {
+			alt = "is-about"
 		}
 	}
 }

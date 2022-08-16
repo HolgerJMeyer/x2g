@@ -73,10 +73,10 @@ runparse:
 	export CLASSPATH=$(CLASSPATH) ; java Main -vp <testunit/simple-ruleset.x2g
 
 werewolf:
-	export CLASSPATH=$(CLASSPATH) ; java Main -wn -d isebel/werewolf <testunit/isebel-stories.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -wn -o werewolf -d isebel/werewolf <testunit/isebel-stories.x2g
 
 werewolf1:
-	export CLASSPATH=$(CLASSPATH) ; java Main -wn -d isebel/werewolf001 <testunit/isebel-stories.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -wn -o werewolf001 -d isebel/werewolf001 <testunit/isebel-stories.x2g
 
 graphtest:
 	export CLASSPATH=$(CLASSPATH) ; for g in testunit/*.x2g ; do java -ea gTest <$$g ; done
