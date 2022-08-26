@@ -119,6 +119,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		bindvar = symtab.resolve(v);
 		if (bindvar == null) {
 			evalMessage("variable binding $" + v + " undefined!");
+			evalMessage("symtab.current=" + symtab.getCurrent());
 			evalMessage("symtab=[[" + symtab.toString() + "]]");
 		}
 		switch (kwtype) {
