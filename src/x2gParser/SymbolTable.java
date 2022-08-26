@@ -47,14 +47,14 @@ public class SymbolTable {
 	}
 
 	public Scope endScope() {
+		Scope old = current;
+		current = old.getEnclosing();
+		if (verbose) System.err.println("endScope: '" + old.name + "', new current: " + current.name);
 		--nesting;
 		if (CLEANUP) {
-			Scope old = current;
-			current = old.getEnclosing();
 			scopes.remove(old);
-			return current;
 		}
-		return current = current.getEnclosing();
+		return current;
 	}
 
    public Variable define(String name, VarType type, String expr) {
