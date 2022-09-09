@@ -35,7 +35,7 @@ public class SymbolTable {
 	}
 
 	public Scope setScope(String name) {
-		if (verbose) System.err.println("setScope: '" + name + "', current: " + current);
+		if (true) System.err.println("setScope: '" + name + "', current: " + current);
 		String n = name + "." + ++nesting;
 		for (Scope scope : scopes) {
 				if (scope.getEnclosing() == current && scope.name.equals(n)) {
@@ -49,7 +49,7 @@ public class SymbolTable {
 	public Scope endScope() {
 		Scope old = current;
 		current = old.getEnclosing();
-		if (verbose) System.err.println("endScope: '" + old.name + "', new current: " + current.name);
+		if (true) System.err.println("endScope: '" + old.name + "', new current: " + current.name);
 		--nesting;
 		if (CLEANUP) {
 			scopes.remove(old);
