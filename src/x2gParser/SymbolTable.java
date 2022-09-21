@@ -28,7 +28,7 @@ public class SymbolTable {
 
 	/* Attention: new scope defined under current scope, new scope becomes current */
 	public Scope newScope(String name) {
-		if (verbose) System.err.println("newScope: '" + name + "'");
+		if (true) System.err.println("newScope: '" + name + "'");
 		nesting++;
 		scopes.add(current = new Scope(name + "." + nesting, current));
 		return current;
