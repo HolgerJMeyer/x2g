@@ -27,6 +27,9 @@ public class SymbolTable {
 	}
 
 	/* Attention: new scope defined under current scope, new scope becomes current */
+	/* TODO: keep track of a sequence of scope of the same level.
+	 *       Nesting should be better a numbering?
+	 */
 	public Scope newScope(String name) {
 		if (true) System.err.println("newScope: '" + name + "'");
 		nesting++;
