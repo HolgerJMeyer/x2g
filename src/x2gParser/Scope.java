@@ -73,7 +73,7 @@ public class Scope {
 		return members.get(name);
 	}
 
-	public Variable getOuter(String scopename, VarType type) {
+	protected Variable getOuter(String scopename, VarType type) {
 		if (name.equals(scopename)) {
 			for (Variable v : members.values()) {
 				if (v.getType() == type) {
@@ -87,11 +87,11 @@ public class Scope {
 		return null;
 	}
 
-	public Set<Variable> getVariables() {
+	protected Set<Variable> getVariables() {
 		return new HashSet<Variable>(members.values());
 	}
 
-	public Set<Variable> getVariablesByType(VarType type) {
+	protected Set<Variable> getVariablesByType(VarType type) {
 		Set<Variable> s = new HashSet<Variable>();
 
 		for (Variable v : members.values()) {

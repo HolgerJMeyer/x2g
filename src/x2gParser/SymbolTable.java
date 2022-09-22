@@ -13,7 +13,7 @@ public class SymbolTable {
 	private Scope globals;
 	private Scope current;
 	private int nesting;
-	private List<Scope> scopes = new ArrayList<Scope>();	
+	private List<Scope> allscopes = new ArrayList<Scope>();	
 
 	public SymbolTable() { this(false); }
 
@@ -23,7 +23,7 @@ public class SymbolTable {
 		nesting = 0;
 		globals.define("__allnodes", VarType.NODESET, new HashSet<Object>());
 		globals.define("__alledges", VarType.EDGESET, new HashSet<Object>());
-		scopes.add(globals);
+		allscopes.add(globals);
 	}
 
 	/* Attention: new scope defined under current scope, new scope becomes current */
@@ -33,14 +33,15 @@ public class SymbolTable {
 	public Scope newScope(String name) {
 		if (true) System.err.println("newScope: '" + name + "'");
 		nesting++;
-		scopes.add(current = new Scope(name + "." + nesting, current));
+		allscopes.add(current = new Scope(name + "." + nesting, current));
 		return current;
 	}
 
 	public Scope setScope(String name) {
 		if (true) System.err.println("setScope: '" + name + "', current: " + current);
+		/* TODO: */
 		String n = name + "." + ++nesting;
-		for (Scope scope : scopes) {
+		for (Scope scope : allscopes) {
 				if (scope.getEnclosing() == current && scope.name.equals(n)) {
 					return current = scope;
 				}
@@ -55,7 +56,7 @@ public class SymbolTable {
 		if (true) System.err.println("endScope: '" + old.name + "', new current: " + current.name);
 		--nesting;
 		if (CLEANUP) {
-			scopes.remove(old);
+			allscopes.remove(old);
 		}
 		return current;
 	}
@@ -89,7 +90,7 @@ public class SymbolTable {
 	public String toString() {
 		//return globals.toString();
 		StringBuilder buf = new StringBuilder();
-		for (Scope scope : scopes) {
+		for (Scope scope : allscopes) {
 			buf.append('\n' + scope.toString());
 		}
 		return buf.toString();
