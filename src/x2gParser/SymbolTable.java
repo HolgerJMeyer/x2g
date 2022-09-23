@@ -54,7 +54,7 @@ public class SymbolTable {
 		Scope old = current;
 		current = old.getEnclosing();
 		if (true) System.err.println("endScope: '" + old.name + "', new current: " + current.name);
-		--nesting;
+		//--nesting;
 		if (CLEANUP) {
 			allscopes.remove(old);
 		}
