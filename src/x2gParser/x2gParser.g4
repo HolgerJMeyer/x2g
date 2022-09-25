@@ -33,15 +33,16 @@ x2g
 	;
 
 x2g_rule
-	: MATCH {
-		symtab.newScope("match");
-	  } bind_expr '{' body '}' {
+	: MATCH bind_expr {
+		// TODO: symtab.newScope("match", bind_expr);*/
+	  } '{' body '}' {
 		symtab.endScope();
 	  }
 	;
 
 bind_expr
 	: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID {
+		symtab.newScope("match", $v.text);
 		if ($c != null) {
 			if (symtab.resolve($c.text) == null) {
 				notifyErrorListeners("context variable $" + $c.text + " is undefined!");
@@ -93,7 +94,7 @@ create_node
 			notifyErrorListeners("binding $" + $ID.text + " hides earlier one!");
 		}
 		Variable node = symtab.define($ID.text, VarType.NODESET);
-		Scope propscope = symtab.newScope("node.properties");
+		Scope propscope = symtab.newScope("node.properties", $ID.text);
 		node.setPropScope(propscope);
 		symtab.define("__label", VarType.PROPERTY, $e.text);
 	  } '{' property_statement_list '}' {
@@ -102,14 +103,14 @@ create_node
 	;
 
 create_edge
-	: CREATE EDGE '$' n0=ID FROM '$' n1=ID TO '$' n2=ID LABEL e=string_expr {
+	: CREATE EDGE '$' e=ID FROM '$' n1=ID TO '$' n2=ID LABEL l=string_expr {
 		/* TODO:  FROM $ID TO $ID  -> FROM eval_expr TO eval_expr */
 		/* FROM node_ref TO node_ref */
 		if (verbose) {
-			notifyErrorListeners("edgeset variable $" + $n0.text + " labeled " + $e.text);
+			notifyErrorListeners("edgeset variable $" + $e.text + " labeled " + $l.text);
 		}
-		if (symtab.resolve($n0.text) != null) {
-			notifyErrorListeners("binding $" + $n0.text + " hides earlier one!");
+		if (symtab.resolve($e.text) != null) {
+			notifyErrorListeners("binding $" + $e.text + " hides earlier one!");
 		}
 		
 		Variable from = symtab.resolve($n1.text);
@@ -120,10 +121,10 @@ create_edge
 		if (to == null || to.getType() != VarType.NODESET) {
 			notifyErrorListeners("nodeset variable $" + $n2.text + " undefined!");
 		}
-		Variable edge = symtab.define($n0.text, VarType.EDGESET);
-		Scope propscope = symtab.newScope("edge.properties");
+		Variable edge = symtab.define($e.text, VarType.EDGESET);
+		Scope propscope = symtab.newScope("edge.properties", $e.text);
 		edge.setPropScope(propscope);
-		symtab.define("__label", VarType.PROPERTY, $e.text);
+		symtab.define("__label", VarType.PROPERTY, $l.text);
 	  } '{' property_statement_list '}' {
 		symtab.endScope();
 	  }

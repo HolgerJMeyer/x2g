@@ -106,6 +106,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		String v = null;
 		Map<String, Object> vars = new HashMap<String, Object>();
 
+		// bind_expr: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID
 		if (ctx.ID(1) != null) { /* bind relative to context var */
 			c = ctx.ID(0).getText();
 			v = ctx.ID(1).getText();
@@ -115,7 +116,6 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			v = ctx.ID(0).getText();
 		}
 
-		// bind_expr: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID
 		bindvar = symtab.resolve(v);
 		if (bindvar == null) {
 			evalMessage("variable binding $" + v + " undefined!");

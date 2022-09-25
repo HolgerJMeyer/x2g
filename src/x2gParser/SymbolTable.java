@@ -30,17 +30,17 @@ public class SymbolTable {
 	/* TODO: keep track of a sequence of scope of the same level.
 	 *       Nesting should be better a numbering?
 	 */
-	public Scope newScope(String name) {
-		if (true) System.err.println("newScope: '" + name + "'");
-		nesting++;
-		allscopes.add(current = new Scope(name + "." + nesting, current));
+	public Scope newScope(String name, String variable) {
+		if (true) System.err.println("newScope: '" + name + '.' + variable + "'");
+		++nesting;
+		allscopes.add(current = new Scope(name + '.' + variable, current));
 		return current;
 	}
 
-	public Scope setScope(String name) {
-		if (true) System.err.println("setScope: '" + name + "', current: " + current);
-		/* TODO: */
-		String n = name + "." + ++nesting;
+	public Scope setScope(String name, String variable) {
+		String n = name + "." + variable;
+		if (true) System.err.println("setScope: '" + n + "', current: " + current);
+		++nesting;
 		for (Scope scope : allscopes) {
 				if (scope.getEnclosing() == current && scope.name.equals(n)) {
 					return current = scope;
@@ -54,7 +54,7 @@ public class SymbolTable {
 		Scope old = current;
 		current = old.getEnclosing();
 		if (true) System.err.println("endScope: '" + old.name + "', new current: " + current.name);
-		//--nesting;
+		--nesting;
 		if (CLEANUP) {
 			allscopes.remove(old);
 		}
