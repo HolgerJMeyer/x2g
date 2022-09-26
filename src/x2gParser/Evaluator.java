@@ -74,7 +74,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	 *
 	 */
 	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
-		symtab.setScope("match");
+		//symtab.setScope("match", "TODO");
 		Variable bindvar = visitBind_expr(ctx.bind_expr());
 		// forall bindings: for all bindings of this scope
 		for (Object s : bindvar.getBinding()) {
@@ -182,6 +182,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		default:
 			break;
 		}
+		symtab.setScope("match", v);
 		return bindvar;
 	}
 
@@ -191,7 +192,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		if (nvar == null) {
 			evalMessage("node variable $" + vname + " is undefined!");
 		}
-		Scope scope = symtab.setScope("node.properties");
+		Scope scope = symtab.setScope("node.properties", vname);
 		String label = (String)visit(ctx.string_expr());
 		visit(ctx.property_statement_list());
 		Map<String, Object> props = new HashMap<String, Object>();
@@ -221,7 +222,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		if (evar == null) {
 			evalMessage("node variable $" + vname + " is undefined!");
 		}
-		Scope scope = symtab.setScope("edge.properties");
+		Scope scope = symtab.setScope("edge.properties", vname);
 		String label = (String)visit(ctx.string_expr());
 		String from = ctx.ID(1).getText();
 		String to = ctx.ID(2).getText();

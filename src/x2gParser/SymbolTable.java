@@ -31,7 +31,7 @@ public class SymbolTable {
 	 *       Nesting should be better a numbering?
 	 */
 	public Scope newScope(String name, String variable) {
-		if (true) System.err.println("newScope: '" + name + '.' + variable + "'");
+		if (verbose) System.err.println("newScope: '" + name + '.' + variable + "'");
 		++nesting;
 		allscopes.add(current = new Scope(name + '.' + variable, current));
 		return current;
@@ -39,7 +39,7 @@ public class SymbolTable {
 
 	public Scope setScope(String name, String variable) {
 		String n = name + "." + variable;
-		if (true) System.err.println("setScope: '" + n + "', current: " + current);
+		if (verbose) System.err.println("setScope: '" + n + "', current: " + current);
 		++nesting;
 		for (Scope scope : allscopes) {
 				if (scope.getEnclosing() == current && scope.name.equals(n)) {
@@ -53,7 +53,7 @@ public class SymbolTable {
 	public Scope endScope() {
 		Scope old = current;
 		current = old.getEnclosing();
-		if (true) System.err.println("endScope: '" + old.name + "', new current: " + current.name);
+		if (verbose) System.err.println("endScope: '" + old.name + "', new current: " + current.name);
 		--nesting;
 		if (CLEANUP) {
 			allscopes.remove(old);
