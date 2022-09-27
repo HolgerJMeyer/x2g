@@ -142,7 +142,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 				evalMessage("@bind_expr: $" + v + " = " + set);
 			}
 			if (warnings && set.size() == 0) {
-				evalWarning("matching $" + v + " (" + e + ") yields empty nodeset!");
+				evalWarning("$" + v + " (" + e + ") didn't match!");
 			}
 			bindvar.setBinding(set);
 			break;
@@ -266,7 +266,12 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	@Override public Variable visitProperty_assignment(x2gParser.Property_assignmentContext ctx) {
 		Object e = visit(ctx.expr());
 		Variable v = symtab.resolve(ctx.ID().getText());
-		v.setExpr(e.toString());
+		if (e != null) {
+			v.setExpr(e.toString());
+		}
+		else {
+			v.setExpr(null);
+		}
 		return v;
 	}
 
@@ -424,12 +429,13 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 					}
 					return node.toString();
 				}
-				else if (warnings && seq.size() == 0) {
-					evalWarning("xpath expression (" + e + ") evaluates to an empty nodeset!");
+				else if (seq.size() == 0) {
+					if (Main.emptyProperty) {
+						evalWarning("xpath expression (" + e + ") evaluates to an empty nodeset!");
+					}
+					return null;
 				}
-				else {
-					evalWarning("xpath expression (" + e + ") evaluates to a nodeset of size " + seq.size() + ", but single node expected!");
-				}
+				evalWarning("xpath expression (" + e + ") evaluates to a nodeset of size " + seq.size() + ", but single node expected!");
 				return seq.toString();
 			}
 			// TODO: JPATH

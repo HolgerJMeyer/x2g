@@ -20,7 +20,7 @@ public class Main {
 	static boolean parseOnly = false;
 	static boolean multiGraph = false;
 	static boolean nameSpaces = false;
-	static boolean omitProperty = true; // by this avoid evaluates to empty nodeset warning
+	static boolean emptyProperty = false; // create empty properties and warn
 	static String conflict = "reject"; // other options: merga, link
 	static String inputDir = null;
 	static String rulesFile = null;
@@ -55,6 +55,7 @@ public class Main {
 
 		options.addOption("c", "conflict", true, "conflict resolution options during node creation: create, (create and) link, merge, reject are valid options");
 		options.addOption("d", "input-dir", true, "transform all files found in this directory");
+		options.addOption("e", "empty-properties", false, "create empty property if empty source element or missing value. otherwise don't add property to node/edge");
 		options.addOption("f", "output-format", true, "output file format: csv, dot, gefx, graphml, and lg are supported options");
 		options.addOption("h", "help", false, "print this help");
 		options.addOption("i", "integrate-mode", false, "mixed input formats (xml, json, sql, csv) are used");
@@ -62,7 +63,6 @@ public class Main {
 		options.addOption("m", "mixed-mode", false, "allow different input type sources");
 		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
-		options.addOption("", "omit-property", false, "omit property if empty source element or missing value");
 		options.addOption("o", "output-file", true, "basename of output file(s), default \"null\"*");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
@@ -82,7 +82,7 @@ public class Main {
 		if (cmd.hasOption("input-url")) { inputURL = cmd.getOptionValue("u"); }
 		if (cmd.hasOption("rules")) { rulesFile = cmd.getOptionValue("r"); }
 		if (cmd.hasOption("mixed-mode")) { mixed = true; }
-		if (cmd.hasOption("omit-empty")) { omitProperty = true; }
+		if (cmd.hasOption("empty-empty")) { emptyProperty = true; }
 		if (cmd.hasOption("special")) { special = true; }
 		if (cmd.hasOption("verbose")) { verbose = true; }
 		if (cmd.hasOption("warnings")) { warnings = true; }

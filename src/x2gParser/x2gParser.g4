@@ -161,7 +161,7 @@ property_assignment
 			notifyErrorListeners("property " + $ID.text + "=" + $expr.text);
 		}
 		if (symtab.resolveCurrent($ID.text) != null) {
-			notifyErrorListeners("property " + $ID.text + " overidden!");
+			notifyErrorListeners("property " + $ID.text + " maybe overridden!");
 		}
 		symtab.define($ID.text, VarType.PROPERTY, $expr.text);
 	  }
