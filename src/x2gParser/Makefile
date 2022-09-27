@@ -36,6 +36,7 @@ MYSRCS = \
 	SymbolTable.java \
 	Variable.java \
 	VarType.java \
+	WarnType.java \
 	$(GRAPHSRCS) \
 	$(XMLSRCS)
 #LISTENER = x2gParserBaseListener.java x2gParserListener.java

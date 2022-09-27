@@ -15,10 +15,12 @@ public class Main {
 	static boolean special = false;
 	static boolean verbose = false;
 	static boolean warnings = false;
+	static int warnlevel = WarnType.NONE;
 	static boolean mixed = false;
 	static boolean parseOnly = false;
 	static boolean multiGraph = false;
 	static boolean nameSpaces = false;
+	static boolean omitProperty = true; // by this avoid evaluates to empty nodeset warning
 	static String conflict = "reject"; // other options: merga, link
 	static String inputDir = null;
 	static String rulesFile = null;
@@ -60,6 +62,7 @@ public class Main {
 		options.addOption("m", "mixed-mode", false, "allow different input type sources");
 		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
+		options.addOption("", "omit-property", false, "omit property if empty source element or missing value");
 		options.addOption("o", "output-file", true, "basename of output file(s), default \"null\"*");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
@@ -79,6 +82,7 @@ public class Main {
 		if (cmd.hasOption("input-url")) { inputURL = cmd.getOptionValue("u"); }
 		if (cmd.hasOption("rules")) { rulesFile = cmd.getOptionValue("r"); }
 		if (cmd.hasOption("mixed-mode")) { mixed = true; }
+		if (cmd.hasOption("omit-empty")) { omitProperty = true; }
 		if (cmd.hasOption("special")) { special = true; }
 		if (cmd.hasOption("verbose")) { verbose = true; }
 		if (cmd.hasOption("warnings")) { warnings = true; }

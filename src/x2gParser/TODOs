@@ -1,0 +1,5 @@
+* x2g-Rules not only on stdin but from file option on commandline
+* omit properties if empty/not present in source
+* registered properties
+* allow for multi-valued properties
+* .GEXF (gephi file format) export: https://github.com/francesco-ficarola/gexf4j

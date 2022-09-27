@@ -13,14 +13,14 @@ match xpath("//isebel:story") using $s {
 			// properties with optional type declaration
 			name = $p.xpath("isebel:name/text()"),
 			age = $p.xpath("isebel:age"),
-			unique (name, age),
 			// conditional assignment
 			if ($p.xpath("isebel:gender/text()") == "male") {
 				gender = "male-narrator"
 			}
 			else {
 				gender = "female-narrator"
-			}
+			},
+			unique (name, gender)
 		},
 		create edge $e from $sn to $pn label "narrator" {
 			alt = "story-teller"
