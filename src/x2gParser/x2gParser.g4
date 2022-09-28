@@ -34,7 +34,8 @@ x2g
 
 x2g_rule
 	: MATCH bind_expr {
-		// TODO: symtab.newScope("match", bind_expr.ID(2);*/
+		// sorry, nontrivial access to sub-rule token, but here is the right place to show the nesting
+		symtab.newScope("match", $bind_expr.ctx.v.getText());
 	  } '{' body '}' {
 		symtab.endScope();
 	  }
@@ -42,7 +43,6 @@ x2g_rule
 
 bind_expr
 	: ('$' c=ID '.')? b=(XPATH|JPATH|SQL|NODE|EDGE) '(' e=string_expr ')' USING '$' v=ID {
-		// TODO: symtab.newScope("match", $v.text);
 		if ($c != null) {
 			if (symtab.resolve($c.text) == null) {
 				notifyErrorListeners("context variable $" + $c.text + " is undefined!");
@@ -54,7 +54,7 @@ bind_expr
 		if (symtab.resolve($v.text) != null) {
 			notifyErrorListeners("binding $" + $v.text + " hides earlier one!");
 		}
-		/* TODO: Simplefy be replacing VarType by x2gParser.<Token> */
+		/* TODO: Maybe simplify be replacing VarType by x2gParser.<Token> */
 		switch ($b.type) {
 		case XPATH:
 			symtab.define($v.text, VarType.XPATH, $e.text);
@@ -72,7 +72,6 @@ bind_expr
 			symtab.define($v.text, VarType.EDGESET, $e.text);
 			break;
 		}
-		symtab.newScope("match", $v.text);
 	  }
 	;
 

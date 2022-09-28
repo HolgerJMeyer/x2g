@@ -70,12 +70,12 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	 *	(2) Visiting the tree and evaluating the expressions based on variable binding. Here we go!
 	 *
 	 *	Notes:
-	 *	- The @Override are just for allerting if parser rules changei and so do ParserBasicVisitor.
+	 *	- The @Override are just for allerting if parser rules change and so do ParserBasicVisitor.
 	 *
 	 */
 	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
-		//symtab.setScope("match", "TODO");
 		Variable bindvar = visitBind_expr(ctx.bind_expr());
+		symtab.setScope("match", ctx.bind_expr.v.getText());
 		// forall bindings: for all bindings of this scope
 		for (Object s : bindvar.getBinding()) {
 			bindvar.setCurrent(s);
@@ -141,7 +141,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			if (verbose) {
 				evalMessage("@bind_expr: $" + v + " = " + set);
 			}
-			if (warnings && set.size() == 0) {
+			if (Main.warnEmpty && set.size() == 0) {
 				evalWarning("$" + v + " (" + e + ") didn't match!");
 			}
 			bindvar.setBinding(set);
@@ -182,7 +182,6 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		default:
 			break;
 		}
-		symtab.setScope("match", v);
 		return bindvar;
 	}
 
@@ -430,7 +429,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 					return node.toString();
 				}
 				else if (seq.size() == 0) {
-					if (Main.emptyProperty) {
+					if (Main.warnEmpty) {
 						evalWarning("xpath expression (" + e + ") evaluates to an empty nodeset!");
 					}
 					return null;

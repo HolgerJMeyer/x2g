@@ -14,7 +14,7 @@ import java.io.StringWriter;
 public class csvExport {
 	private boolean verbose = false;
 
-	public enum PropertyRepr { ASSIGN, COMMA, COLON, JSON }
+	public enum PropStyle { ASSIGN, COMMA, COLON, JSON }
 
 	public csvExport(boolean verbose) {
 		this.verbose = verbose;
@@ -24,14 +24,17 @@ public class csvExport {
 
 	public void export(gGraph graph, String basename) { export(graph, basename, false); }
 
-	protected void exportProperties(CSVPrinter printer, gElement e, boolean special, PropertyRepr repr) {
+	protected void exportProperties(CSVPrinter printer, gElement e, boolean special, String pstyle) {
 		List<String> skeys = new ArrayList<>(e.getProperties().keySet());
 		Collections.sort(skeys);
 		try {
 			for (String k : skeys) {
 				if (!k.startsWith("__") || special) {
-					switch (repr) {
-						case COLON:
+					switch (pstyle) {
+						case "assign":
+							printer.print(k + '=' + e.getProperties().get(k));
+							break;
+						case "colon":
 							printer.print(k + ':' + e.getProperties().get(k));
 							break;
 						default:
@@ -55,14 +58,16 @@ public class csvExport {
 	 *		- how to handle different property sets per node or edge type/label
 	 *		- how to export attribute value pairs? a=v, a,v, a:v, [a:v,...] ...
 	 */
-	public void export(gGraph graph, String basename, boolean special) {
+	public void export(gGraph graph, String basename, boolean special) { export(graph, basename, special, "comma"); }
+
+	public void export(gGraph graph, String basename, boolean special, String pstyle) {
 		try (CSVPrinter printer = new CSVPrinter(new FileWriter(basename + "-nodes.csv"), CSVFormat.DEFAULT)) {
 			printer.printRecord("id", "label", "properties");
 			for (String label : graph.getNodeLabels()) {
 				for (gNode n : graph.getNodes(label)) {
 					printer.print(n.getId());
 					printer.print(label);
-					exportProperties(printer, n, special, PropertyRepr.COMMA);
+					exportProperties(printer, n, special, pstyle);
 				}
 			}
 		} catch (IOException ex) {
@@ -76,7 +81,7 @@ public class csvExport {
 					printer.print(e.getSrc().getId());
 					printer.print(e.getDst().getId());
 					printer.print(label);
-					exportProperties(printer, e, special, PropertyRepr.COMMA);
+					exportProperties(printer, e, special, pstyle);
 				}
 			}
 		} catch (IOException ex) {

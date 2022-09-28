@@ -12,22 +12,23 @@ import java.io.*;
 public class Main {
 	static final String conflictOptions[] = { "create", "link", "merge", "reject" };
 	static String x2g = "X2G";
+	static boolean mixed = false;
+	static boolean multiGraph = false;
+	static boolean nameSpaces = false;
+	static boolean parseOnly = false;
 	static boolean special = false;
 	static boolean verbose = false;
 	static boolean warnings = false;
+	static boolean warnEmpty = false;
 	static int warnlevel = WarnType.NONE;
-	static boolean mixed = false;
-	static boolean parseOnly = false;
-	static boolean multiGraph = false;
-	static boolean nameSpaces = false;
-	static boolean emptyProperty = false; // create empty properties and warn
 	static String conflict = "reject"; // other options: merga, link
+	static String csvStyle = "comma";
 	static String inputDir = null;
-	static String rulesFile = null;
-	static String outFile = null;
 	static String inputURL = null;
 	static String inputJDBC = null;
+	static String outFile = null;
 	static String outputFormat = "csv";
+	static String rulesFile = null;
 
 	/* pretty print Error messages */
 	public static class ErrorListener extends BaseErrorListener {
@@ -54,14 +55,14 @@ public class Main {
 		org.apache.commons.cli.Options options = new org.apache.commons.cli.Options();
 
 		options.addOption("c", "conflict", true, "conflict resolution options during node creation: create, (create and) link, merge, reject are valid options");
+		// ASSIGN, COMMA, COLON, JSON
+		options.addOption(null, "csv-style", true, "style of properties in CSV file:\n\t'comma' -- repeated 'name,value' (default),\n\t'assign' -- 'name=value',\n\t'colon' -- 'name:value',\n\t'json' -- as JSON object");
 		options.addOption("d", "input-dir", true, "transform all files found in this directory");
-		options.addOption("e", "empty-properties", false, "create empty property if empty source element or missing value. otherwise don't add property to node/edge");
 		options.addOption("f", "output-format", true, "output file format: csv, dot, gefx, graphml, and lg are supported options");
 		options.addOption("h", "help", false, "print this help");
 		options.addOption("i", "integrate-mode", false, "mixed input formats (xml, json, sql, csv) are used");
 		options.addOption("j", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
 		options.addOption("m", "mixed-mode", false, "allow different input type sources");
-		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
 		options.addOption("o", "output-file", true, "basename of output file(s), default \"null\"*");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
@@ -70,25 +71,28 @@ public class Main {
 		options.addOption("u", "input-url", true, "read input data from that URL");
 		options.addOption("v", "verbose", false, "being verbose");
 		options.addOption("w", "warnings", false, "issue warnings about e.g. xpath empty results");
+		options.addOption(null, "warn-empty", false, "warn about empty matching results");
+		options.addOption("x", "multi-graph", false, "multi-graph, i.e., allow muliple edges between a pair of nodes");
 
 		org.apache.commons.cli.CommandLineParser cmdparser = new org.apache.commons.cli.DefaultParser();
 		org.apache.commons.cli.CommandLine cmd = cmdparser.parse(options, args);
 
 		if (cmd.hasOption("conflict")) { conflict = cmd.getOptionValue("c"); }
+		if (cmd.hasOption("csv-style")) { csvStyle = cmd.getOptionValue("csv-style"); }
 		if (cmd.hasOption("input-dir")) { inputDir = cmd.getOptionValue("d"); }
 		if (cmd.hasOption("output-format")) { outputFormat = cmd.getOptionValue("f"); }
 		if (cmd.hasOption("jdbc-connection")) { inputJDBC = cmd.getOptionValue("s"); }
 		if (cmd.hasOption("output-file")) { outFile = cmd.getOptionValue("o"); }
 		if (cmd.hasOption("input-url")) { inputURL = cmd.getOptionValue("u"); }
-		if (cmd.hasOption("rules")) { rulesFile = cmd.getOptionValue("r"); }
 		if (cmd.hasOption("mixed-mode")) { mixed = true; }
-		if (cmd.hasOption("empty-empty")) { emptyProperty = true; }
+		if (cmd.hasOption("multi-graph")) { multiGraph = true; }
+		if (cmd.hasOption("namespace")) { nameSpaces = true; }
+		if (cmd.hasOption("parse-only")) { parseOnly = true; }
+		if (cmd.hasOption("rules")) { rulesFile = cmd.getOptionValue("r"); }
 		if (cmd.hasOption("special")) { special = true; }
 		if (cmd.hasOption("verbose")) { verbose = true; }
 		if (cmd.hasOption("warnings")) { warnings = true; }
-		if (cmd.hasOption("parse-only")) { parseOnly = true; }
-		if (cmd.hasOption("multi-graph")) { multiGraph = true; }
-		if (cmd.hasOption("namespace")) { nameSpaces = true; }
+		if (cmd.hasOption("warn-empty")) { warnEmpty = true; }
 
 		if (cmd.hasOption("help")) {
 			org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
@@ -171,7 +175,7 @@ public class Main {
 		switch (outputFormat) {
 			case "csv":
 				csvExport ex = new csvExport();
-				ex.export(graph, outFile, special);
+				ex.export(graph, outFile, special, csvStyle);
 				break;
 			default:
 				break;
