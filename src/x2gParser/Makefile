@@ -27,7 +27,8 @@ GRAPHSRCS = \
 	gNode.java \
 	gProperties.java \
 	gTest.java \
-	csvExport.java 
+	csvExport.java \
+	graphmlExport.java 
 XMLSRCS = \
 	xTractor.java
 MYSRCS = \

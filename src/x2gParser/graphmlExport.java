@@ -3,9 +3,10 @@
  */
 import java.util.*;
 import java.io.*;
-import org.jdom.*;
-import org.jdom.output.*;
+import org.jdom2.*;
+import org.jdom2.output.*;
 import java.net.*;
+
 /**
  * Util to convert nodes and edges into grapml document
  * @author rbolze
@@ -109,7 +110,7 @@ public class graphmlExport {
 	 * @param graph the graph element of the graphML document
 	 * @param graphml the graphml element of the graphML document
 	 */
-	public static void addNode(int id,URL url,Element graph,Element graphml){
+	public static void addNode(int id, URL url, Element graph, Element graphml){
 		Element node = new Element("node");
 		node.setAttribute("id","n"+id);
 		Element data0 = new Element("data");
@@ -128,7 +129,6 @@ public class graphmlExport {
 		data1.setAttribute("key","d1");
 		data1.setText(url.toString());
 		node.addContent(data1);
-		
 		graph.addContent(node);
 	}
 	/**
@@ -149,14 +149,12 @@ public class graphmlExport {
 	 * @param file the file name
 	 * @param doc xml document
 	 */
-	public static void save(String file,Document doc) {
-		System.out.println("### document saved in : "+file);
+	public static void save(String file, Document doc) {
 		try {
 			XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
 			sortie.output(doc, new java.io.FileOutputStream(file));
 		} catch (java.io.IOException e){}
 	}
-	
 }
 
 // vim: spell spelllang=en
