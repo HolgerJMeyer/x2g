@@ -3,3 +3,8 @@
 * registered properties
 * allow for multi-valued properties
 * .GEXF (gephi file format) export: https://github.com/francesco-ficarola/gexf4j
+* better warnings about:
+  * concatenating strings from nodesets
+  * empty nodesets
+  * avoid creating new nodes if there is already the same node
+  * merging properties of nodes

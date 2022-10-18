@@ -320,6 +320,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		Object left = visit(ctx.expr(0));
 		Object right = visit(ctx.expr(1));
 
+
+		// Assert: left != null && right != null
+		//evalMessage("@boolean_expr: expr relop expr: left=" + left + ", right=" + right);
+
 		/* operands have to comparable */
 		switch (ctx.op.getType()) {
 		case x2gParser.EQ:
@@ -430,11 +434,12 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 				}
 				else if (seq.size() == 0) {
 					if (Main.warnEmpty) {
-						evalWarning("xpath expression (" + e + ") evaluates to an empty nodeset!");
+						evalWarning("xpath (" + e + ") evaluates to an empty nodeset!");
 					}
-					return null;
+					// TODO: to return null or empty string?  We go with empty strings!
+					return "";
 				}
-				evalWarning("xpath expression (" + e + ") evaluates to a nodeset of size " + seq.size() + ", but single node expected!");
+				evalWarning("xpath (" + e + ") evaluates to a nodeset of size " + seq.size() + ", returning as single string!");
 				return seq.toString();
 			}
 			// TODO: JPATH
