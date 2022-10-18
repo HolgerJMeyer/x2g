@@ -59,7 +59,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	}
 
 	public void evalWarning(String message) {
-		evalMessage("Warning: " + message);
+		if (warnings) {
+			evalMessage("Warning: " + message);
+		}
 	}
 
 	/*
