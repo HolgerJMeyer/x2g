@@ -195,7 +195,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		}
 		Scope scope = symtab.setScope("node.properties", vname);
 		String label = (String)visit(ctx.string_expr());
-		visit(ctx.property_statement_list());
+		if (ctx.property_statement_list() != null) {
+			visit(ctx.property_statement_list());
+		}
 		Map<String, Object> props = new HashMap<String, Object>();
 		for (Variable v : symtab.getCurrent().getVariablesByType(VarType.PROPERTY)) {
 			// TODO: getExpr() -> getValue()
@@ -238,7 +240,9 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		}
 		gNode fromNode = (gNode)fromVar.getCurrent();
 		gNode toNode = (gNode)toVar.getCurrent();
-		visit(ctx.property_statement_list());
+		if (ctx.property_statement_list() != null) {
+			visit(ctx.property_statement_list());
+		}
 		Map<String, Object> props = new HashMap<String, Object>();
 		for (Variable v : symtab.getCurrent().getVariablesByType(VarType.PROPERTY)) {
 			props.put(v.getName(), v.getExpr());

@@ -98,7 +98,7 @@ create_node
 		Scope propscope = symtab.newScope("node.properties", $ID.text);
 		node.setPropScope(propscope);
 		symtab.define("__label", VarType.PROPERTY, $e.text);
-	  } '{' property_statement_list '}' {
+	  } '{' property_statement_list? '}' {
 		symtab.endScope();
 	  }
 	;
@@ -126,7 +126,7 @@ create_edge
 		Scope propscope = symtab.newScope("edge.properties", $e.text);
 		edge.setPropScope(propscope);
 		symtab.define("__label", VarType.PROPERTY, $l.text);
-	  } '{' property_statement_list '}' {
+	  } '{' property_statement_list? '}' {
 		symtab.endScope();
 	  }
 	;
