@@ -17,9 +17,9 @@ match xpath("//isebel:story") using $s {
 	match xpath(".//isebel:place") using $o {
 		create node $on label "place" {
 			name = $o.xpath("dc:title/text()"),
-			lon = $o.xpath("dc:title/text()"),
-			lat = $o.xpath("dc:title/text()"),
-			unique (name)
+			latitude = $o.xpath("isebel:point//datacite:pointLatitude/text()"),
+			longitude = $o.xpath("isebel:point//datacite:pointLongitude/text()"),
+			unique (name, latitude, longitude)
 		},
 		create edge $e from $sn to $on label "place-of-narration" {}
 	},

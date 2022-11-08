@@ -85,7 +85,7 @@ public class gGraph {
 						if (propsA.get(key) == null) {
 							propsA.put(key, propsB.get(key));
 						} else if (!propsA.get(key).equals(propsB.get(key))) {
-							System.err.println("gGraph:createNode could not merge: property values for '" + key + "' differ: '" + propsA.get(key) + "' vs. '" + propsB.get(key) + "'");
+							System.err.println("gGraph:createNode could not merge [" + propsA + "]: property values for '" + key + "' differ: '" + propsA.get(key) + "' vs. '" + propsB.get(key) + "'");
 						}
 					}
 					if (verbose) {
@@ -93,6 +93,7 @@ public class gGraph {
 					}
 					return node;
 				}
+				// TODO: what if !allequal?
 			}
 
 			// (3) if propsB are a subset of propsA

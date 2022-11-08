@@ -422,6 +422,10 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 			}
 			if (v != null && (p.equals("xpath") || p.equals("XPATH"))) {
 				List<Content> seq = xtractor.xtract(v.getCurrent(), e, vars);
+				if (seq == null) {
+					evalWarning("xpath (" + e + ") evaluation failed!");
+					return "";
+				}
 				if (seq.size() == 1) {
 					Content node = seq.get(0);
 					switch (node.getCType()) {
