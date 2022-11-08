@@ -101,6 +101,7 @@ public class xTractor {
 			if (verbose) {
 				System.err.println("xTractor:xpath compile: " + xp);
 			}
+			// TODO: additional local namespace extraction must take place here?
 			XPathFactory xpf = XPathFactory.instance();
 			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars, namespaces);
 			List<Content> nodes = expr.evaluate(context);
