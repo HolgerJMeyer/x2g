@@ -45,7 +45,7 @@ public class xTractor {
 	 * @return a new XML xTractor instance
 	 * @see xTractor
 	 */
-	public xTractor(String filename, boolean nsaware) {
+	public xTractor(String filename, boolean nsaware, List<String> addns) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			// make it namespace aware or not
@@ -62,6 +62,11 @@ public class xTractor {
 				doc = sax.build(file = new File(filename));
 				// Extract namespace declarations
 				namespaces = doc.getRootElement().getNamespacesInScope();
+				if (addns != null) {
+					for (String ns : addns) {
+						namespaces.add(Namespace.getNamespace(ns));
+					}
+				}
 				if (verbose) {
 					System.err.println("xTractor:namespaces: " + namespaces);
 				}
@@ -71,10 +76,6 @@ public class xTractor {
 		catch (ParserConfigurationException | JDOMException | SAXException | IOException pe) {
 			System.err.println("xpath extractor creating DOM: " + pe);
 		}
-	}
-
-	public xTractor(String filename) {
-		this(filename, false);
 	}
 
 	public String getFilename() { return file.getName(); }
@@ -125,7 +126,7 @@ public class xTractor {
 			System.out.println("xTractor <xml-file> <xpath-expr>");
 			return;
 		}
-		xTractor xt = new xTractor(args[0]);
+		xTractor xt = new xTractor(args[0], true, null);
 		List<Content> list = xt.xtract(args[1]);
 		System.out.println("keywords are:" + Arrays.toString(list.toArray()));
 	}

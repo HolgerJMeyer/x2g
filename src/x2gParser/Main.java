@@ -29,6 +29,8 @@ public class Main {
 	static String outFile = null;
 	static String outputFormat = "csv";
 	static String rulesFile = null;
+	static List<String> addNamespaces = null;
+
 
 	/* pretty print Error messages */
 	public static class ErrorListener extends BaseErrorListener {
@@ -64,6 +66,7 @@ public class Main {
 		options.addOption("j", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
 		options.addOption("m", "mixed-mode", false, "allow different input type sources");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
+		options.addOption(null, "add-ns", true, "additional namespace url");
 		options.addOption("o", "output-file", true, "basename of output file(s), default \"null\"*");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
@@ -87,6 +90,9 @@ public class Main {
 		if (cmd.hasOption("mixed-mode")) { mixed = true; }
 		if (cmd.hasOption("multi-graph")) { multiGraph = true; }
 		if (cmd.hasOption("namespace")) { nameSpaces = true; }
+		if (cmd.hasOption("add-ns")) {
+			addNamespaces = new ArrayList<String>(Arrays.asList(cmd.getOptionValues("add-ns")));
+		}
 		if (cmd.hasOption("parse-only")) { parseOnly = true; }
 		if (cmd.hasOption("rules")) { rulesFile = cmd.getOptionValue("r"); }
 		if (cmd.hasOption("special")) { special = true; }
@@ -165,7 +171,12 @@ public class Main {
 			if (verbose) {
 				System.err.println(x2g + ": processing xml file " + file.getAbsolutePath());
 			}
-			eval.setXtractor(file.getAbsolutePath(), nameSpaces);
+			if (addNamespaces != null) {
+				eval.setXtractor(file.getAbsolutePath(), addNamespaces);
+			}
+			else {
+				eval.setXtractor(file.getAbsolutePath(), nameSpaces);
+			}
 			eval.visit(tree);
 		}
 		if (verbose) {

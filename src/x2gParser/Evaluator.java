@@ -34,9 +34,11 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 
 	public Evaluator(SymbolTable symtab, gGraph graph) { this(symtab, graph, false, false); }
 
-	public void setXtractor(String filename) { xtractor = new xTractor(filename, true); }
+	public void setXtractor(String filename) { xtractor = new xTractor(filename, false, null); }
 
-	public void setXtractor(String filename, boolean nsaware) { xtractor = new xTractor(filename, nsaware); }
+	public void setXtractor(String filename, boolean nsaware) { xtractor = new xTractor(filename, nsaware, null); }
+
+	public void setXtractor(String filename, List<String> addns) { xtractor = new xTractor(filename, true, addns); }
 
 	public gGraph getGraph() { return graph; }
 
