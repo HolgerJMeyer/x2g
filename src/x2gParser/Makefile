@@ -77,7 +77,10 @@ runparse:
 werewolf:
 	export CLASSPATH=$(CLASSPATH) ; java Main -wn -o werewolf -d isebel/werewolf <testunit/isebel-stories.x2g
 
-witches:
+isebel-werewolf:
+	export CLASSPATH=$(CLASSPATH) ; java Main -wn o werewolf -d isebel/werewolf <isebel.x2g
+
+isebel-witches:
 	export CLASSPATH=$(CLASSPATH) ; java Main -wn o witches -d isebel/witches <isebel.x2g
 
 werewolf1:
