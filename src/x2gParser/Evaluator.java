@@ -451,7 +451,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 					// TODO: to return null or empty string?  We go with empty strings!
 					return "";
 				}
-				evalWarning("xpath (" + e + ") evaluates to a nodeset of size " + seq.size() + ", returning as single string!");
+				evalWarning("xpath (" + e + ") evaluates to " + seq.size() + " nodes, returning concatenated string value!");
 				return seq.toString();
 			}
 			// TODO: JPATH

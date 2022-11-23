@@ -10,16 +10,20 @@ match xpath("//isebel:story") using $s {
 	match xpath(".//isebel:person[isebel:role/text()='narrator']") using $p {
 		create node $pn label "person" {
 			name = $p.xpath("isebel:name/text()"),
-			unique (name)
+			gender = "male", // defautl assumption
+			if ($p.xpath("isebel:gender") == "female") {
+				gender = "female"
+			},
+			unique (name, gender)
 		},
 		create edge $e from $sn to $pn label "narrator" {}
 	},
 	match xpath(".//isebel:place") using $o {
 		create node $on label "place" {
 			name = $o.xpath("dc:title/text()"),
-			latitude = $o.xpath("isebel:point//datacite:pointLatitude/text()"),
-			longitude = $o.xpath("isebel:point//datacite:pointLongitude/text()"),
-			unique (name, latitude, longitude)
+			//latitude = $o.xpath("isebel:point//datacite:pointLatitude/text()"),
+			//longitude = $o.xpath("isebel:point//datacite:pointLongitude/text()"),
+			unique (name)
 		},
 		create edge $e from $sn to $on label "place-of-narration" {}
 	},
