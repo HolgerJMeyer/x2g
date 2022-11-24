@@ -130,7 +130,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 		case x2gLexer.XPATH:
 			List<Content> seq;
 			if (context != null) {
-				seq = xtractor.xtract(context.getCurrent(), e, vars);
+				seq = xtractor.xtract((Content)context.getCurrent(), e, vars);
 			}
 			else {
 				seq = xtractor.xtract(e, vars);
@@ -423,7 +423,7 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 				evalMessage("@var_ref: $" + v.getName() + ".path(" + e + ')');
 			}
 			if (v != null && (p.equals("xpath") || p.equals("XPATH"))) {
-				List<Content> seq = xtractor.xtract(v.getCurrent(), e, vars);
+				List<Content> seq = xtractor.xtract((Content)v.getCurrent(), e, vars);
 				if (seq == null) {
 					evalWarning("xpath (" + e + ") evaluation failed!");
 					return "";

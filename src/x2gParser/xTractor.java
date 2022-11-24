@@ -48,32 +48,30 @@ public class xTractor {
 	public xTractor(String filename, boolean nsaware, List<String> addns) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			// make it namespace aware or not
+			// make it namespace aware or not, TODO
+			factory.setNamespaceAware(nsaware); 
+			DocumentBuilder dombuilder = factory.newDocumentBuilder();
+			org.w3c.dom.Document w3cDocument = dombuilder.parse(file = new File(filename));
+			DOMBuilder jdomBuilder = new DOMBuilder();
+			doc = jdomBuilder.build(w3cDocument);
 			if (nsaware == false) {
-				factory.setNamespaceAware(nsaware); 
-				DocumentBuilder dombuilder = factory.newDocumentBuilder();
-				org.w3c.dom.Document w3cDocument = dombuilder.parse(file = new File(filename));
-				DOMBuilder jdomBuilder = new DOMBuilder();
-				doc = jdomBuilder.build(w3cDocument);
-				// Should return an empty list
 				namespaces = doc.getRootElement().getNamespacesInScope();
-			} else {
-				SAXBuilder sax = new SAXBuilder();
-				doc = sax.build(file = new File(filename));
-				// Extract namespace declarations
-				namespaces = doc.getRootElement().getNamespacesInScope();
-				if (addns != null) {
-					for (String ns : addns) {
-						namespaces.add(Namespace.getNamespace(ns));
-					}
-				}
-				if (verbose) {
-					System.err.println("xTractor:namespaces: " + namespaces);
-				}
 			}
-		}
-		//catch (ParserConfigurationException | JDOMException | SAXException | URISyntaxException | IOException pe) {
-		catch (ParserConfigurationException | JDOMException | SAXException | IOException pe) {
+			//else {
+			//	SAXBuilder sax = new SAXBuilder();
+			//	doc = sax.build(file = new File(filename));
+			//	// Extract namespace declarations
+			//	namespaces = doc.getRootElement().getNamespacesInScope();
+			//	if (addns != null) {
+			//		for (String ns : addns) {
+			//			namespaces.add(Namespace.getNamespace(ns));
+			//		}
+			//	}
+			//}
+			if (verbose) {
+				System.err.println("xTractor:namespaces: " + namespaces);
+			}
+		} catch (ParserConfigurationException | SAXException | IOException pe) {
 			System.err.println("xpath extractor creating DOM: " + pe);
 		}
 	}
@@ -91,10 +89,10 @@ public class xTractor {
 	}
 
 	public List<Content> xtract(String xp, Map<String, Object> vars) {
-		return xtract(doc, xp, vars);
+		return xtract(doc.getRootElement(), xp, vars);
 	}
 
-	public List<Content> xtract(Object context, String xp, Map<String, Object> vars) {
+	public List<Content> xtract(Content context, String xp, Map<String, Object> vars) {
 		if (verbose) {
 			System.err.println("xTractor:xtract("+ context + "," + xp + ")");
 		}
@@ -104,6 +102,7 @@ public class xTractor {
 			}
 			// TODO: additional local namespace extraction must take place here?
 			XPathFactory xpf = XPathFactory.instance();
+			namespaces = context.getNamespacesInScope();
 			XPathExpression<Content> expr = xpf.compile(xp, Filters.content(), vars, namespaces);
 			List<Content> nodes = expr.evaluate(context);
 			if (verbose) {
@@ -111,6 +110,9 @@ public class xTractor {
 			}
 			return nodes;
 		} catch (Exception e) {
+			if (namespaces != null) {
+				System.err.println("xTractor:xpath(" + xp + ") namespaces: " + namespaces);
+			}
 			System.err.println("xTractor:xpath(" + xp + ") evaluation failed: " + e);
 		}
 		return null;
