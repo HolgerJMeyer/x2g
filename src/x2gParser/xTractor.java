@@ -49,11 +49,14 @@ public class xTractor {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			// make it namespace aware or not, TODO
-			factory.setNamespaceAware(nsaware); 
-			DocumentBuilder dombuilder = factory.newDocumentBuilder();
-			org.w3c.dom.Document w3cDocument = dombuilder.parse(file = new File(filename));
-			DOMBuilder jdomBuilder = new DOMBuilder();
-			doc = jdomBuilder.build(w3cDocument);
+			//factory.setNamespaceAware(nsaware); 
+			//DocumentBuilder dombuilder = factory.newDocumentBuilder();
+			//org.w3c.dom.Document w3cDocument = dombuilder.parse(file = new File(filename));
+			//DOMBuilder jdomBuilder = new DOMBuilder();
+			//doc = jdomBuilder.build(w3cDocument);
+			SAXBuilder sax = new SAXBuilder();
+			doc = sax.build(file = new File(filename));
+			namespaces = doc.getRootElement().getNamespacesInScope();
 			if (nsaware == false) {
 				namespaces = doc.getRootElement().getNamespacesInScope();
 			}
@@ -71,7 +74,8 @@ public class xTractor {
 			if (verbose) {
 				System.err.println("xTractor:namespaces: " + namespaces);
 			}
-		} catch (ParserConfigurationException | SAXException | IOException pe) {
+		//} catch (ParserConfigurationException | SAXException | IOException pe) {
+		} catch (JDOMException | IOException pe) {
 			System.err.println("xpath extractor creating DOM: " + pe);
 		}
 	}

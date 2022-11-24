@@ -1,0 +1,8 @@
+for f
+do
+ed - $f <<\!
+f
+g/xml:id/s//xmlns:datacite="http:\/\/datacite.org\/schema\/kernel-4" xml:id/p
+wq
+!
+done

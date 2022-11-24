@@ -78,13 +78,10 @@ werewolf:
 	export CLASSPATH=$(CLASSPATH) ; java Main -wn -o werewolf -d isebel/werewolf <testunit/isebel-stories.x2g
 
 isebel-werewolf:
-	export CLASSPATH=$(CLASSPATH) ; java Main -w -o werewolf -d isebel/werewolf <isebel.x2g
+	export CLASSPATH=$(CLASSPATH) ; java Main -wn -o werewolf -d isebel/werewolf <isebel.x2g
 
 isebel-witches:
 	export CLASSPATH=$(CLASSPATH) ; java Main -w -o witches -d isebel/witches <isebel.x2g
-
-isebel-witches-dk:
-	export CLASSPATH=$(CLASSPATH) ; java Main -wn -o witches -d isebel/witches-dk <isebel.x2g
 
 werewolf1:
 	export CLASSPATH=$(CLASSPATH) ; java Main -wn -o werewolf001 -d isebel/werewolf001 <testunit/isebel-stories.x2g

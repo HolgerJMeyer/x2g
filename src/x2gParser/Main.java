@@ -66,7 +66,7 @@ public class Main {
 		options.addOption("j", "jdbc-connection", true, "read from JDBC connection specified as connection URL");
 		options.addOption("m", "mixed-mode", false, "allow different input type sources");
 		options.addOption("n", "namespace", false, "enable namespace processing (default: false)");
-		options.addOption(null, "add-ns", true, "additional namespace url");
+		options.addOption(null, "add-ns", true, "additional namespace url, uses xmlns:<ns>=<url> syntax");
 		options.addOption("o", "output-file", true, "basename of output file(s), default \"null\"*");
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
