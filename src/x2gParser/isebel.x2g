@@ -10,7 +10,7 @@ match xpath("//isebel:story") using $s {
 	match xpath(".//isebel:person[isebel:role/text()='narrator']") using $p {
 		create node $pn label "person" {
 			name = $p.xpath("isebel:name/text()"),
-			gender = "male", // defautl assumption
+			gender = "male", // default assumption
 			if ($p.xpath("isebel:gender") == "female") {
 				gender = "female"
 			},
