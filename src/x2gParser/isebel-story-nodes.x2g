@@ -1,0 +1,47 @@
+// nested match example, the second match is evaluated within the context of the first
+match xpath("//isebel:story") using $s {
+	create node $sn label "story" {
+		// properties
+		//content = $s.xpath("isebel:contents/isebel:content/text()"),
+		title = $s.xpath("dc:title/text()"),
+		path = $s.xpath("dc:identifier/text()"),
+		unique (path)
+	},
+	match xpath(".//isebel:person[isebel:role/text()='narrator']") using $p {
+		create node $pn label "person" {
+			name = $p.xpath("isebel:name/text()"),
+			gender = "male", // default assumption
+			if ($p.xpath("isebel:gender") == "female") {
+				gender = "female"
+			},
+			unique (name, gender)
+		},
+		create edge $e from $sn to $pn label "narrator" {}
+	},
+	match xpath(".//isebel:place") using $o {
+		create node $on label "place" {
+			name = $o.xpath("dc:title/text()"),
+			lat = $o.xpath("isebel:point//datacite:pointLatitude/text()"),
+			long = $o.xpath("isebel:point//datacite:pointLongitude/text()"),
+			unique (name, lat, long)
+		},
+		create edge $e from $sn to $on label "place-of-narration" {}
+	},
+	match xpath(".//isebel:keyword") using $k {
+		create node $kn label "keyword" {
+			name = $k.xpath("text()"),
+			unique (name)
+		},
+		create edge $e from $sn to $kn label "content" {}
+	},
+	match xpath(".//isebel:date") using $d {
+		create node $dn label "date" {
+			datetime = $d.xpath("text()"),
+			unique (datetime)
+		},
+		create edge $e from $sn to $dn label "date-of-narration" {}
+	}
+}
+
+// vim: spell spelllang=en
+// vim: ff=unix ts=3 sw=3 sts=3 noet
