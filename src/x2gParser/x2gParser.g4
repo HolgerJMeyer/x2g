@@ -33,9 +33,10 @@ x2g
 	;
 
 x2g_rule
-	: MATCH bind_expr {
+	: MATCH f=bind_expr (',' bind_expr)* {
 		// sorry, nontrivial access to sub-rule token, but here is the right place to show the nesting
-		symtab.newScope("match", $bind_expr.ctx.v.getText());
+		//symtab.newScope("match", $bind_expr.ctx.v.getText());
+		symtab.newScope("match", $f.text);
 	  } '{' body '}' {
 		symtab.endScope();
 	  }
