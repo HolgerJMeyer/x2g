@@ -78,14 +78,16 @@ public class Evaluator extends x2gParserBaseVisitor<Object> {
 	 *
 	 */
 	@Override public Object visitX2g_rule(x2gParser.X2g_ruleContext ctx) {
+		symtab.setScope("match", ctx.f.getText());
 		// TODO: handle list of bindings
 		// List<Bind_exprContext>
-		Variable bindvar = visitBind_expr(ctx.bind_expr());
-		symtab.setScope("match", ctx.bind_expr.v.getText());
-		// forall bindings: for all bindings of this scope
-		for (Object s : bindvar.getBinding()) {
-			bindvar.setCurrent(s);
-			visit(ctx.body());
+		for (x2gParser.Bind_exprContext b : ctx.bind_expr()) {
+			Variable bindvar = visitBind_expr(b);
+			// forall bindings: for all bindings of this scope
+			for (Object s : bindvar.getBinding()) {
+				bindvar.setCurrent(s);
+				visit(ctx.body());
+			}
 		}
 		symtab.endScope();
 		return null;

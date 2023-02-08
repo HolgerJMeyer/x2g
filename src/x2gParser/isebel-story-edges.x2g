@@ -19,18 +19,25 @@ match xpath("//isebel:story") using $s {
 			long = $o.xpath("isebel:point//datacite:pointLongitude/text()"),
 			unique (name, lat, long)
 		},
+		create edge $pe from $on to $pn label "place-of-narration" {
+			title = $s.xpath("dc:title/text()"),
+			path = $s.xpath("dc:identifier/text()")
+		},
 		create node $kn label "keyword" {
 			name = $k.xpath("text()"),
 			unique (name)
 		},
+		create edge $ke from $kn to $pn label "keyword-of-narration" {
+			title = $s.xpath("dc:title/text()"),
+			path = $s.xpath("dc:identifier/text()")
+		}
 		create node $dn label "date" {
 			datetime = $d.xpath("text()"),
 			unique (datetime)
 		},
-		create edge $e from $on to $pn label "narrator" {
+		create edge $de from $dn to $pn label "date-of-narration" {
 			title = $s.xpath("dc:title/text()"),
 			path = $s.xpath("dc:identifier/text()")
-			//content = $s.xpath("isebel:contents/isebel:content/text()"),
 		}
 	}
 }
