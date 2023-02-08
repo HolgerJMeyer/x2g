@@ -17,6 +17,7 @@ public class Main {
 	static boolean nameSpaces = false;
 	static boolean parseOnly = false;
 	static boolean special = false;
+	static boolean printTree = false;
 	static boolean verbose = false;
 	static boolean warnings = false;
 	static boolean warnEmpty = false;
@@ -71,6 +72,7 @@ public class Main {
 		options.addOption("p", "parse-only", false, "only parse ruleset, don't transform xml files");
 		options.addOption("r", "rules", true, "read x2g rules from file or stdin (default)");
 		options.addOption("s", "special-props", false, "export special properties starting with\"__\" (dfefault: not)");
+		options.addOption("t", "print-ast", false, "print abstract syntax tree after parsing");
 		options.addOption("u", "input-url", true, "read input data from that URL");
 		options.addOption("v", "verbose", false, "being verbose");
 		options.addOption("w", "warnings", false, "issue warnings about e.g. xpath empty results");
@@ -94,9 +96,10 @@ public class Main {
 			addNamespaces = new ArrayList<String>(Arrays.asList(cmd.getOptionValues("add-ns")));
 		}
 		if (cmd.hasOption("parse-only")) { parseOnly = true; }
+		if (cmd.hasOption("print-ast")) { printTree = true; }
 		if (cmd.hasOption("rules")) { rulesFile = cmd.getOptionValue("r"); }
 		if (cmd.hasOption("special")) { special = true; }
-		if (cmd.hasOption("verbose")) { verbose = true; }
+		if (cmd.hasOption("verbose")) { printTree = verbose = true; }
 		if (cmd.hasOption("warnings")) { warnings = true; }
 		if (cmd.hasOption("warn-empty")) { warnEmpty = true; }
 
@@ -127,7 +130,7 @@ public class Main {
 		parser.addErrorListener(new ErrorListener());
 
 		ParseTree tree = parser.x2g();	// begin parsing at init rule
-		if (verbose) {
+		if (printTree) {
 			System.err.println(x2g + " parse tree: " + tree.toStringTree(parser));	// print LISP-style tree
 			System.err.println(x2g + " symbol table after parsing: " + symtab.toString());
 		}
